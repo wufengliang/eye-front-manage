@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-07-29 22:33:09
+ * @LastEditTime: 2023-08-09 11:30:42
  * @Description: 界面布局
  */
 import { useState } from 'react';
@@ -12,7 +12,8 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, Dropdown, Space } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes } from 'react-router-dom';
+import RouterConfig from '@/router';
 import { SUPER_ADMIN_MENUS } from './params';
 import SystemLogo from './system-logo';
 import './index.scss';
@@ -72,7 +73,7 @@ function Home() {
       <Content
         className='mx-4 my-6 p-6 min-h-82.5 bg-white'
       >
-        Content
+        <RouterConfig />
       </Content>
     </Layout>
   </Layout>

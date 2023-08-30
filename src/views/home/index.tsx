@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-08-09 11:30:42
+ * @LastEditTime: 2023-08-09 11:58:39
  * @Description: 界面布局
  */
-import { useState } from 'react';
+import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal, useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -20,7 +20,7 @@ import './index.scss';
 
 const { Header, Sider, Content } = Layout;
 
-function Home() {
+function Home(props: { children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) {
   const [collapsed, setCollapsed] = useState(false);
   const [keys, setKyes] = useState([SUPER_ADMIN_MENUS[0].key]);
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ function Home() {
       <Content
         className='mx-4 my-6 p-6 min-h-82.5 bg-white'
       >
-        <RouterConfig />
+        {props.children}
       </Content>
     </Layout>
   </Layout>

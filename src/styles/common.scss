@@ -1,0 +1,47 @@
+$DISTANCE_ARRAY: 0, 1, 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 22, 24, 25, 26, 28, 30, 32, 34, 35, 36, 38, 40, 45, 50, 60, 65, 70, 80;
+
+@each $c in $DISTANCE_ARRAY {
+    .margin-#{$c} {
+        margin: $c + px;
+    }
+
+    .margin-left-#{$c} {
+        margin-left: $c + px;
+    }
+
+    .margin-right-#{$c} {
+        margin-right: $c + px;
+    }
+
+    .margin-top-#{$c} {
+        margin-top: $c + px;
+    }
+
+    .margin-bottom-#{$c} {
+        margin-bottom: $c + px;
+    }
+
+    .padding-#{$c} {
+        padding: $c + px;
+    }
+
+    .padding-left-#{$c} {
+        padding-left: $c + px;
+    }
+
+    .padding-right-#{$c} {
+        padding-right: $c + px;
+    }
+
+    .padding-top-#{$c} {
+        padding-top: $c + px;
+    }
+
+    .padding-bottom-#{$c} {
+        padding-bottom: $c + px;
+    }
+
+    .font-#{$c} {
+        font-size: $c + px;
+    }
+}

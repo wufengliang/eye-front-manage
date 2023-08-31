@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-08-09 11:58:39
+ * @LastEditTime: 2023-08-31 16:21:27
  * @Description: 界面布局
  */
-import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal, useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,28 +12,38 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, Dropdown, Space } from 'antd';
-import { useNavigate, Routes } from 'react-router-dom';
-import RouterConfig from '@/router';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { SUPER_ADMIN_MENUS } from './params';
 import SystemLogo from './system-logo';
 import './index.scss';
+import { checkHasLogin } from '@/utils/utils';
 
 const { Header, Sider, Content } = Layout;
 
-function Home(props: { children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) {
+function Home() {
+  const reactLocation = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-  const [keys, setKyes] = useState([SUPER_ADMIN_MENUS[0].key]);
+  const [key, setKey] = useState([reactLocation.pathname.substring(1)]);
   const navigate = useNavigate();
 
+  const token = checkHasLogin();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
+
   const onClickMenuItem = (info: { item: Record<string, any>, key: string, keyPath: string[] }) => {
-    const { key } = info;
-    if (key !== keys[0]) {
-      navigate(key);
+    const { key: _key } = info;
+    if (_key !== key[0]) {
+      setKey([_key]);
+      navigate(_key);
     }
   }
 
-  return <Layout className='h-full'>
-    <Sider trigger={null} collapsible collapsed={collapsed}>
+  return <Layout className='h-full flex flex-row'>
+    <Sider trigger={null} collapsible collapsed={collapsed} className='flex-1'>
       <div className="logo-box flex justify-center">
         <div className='flex justify-center items-center'>
           <SystemLogo isOpen={!collapsed} color='#2c61e2' />
@@ -42,12 +52,12 @@ function Home(props: { children: string | number | boolean | ReactElement<any, s
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={keys}
+        defaultSelectedKeys={key}
         items={SUPER_ADMIN_MENUS as any[]}
         onClick={(info) => onClickMenuItem(info)}
       />
     </Sider>
-    <Layout>
+    <Layout className='flex-1'>
       <Header className='p-0 bg-white flex justify-between'>
         <Button
           className='!w-16 h-16 text-base'
@@ -73,7 +83,7 @@ function Home(props: { children: string | number | boolean | ReactElement<any, s
       <Content
         className='mx-4 my-6 p-6 min-h-82.5 bg-white'
       >
-        {props.children}
+        <Outlet />
       </Content>
     </Layout>
   </Layout>

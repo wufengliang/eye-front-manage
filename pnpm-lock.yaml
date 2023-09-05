@@ -13,6 +13,7 @@ specifiers:
   '@types/js-cookie': ^3.0.3
   '@types/node': ^16.18.39
   '@types/react': ^18.2.17
+  '@types/react-copy-to-clipboard': ^5.0.4
   '@types/react-dom': ^18.2.7
   antd: ^5.7.3
   autoprefixer: ^10.4.14
@@ -50,6 +51,7 @@ specifiers:
   prompts: ^2.4.2
   react: ^18.2.0
   react-app-polyfill: ^3.0.0
+  react-copy-to-clipboard: ^5.1.0
   react-dev-utils: ^12.0.1
   react-dom: ^18.2.0
   react-redux: ^8.1.2
@@ -117,6 +119,7 @@ dependencies:
   prompts: 2.4.2
   react: 18.2.0
   react-app-polyfill: 3.0.0
+  react-copy-to-clipboard: 5.1.0_react@18.2.0
   react-dev-utils: 12.0.1_ifqjydam7z7r555lanj4oyd7da
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.1.2_daadhm4ohxobgnrt365as5bhny
@@ -140,6 +143,7 @@ dependencies:
 devDependencies:
   '@types/js-cookie': 3.0.3
   '@types/react': 18.2.17
+  '@types/react-copy-to-clipboard': 5.0.4
   '@types/react-dom': 18.2.7
   autoprefixer: 10.4.14_postcss@8.4.27
   sass: 1.64.1
@@ -2835,6 +2839,12 @@ packages:
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: false
+
+  /@types/react-copy-to-clipboard/5.0.4:
+    resolution: {integrity: sha512-otTJsJpofYAeaIeOwV5xBUGpo6exXG2HX7X4nseToCB2VgPEBxGBHCm/FecZ676doNR7HCSTVtmohxfG2b3/yQ==}
+    dependencies:
+      '@types/react': 18.2.17
+    dev: true
 
   /@types/react-dom/18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
@@ -9249,6 +9259,16 @@ packages:
       raf: 3.4.1
       regenerator-runtime: 0.13.11
       whatwg-fetch: 3.6.17
+    dev: false
+
+  /react-copy-to-clipboard/5.1.0_react@18.2.0:
+    resolution: {integrity: sha512-k61RsNgAayIJNoy9yDsYzDe/yAZAzEbEgcz3DZMhF686LEyukcE1hzurxe85JandPUG+yTfGVFzuEw3xt8WP/A==}
+    peerDependencies:
+      react: ^15.3.0 || 16 || 17 || 18
+    dependencies:
+      copy-to-clipboard: 3.3.3
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-dev-utils/12.0.1_ifqjydam7z7r555lanj4oyd7da:

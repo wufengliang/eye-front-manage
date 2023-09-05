@@ -1,21 +1,25 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2023-08-31 16:33:56
- * @Description: 
+ * @LastEditTime: 2023-09-04 15:32:14
+ * @Description:
  */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
+import { useDispatch } from 'react-redux';
 import { to } from '@/utils/utils';
 import { getCheckImgCode, loginIn } from '@/api/login';
-import './index.scss';
+import { setCurrentUser } from '@/store/slices/user';
 import Cookies from 'js-cookie';
 import { USER_TOKEN, USER_INFO } from '@/utils/variable';
+import { Storage } from '@/utils/storage';
+import './index.scss';
 
 export default function LoginIndex() {
   const navigate = useNavigate();
-  const [codeConfig, setCodeConfig] = useState({ image: '', uuid: '' });
+  const dispatch = useDispatch();
+  const [codeConfig, setCodeConfig] = useState({ image: '', uuid: '', loading: false, });
 
   useEffect(() => {
     getCode();
@@ -35,13 +39,16 @@ export default function LoginIndex() {
    * @desc 去登录
    */
   const onFinish = async (value: Record<string, any>) => {
+    setCodeConfig({ ...codeConfig, loading: true });
     const [error, result] = await to(loginIn({ ...value, uuid: codeConfig.uuid }));
+    setCodeConfig({ ...codeConfig, loading: false });
     if (error) {
       return getCode();
     }
     const { authToken } = result;
+    dispatch(setCurrentUser(result));
+    Storage.setItem(USER_INFO, result);
     Cookies.set(USER_TOKEN, authToken);
-    Cookies.set(USER_INFO, JSON.stringify(result));
     navigate('/');
   }
 
@@ -128,6 +135,7 @@ export default function LoginIndex() {
           </Form.Item>
           <Form.Item>
             <Button
+              loading={codeConfig.loading}
               className='w-full h-11 bg-[#9895f5] hover:bg-[#9895f5]'
               type="primary"
               htmlType='submit'

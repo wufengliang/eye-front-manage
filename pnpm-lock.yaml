@@ -15,6 +15,7 @@ specifiers:
   '@types/react': ^18.2.17
   '@types/react-copy-to-clipboard': ^5.0.4
   '@types/react-dom': ^18.2.7
+  ahooks: ^3.7.8
   antd: ^5.7.3
   autoprefixer: ^10.4.14
   axios: ^1.4.0
@@ -29,6 +30,7 @@ specifiers:
   classnames: ^2.3.2
   css-loader: ^6.5.1
   css-minimizer-webpack-plugin: ^3.2.0
+  dayjs: ^1.11.9
   dotenv: ^10.0.0
   dotenv-expand: ^5.1.0
   eslint: ^8.3.0
@@ -43,6 +45,7 @@ specifiers:
   jest-watch-typeahead: ^1.0.0
   js-cookie: ^3.0.5
   mini-css-extract-plugin: ^2.4.5
+  normalize.css: ^8.0.1
   postcss: ^8.4.4
   postcss-flexbugs-fixes: ^5.0.2
   postcss-loader: ^6.2.1
@@ -84,6 +87,7 @@ dependencies:
   '@testing-library/user-event': 13.5.0
   '@types/jest': 27.5.2
   '@types/node': 16.18.39
+  ahooks: 3.7.8_react@18.2.0
   antd: 5.7.3_biqbaboplfbrettd7655fr4n2y
   axios: 1.4.0
   babel-jest: 27.5.1_@babel+core@7.22.9
@@ -97,6 +101,7 @@ dependencies:
   classnames: 2.3.2
   css-loader: 6.8.1_webpack@5.88.2
   css-minimizer-webpack-plugin: 3.4.1_webpack@5.88.2
+  dayjs: 1.11.9
   dotenv: 10.0.0
   dotenv-expand: 5.1.0
   eslint: 8.46.0
@@ -111,6 +116,7 @@ dependencies:
   jest-watch-typeahead: 1.1.0_jest@27.5.1
   js-cookie: 3.0.5
   mini-css-extract-plugin: 2.7.6_webpack@5.88.2
+  normalize.css: 8.0.1
   postcss: 8.4.27
   postcss-flexbugs-fixes: 5.0.2_postcss@8.4.27
   postcss-loader: 6.2.1_wtdfwmg7ycxaq333qvq47tatda
@@ -2793,6 +2799,10 @@ packages:
       pretty-format: 27.5.1
     dev: false
 
+  /@types/js-cookie/2.2.7:
+    resolution: {integrity: sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA==}
+    dev: false
+
   /@types/js-cookie/3.0.3:
     resolution: {integrity: sha512-Xe7IImK09HP1sv2M/aI+48a20VX+TdRJucfq4vfRVy6nWN8PYPOEnlMRSgxJAgYQIXJVL8dZ4/ilAM7dWNaOww==}
     dev: true
@@ -3271,6 +3281,29 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /ahooks-v3-count/1.0.0:
+    resolution: {integrity: sha512-V7uUvAwnimu6eh/PED4mCDjE7tokeZQLKlxg9lCTMPhN+NjsSbtdacByVlR1oluXQzD3MOw55wylDmQo4+S9ZQ==}
+    dev: false
+
+  /ahooks/3.7.8_react@18.2.0:
+    resolution: {integrity: sha512-e/NMlQWoCjaUtncNFIZk3FG1ImSkV/JhScQSkTqnftakRwdfZWSw6zzoWSG9OMYqPNs2MguDYBUFFC6THelWXA==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@types/js-cookie': 2.2.7
+      ahooks-v3-count: 1.0.0
+      dayjs: 1.11.9
+      intersection-observer: 0.12.2
+      js-cookie: 2.2.1
+      lodash: 4.17.21
+      react: 18.2.0
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.2.0
+      tslib: 2.6.1
     dev: false
 
   /ajv-formats/2.1.1:
@@ -6140,6 +6173,10 @@ packages:
       side-channel: 1.0.4
     dev: false
 
+  /intersection-observer/0.12.2:
+    resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
+    dev: false
+
   /ipaddr.js/1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -6979,6 +7016,10 @@ packages:
     hasBin: true
     dev: false
 
+  /js-cookie/2.2.1:
+    resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
+    dev: false
+
   /js-cookie/3.0.5:
     resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
     engines: {node: '>=14'}
@@ -7486,6 +7527,10 @@ packages:
   /normalize-url/6.1.0:
     resolution: {integrity: sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==}
     engines: {node: '>=10'}
+    dev: false
+
+  /normalize.css/8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
     dev: false
 
   /npm-run-path/4.0.1:
@@ -9776,6 +9821,11 @@ packages:
       ajv: 8.12.0
       ajv-formats: 2.1.1
       ajv-keywords: 5.1.0_ajv@8.12.0
+    dev: false
+
+  /screenfull/5.2.0:
+    resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
+    engines: {node: '>=0.10.0'}
     dev: false
 
   /scroll-into-view-if-needed/3.0.10:

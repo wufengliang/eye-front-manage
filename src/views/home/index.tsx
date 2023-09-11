@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-09-04 15:29:13
+ * @LastEditTime: 2023-09-08 16:50:18
  * @Description: 界面布局
  */
 import { useState, useEffect } from 'react';
@@ -30,9 +30,13 @@ function Home() {
   const reactLocation = useLocation();
   const userInfo = useSelector((state: Record<string, any>) => state.user);
   const [collapsed, setCollapsed] = useState(false);
-  const [key, setKey] = useState([reactLocation.pathname.substring(1)]);
+  const [key, setKey] = useState<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setKey([reactLocation.pathname.substring(1)]);
+  }, [reactLocation.pathname])
 
   useEffect(() => {
     const token = checkHasLogin();
@@ -73,12 +77,12 @@ function Home() {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={key}
+        selectedKeys={key}
         items={SUPER_ADMIN_MENUS as any[]}
         onClick={(info) => onClickMenuItem(info)}
       />
     </Sider>
-    <Layout className='flex-1'>
+    <Layout className='flex-1 flex h-full'>
       <Header className='p-0 bg-white flex justify-between'>
         <Button
           className='!w-16 h-16 text-base'
@@ -110,11 +114,13 @@ function Home() {
           </Dropdown>
         </div>
       </Header>
-      <Content
-        className='mx-4 my-6 p-6 min-h-82.5 bg-white'
-      >
-        <Outlet />
-      </Content>
+      <div className='overflow-auto'>
+        <Content
+          className='mx-4 my-6 p-6 bg-white flex-1 '
+        >
+          <Outlet />
+        </Content>
+      </div>
     </Layout>
   </Layout>
 }

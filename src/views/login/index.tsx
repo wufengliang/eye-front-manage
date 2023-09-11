@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2023-09-04 15:32:14
+ * @LastEditTime: 2023-09-07 15:57:35
  * @Description:
  */
 import { useState, useEffect } from 'react';
@@ -14,12 +14,24 @@ import { setCurrentUser } from '@/store/slices/user';
 import Cookies from 'js-cookie';
 import { USER_TOKEN, USER_INFO } from '@/utils/variable';
 import { Storage } from '@/utils/storage';
+import { useRequest } from 'ahooks';
 import './index.scss';
 
 export default function LoginIndex() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [codeConfig, setCodeConfig] = useState({ image: '', uuid: '', loading: false, });
+  const [codeConfig, setCodeConfig] = useState({ image: '', uuid: '', });
+  const { loading, run } = useRequest(async (value: Record<string, any>) => {
+    const [error, result] = await to(loginIn({ ...value, uuid: codeConfig.uuid }));
+    if (error) {
+      return getCode();
+    }
+    const { authToken } = result;
+    dispatch(setCurrentUser(result));
+    Storage.setItem(USER_INFO, result);
+    Cookies.set(USER_TOKEN, authToken);
+    navigate('/');
+  }, { manual: true });
 
   useEffect(() => {
     getCode();
@@ -33,23 +45,6 @@ export default function LoginIndex() {
     if (result) {
       setCodeConfig(result);
     }
-  }
-
-  /**
-   * @desc 去登录
-   */
-  const onFinish = async (value: Record<string, any>) => {
-    setCodeConfig({ ...codeConfig, loading: true });
-    const [error, result] = await to(loginIn({ ...value, uuid: codeConfig.uuid }));
-    setCodeConfig({ ...codeConfig, loading: false });
-    if (error) {
-      return getCode();
-    }
-    const { authToken } = result;
-    dispatch(setCurrentUser(result));
-    Storage.setItem(USER_INFO, result);
-    Cookies.set(USER_TOKEN, authToken);
-    navigate('/');
   }
 
   const renderLeft = () => {
@@ -93,7 +88,7 @@ export default function LoginIndex() {
       <>
         <Form
           initialValues={{ phone: '13417103801', password: '123' }}
-          onFinish={onFinish}
+          onFinish={run}
         >
           <Form.Item
             name='phone'
@@ -135,7 +130,7 @@ export default function LoginIndex() {
           </Form.Item>
           <Form.Item>
             <Button
-              loading={codeConfig.loading}
+              loading={loading}
               className='w-full h-11 bg-[#9895f5] hover:bg-[#9895f5]'
               type="primary"
               htmlType='submit'

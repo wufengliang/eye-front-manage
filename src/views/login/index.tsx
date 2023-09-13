@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2023-09-07 15:57:35
+ * @LastEditTime: 2023-09-13 10:46:19
  * @Description:
  */
 import { useState, useEffect } from 'react';
@@ -71,7 +71,7 @@ export default function LoginIndex() {
         <p className="font-15 flex items-center margin-bottom-20">
           <span className='text-[#999]'>没有账号？</span>
           <span className='text-[#a19df7]'>
-            <a className='margin-left-5'>联系合作</a>
+            <a href='javascript' className='margin-left-5'>联系合作</a>
             <i className='iconfont icon-goto margin-left-10'></i>
           </span>
         </p>

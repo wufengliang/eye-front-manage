@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-09-09 10:12:20
+ * @LastEditTime: 2023-09-13 11:33:37
  * @Description: 用户管理
  */
 import { useRef } from 'react';
@@ -13,13 +13,9 @@ import { getUserList, deleteUser } from '@/api/user';
 import dayjs from 'dayjs';
 import { to } from '@/utils/utils';
 import UserTemplate from './template';
+import { OperateType } from '@/types/operate.enum';
+import { useGetScrollCount } from '@/hooks';
 import './index.scss';
-
-enum OperateType {
-  ADD,
-  EDIT,
-  DELETE
-}
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -36,7 +32,6 @@ function UserManage() {
   });
 
   const modalRef = useRef();
-
 
   const handleOperate = async (type: OperateType, data?: Record<string, any>) => {
     switch (type) {
@@ -59,7 +54,7 @@ function UserManage() {
           icon: null,
           closable: true,
           width: 500,
-          content: <UserTemplate ref={modalRef} {...data} />,
+          content: <UserTemplate key='userTemplate' ref={modalRef} {...data} />,
           onOk: () => {
             const { validate } = modalRef.current!;
             validate && (validate as Function)();
@@ -77,7 +72,7 @@ function UserManage() {
       title: '最近登录',
       dataIndex: 'lastLoginTime',
       width: 170,
-      render: (_, record) => <a>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</a>
+      render: (_, record) => <a href='javascript'>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</a>
     },
     { title: '备注', dataIndex: 'remark', width: 150, },
     {
@@ -93,13 +88,15 @@ function UserManage() {
       )
     }
   ];
-  console.log(tableProps);
+
+  const scrollXCount = useGetScrollCount(columns);
+
   return (
     <div className='user-box'>
       <div className='flex justify-end mb-3'>
         <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button>
       </div>
-      <Table columns={columns} scroll={{ x: 970 }} bordered rowKey='id' {...tableProps} />
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-31 14:50:25
- * @LastEditTime: 2023-09-19 15:29:04
+ * @LastEditTime: 2023-09-21 15:02:12
  * @Description: 拦截器
  */
 import axios from 'axios';
@@ -44,6 +44,7 @@ instance.interceptors.response.use(response => {
         case 4005:
           return login();
         case 500:
+          notification.error({ message: '提示', description: message || '接口异常', duration: 2 });
           return Promise.reject(response);
         default:
           return response;

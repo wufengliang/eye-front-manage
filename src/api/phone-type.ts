@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 17:12:52
- * @LastEditTime: 2023-09-20 14:31:54
+ * @LastEditTime: 2023-09-21 11:49:03
  * @Description:
  */
 import instance from './instance';
@@ -18,4 +18,18 @@ export function getPhoneTypeList(data: unknown) {
  */
 export function createNewPhoneType(data: unknown) {
   return instance.put(`/api/phone/add`, data)
+}
+
+/**
+ * @desc 更新新的手机型号
+ */
+export function updateNewPhoneType(data: unknown) {
+  return instance.post(`/api/phone/update`, data);
+}
+
+/**
+ * @desc 删除手机型号
+ */
+export function deleteNewPhoneType(id: string | number) {
+  return instance.delete(`/api/phone/delete?id=${id}`);
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-20 09:40:00
+ * @LastEditTime: 2023-09-21 14:21:24
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message } from 'antd';
@@ -13,7 +13,7 @@ import { TNumberOrString } from '@/types/common.type';
 import dayjs from 'dayjs';
 import { useGetScrollCount } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
-import CustomPlay from '@/components/custom-play';
+import { CustomPlay } from '@/components';
 import { getExt, to } from '@/utils/utils';
 import { downloadFile } from '@/utils/download';
 
@@ -37,8 +37,6 @@ function TestVideo() {
 
   //  缓存热力图数据
   const hotCacheData = useRef<Record<string, any>>({});
-  //  缓存轨迹图数据
-  const trajectoryCacheData = useRef<Record<string, any>>({});
 
   const columns: ColumnsType<any> = [
     { title: '视频ID', dataIndex: 'id', fixed: 'left', width: 150, },
@@ -62,7 +60,7 @@ function TestVideo() {
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DETAIL, record, TTestVideoType.TRAJECTORY)}>查看轨迹图</Button>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.HOT)}>下载热力图</Button>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.TRAJECTORY)}>下载轨迹图</Button>
-          <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record)}>下载动态热力图</Button>
+          <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.DYNAMIC_HOT)}>下载动态热力图</Button>
         </>
       )
     }

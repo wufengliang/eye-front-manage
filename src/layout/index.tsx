@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-09-13 17:43:13
+ * @LastEditTime: 2023-09-21 14:03:53
  * @Description: 界面布局
  */
 import { useState, useEffect } from 'react';
@@ -114,9 +114,9 @@ function LayoutBox() {
           </Dropdown>
         </div>
       </Header>
-      <div className='overflow-auto'>
+      <div className='overflow-auto flex-1'>
         <Content
-          className='mx-4 my-6 p-6 bg-white flex-1 '
+          className='mx-4 my-6 p-6 bg-white flex-1'
         >
           <Outlet />
         </Content>

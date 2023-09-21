@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2023-09-19 16:38:14
+ * @LastEditTime: 2023-09-21 14:12:40
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -18,9 +18,9 @@ export const checkHasLogin = () => {
  * @desc 去登录
  */
 export const login = () => {
-  const { protocol, origin } = window.location;
+  const { origin } = window.location;
   Cookies.remove(USER_TOKEN);
-  window.location.href = `${protocol}://${origin}/login`;
+  window.location.href = `${origin}/login`;
 }
 
 /**

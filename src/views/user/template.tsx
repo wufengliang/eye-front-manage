@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2023-09-20 17:44:15
+ * @LastEditTime: 2023-09-21 14:34:11
  * @Description: 创建用户、编辑用户
  */
 import { useRef, forwardRef, useImperativeHandle, Ref } from 'react';
@@ -14,6 +14,8 @@ function UserTemplate(props = {}, cref?: Ref<unknown>) {
     wrapperCol: { span: 16 },
   };
   const form = useRef(null);
+
+  const isEditMode = Object.keys(props).length > 0;
 
   useImperativeHandle(cref, () => {
     return {
@@ -31,7 +33,7 @@ function UserTemplate(props = {}, cref?: Ref<unknown>) {
           <Input placeholder='请输入用户名...' />
         </Form.Item>
         <Form.Item name={'password'} label='密码' rules={[{ required: true, message: '请输入密码' }]}>
-          <Input.Password placeholder='请输入密码...' />
+          <Input.Password placeholder='请输入密码...' visibilityToggle={!isEditMode} />
         </Form.Item>
         <Form.Item name={'phoneNumber'} label='手机号' rules={[{ required: true, message: '请输入手机号' }, { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' }]}>
           <Input placeholder='请输入手机号...' />
@@ -44,7 +46,7 @@ function UserTemplate(props = {}, cref?: Ref<unknown>) {
           </Select>
         </Form.Item>
         <Form.Item name={'remark'} label='备注'>
-          <Input placeholder='请输入备注...' />
+          <Input.TextArea placeholder='请输入备注...' />
         </Form.Item>
       </Form>
     </div >

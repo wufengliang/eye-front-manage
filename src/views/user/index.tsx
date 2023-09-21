@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-09-13 11:33:37
+ * @LastEditTime: 2023-09-21 16:40:34
  * @Description: 用户管理
  */
 import { useRef } from 'react';
@@ -9,13 +9,15 @@ import { Table, Button, Modal, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table'
 import { useAntdTable } from 'ahooks';
 import { TNumberOrString } from '@/types/common.type';
-import { getUserList, deleteUser } from '@/api/user';
+import { getUserList, deleteUser, createUser, updateUser } from '@/api/user';
 import dayjs from 'dayjs';
 import { to } from '@/utils/utils';
 import UserTemplate from './template';
 import { OperateType } from '@/types/operate.enum';
 import { useGetScrollCount } from '@/hooks';
+import { pick } from 'lodash-es';
 import './index.scss';
+import { useSelector } from 'react-redux';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -30,6 +32,8 @@ function UserManage() {
     ],
     defaultType: 'advance',
   });
+
+  const user = useSelector((state: Record<string, any>) => state.user);
 
   const modalRef = useRef();
 
@@ -54,11 +58,20 @@ function UserManage() {
           icon: null,
           closable: true,
           width: 500,
-          content: <UserTemplate key='userTemplate' ref={modalRef} {...data} />,
+          content: <UserTemplate key='userTemplate' ref={modalRef} {...(data || {})} />,
           onOk: () => {
+            const role = user.userInfo.role === 2 ? 1 : 0;  //  默认只有管理员、超管才可以创建用户
             const { validate } = modalRef.current!;
-            validate && (validate as Function)();
-            return Promise.reject(false);
+            if (validate && typeof validate === 'function') {
+              (validate as Function)().then(async (value: Record<string, any>) => {
+                const [error] = await to(type === OperateType.EDIT ? updateUser({ ...pick(value, ['role', 'status', 'remark']), ...pick(data, ['id', 'status']) }) : createUser(role, value))
+                if (!error) {
+                  search.submit();
+                  message.success(`${type === OperateType.EDIT ? '编辑' : '创建'}成功`);
+                }
+                return;
+              })
+            }
           }
         })
     }
@@ -78,11 +91,11 @@ function UserManage() {
     {
       title: '操作',
       key: 'operation',
-      width: 200,
+      width: 100,
       fixed: 'right',
       render: (_, record) => (
         <>
-          <Button type='primary' className='margin-right-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button>
+          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button>
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
         </>
       )

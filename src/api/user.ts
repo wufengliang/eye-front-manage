@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:55:53
- * @LastEditTime: 2023-09-08 17:22:02
+ * @LastEditTime: 2023-09-21 14:47:59
  * @Description: 用户管理
  */
 import instance from './instance';
@@ -20,4 +20,19 @@ export function getUserList(data: unknown) {
  */
 export function deleteUser(userId: string) {
   return instance.delete(`/api/admin/user/delete?userId=${userId}`);
+}
+
+/**
+ * @param {Number} role 1 代表超级管理员 0 代表管理员
+ * @desc 创建用户
+ */
+export function createUser(role: number, data: unknown) {
+  return instance.post(`/api/admin/user/create?isAdmin=${role}`, data);
+}
+
+/**
+ * @desc 更新用户
+ */
+export function updateUser(data: unknown) {
+  return instance.put(`/api/admin/user/update`, data);
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-09-19 14:04:26
+ * @LastEditTime: 2023-09-21 11:54:47
  * @Description:
  */
 import { useEffect } from 'react';
@@ -18,6 +18,7 @@ import CheckVideo from '@/views/check-video';
 import DownloadVideo from '@/views/download-video';
 import PhoneType from '@/views/phone-type';
 import QuestionAnswer from '@/views/question-answer';
+import Upload from '@/views/upload';
 import './App.scss';
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
           <Route index path='/downloadVideo' element={<DownloadVideo />} />
           <Route index path='/phoneType' element={<PhoneType />} />
           <Route index path='/questionAnswer' element={<QuestionAnswer />} />
+          <Route index path='/upload' element={<Upload />} />
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />

@@ -1,17 +1,18 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-13 16:47:06
+ * @LastEditTime: 2023-09-21 14:16:21
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
-import { Button, Table, } from 'antd';
+import { Button, Table, Modal } from 'antd';
 import { getCheckVideoList } from '@/api/check-video';
 import { TNumberOrString } from '@/types/common.type';
 import type { ColumnsType } from 'antd/es/table';
 import { OperateType } from '@/types/operate.enum';
 import { useGetScrollCount } from '@/hooks';
 import dayjs from 'dayjs';
+import { CustomPlay } from '@/components';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getCheckVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -40,14 +41,23 @@ function CheckVideo() {
       fixed: 'right',
       render: (_, record) => (
         <>
-          <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.EDIT, record)}>点击播放</Button>
+          <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.PLAY, record)}>点击播放</Button>
         </>
       )
     }
   ];
 
   const handleOperate = async (type: OperateType, data: unknown) => {
-
+    if (type === OperateType.PLAY) {
+      return Modal.confirm({
+        title: '查看视频',
+        icon: null,
+        maskClosable: true,
+        closable: true,
+        content: <CustomPlay {...(data || {})} />,
+        footer: null,
+      })
+    }
   }
 
   const scrollXCount = useGetScrollCount(columns);

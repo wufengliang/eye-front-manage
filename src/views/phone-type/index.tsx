@@ -1,16 +1,18 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-13 17:33:19
+ * @LastEditTime: 2023-09-20 17:37:16
  * @Description: 手机型号
  */
-import { Button, Table } from 'antd';
+import { useRef } from 'react';
+import { Button, Table, Modal } from 'antd';
 import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table'
 import { getPhoneTypeList } from '@/api/phone-type';
 import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
+import PhoneTypeTemplate from './template';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getPhoneTypeList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -23,6 +25,8 @@ function PhoneType() {
       { search: '' }
     ]
   });
+
+  const modalRef = useRef();
 
   const columns: ColumnsType<any> = [
     { title: 'ID', dataIndex: 'id', fixed: 'left', width: 150, },
@@ -49,7 +53,22 @@ function PhoneType() {
   ];
 
   const handleOperate = (type: OperateType, data?: Record<string, any>) => {
-
+    Modal.confirm({
+      title: type === OperateType.ADD ? '添加手机型号' : '编辑手机型号',
+      content: <PhoneTypeTemplate ref={modalRef} {...(data || {})} />,
+      icon: null,
+      width: 600,
+      maskClosable: false,
+      closable: true,
+      onOk: async () => {
+        const { validate } = modalRef.current!;
+        if (validate && typeof validate === 'function') {
+          (validate as Function)().then((value: Record<string, any>) => {
+            console.log(value);
+          })
+        }
+      }
+    })
   }
 
   const scrollXCount = useGetScrollCount(columns);

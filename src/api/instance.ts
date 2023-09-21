@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-31 14:50:25
- * @LastEditTime: 2023-09-08 15:00:23
+ * @LastEditTime: 2023-09-19 15:29:04
  * @Description: 拦截器
  */
 import axios from 'axios';
@@ -43,6 +43,8 @@ instance.interceptors.response.use(response => {
           return Promise.reject(response);
         case 4005:
           return login();
+        case 500:
+          return Promise.reject(response);
         default:
           return response;
       }

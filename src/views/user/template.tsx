@@ -1,21 +1,21 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2023-09-13 10:45:25
+ * @LastEditTime: 2023-09-20 17:44:15
  * @Description: 创建用户、编辑用户
  */
 import { useRef, forwardRef, useImperativeHandle, Ref } from 'react';
 import { Form, Input, Select } from 'antd';
 import { UserTypeList } from '@/utils/const';
 
-function UserTemplate(props = {}, ref?: Ref<unknown>) {
+function UserTemplate(props = {}, cref?: Ref<unknown>) {
   const layout = {
     labelCol: { span: 5 },
     wrapperCol: { span: 16 },
   };
   const form = useRef(null);
 
-  useImperativeHandle(ref, () => {
+  useImperativeHandle(cref, () => {
     return {
       validate() {
         return (form.current! as Record<string, any>).validateFields();

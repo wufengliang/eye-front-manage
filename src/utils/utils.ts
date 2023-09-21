@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2023-09-13 09:38:36
+ * @LastEditTime: 2023-09-19 16:38:14
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -33,4 +33,12 @@ export async function to(p: Promise<any>): Promise<Array<any>> {
   } catch (err) {
     return [err, null];
   }
+}
+
+/**
+ * @desc 获取文件后缀名
+ */
+export function getExt(value: string) {
+  const array = value.match(/\.([^.]+)$/);
+  return array ? array[1] : null;
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-09-13 17:32:02
+ * @LastEditTime: 2023-09-19 14:04:26
  * @Description:
  */
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, } from 'react-router-
 import { useDispatch } from 'react-redux';
 import { initCurrentUser } from '@/store/slices/user';
 import Login from '@/views/login';
-import Home from '@/views/home';
+import LayoutBox from '@/layout';
 import Download from '@/views/download';
 import Project from '@/views/project';
 import User from '@/views/user';
@@ -31,7 +31,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home />}>
+        <Route path='/' element={<LayoutBox />}>
           <Route index element={<Navigate to={'/user'} />} />
           <Route index path='/user' element={<User />} />
           <Route index path='/project' element={<Project />} />

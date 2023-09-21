@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-09-08 16:50:18
+ * @LastEditTime: 2023-09-13 17:43:13
  * @Description: 界面布局
  */
 import { useState, useEffect } from 'react';
@@ -26,7 +26,7 @@ import './index.scss';
 
 const { Header, Sider, Content } = Layout;
 
-function Home() {
+function LayoutBox() {
   const reactLocation = useLocation();
   const userInfo = useSelector((state: Record<string, any>) => state.user);
   const [collapsed, setCollapsed] = useState(false);
@@ -125,4 +125,4 @@ function Home() {
   </Layout>
 }
 
-export default Home;
+export default LayoutBox;

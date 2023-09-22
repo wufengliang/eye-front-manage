@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-22 11:14:29
+ * @LastEditTime: 2023-09-22 17:24:55
  * @Description: 手机型号
  */
 import { useRef } from 'react';
@@ -10,7 +10,7 @@ import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table'
 import { getPhoneTypeList, updateNewPhoneType, createNewPhoneType, deleteNewPhoneType } from '@/api/phone-type';
 import { TNumberOrString } from '@/types/common.type';
-import { useGetScrollCount } from '@/hooks';
+import { useGetScrollCount, useTableProps } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
 import PhoneTypeTemplate from './template';
 import { to } from '@/utils/utils';
@@ -123,7 +123,7 @@ function PhoneType() {
       <div className='flex justify-end mb-3'>
         <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加手机型号</Button>
       </div>
-      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </div>
   )
 }

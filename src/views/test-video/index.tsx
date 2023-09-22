@@ -1,17 +1,17 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-22 11:10:41
+ * @LastEditTime: 2023-09-22 17:24:02
  * @Description: 测试视频
  */
-import { Button, Table, Modal, message } from 'antd';
+import { Button, Table, Modal, message, Row } from 'antd';
 import { useAntdTable } from 'ahooks';
 import { useRef } from 'react';
 import type { ColumnsType } from 'antd/es/table'
 import { getTestVideoList, getHotPicture } from '@/api/test-video';
 import { TNumberOrString } from '@/types/common.type';
 import dayjs from 'dayjs';
-import { useGetScrollCount } from '@/hooks';
+import { useGetScrollCount, useTableProps } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
 import { CustomPlay } from '@/components';
 import { getExt, to } from '@/utils/utils';
@@ -152,13 +152,13 @@ function TestVideo() {
   return (
     <div className='test-video-box'>
       {renderSearch()}
-      <div className='flex mb-1 flex-wrap'>
+      <Row className='mb-1 flex-wrap' justify={'end'}>
         <Button type='primary' className='mr-3 mb-3'>批量下载热力图数据</Button>
         <Button type='primary' className='mr-3 mb-3'>批量下载轨迹图数据</Button>
         <Button className='mr-3 mb-3'>导出选中热力图数据</Button>
         <Button className='mr-3 mb-3'>导出选中轨迹图数据</Button>
-      </div>
-      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
+      </Row>
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </div>
   )
 }

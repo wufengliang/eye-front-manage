@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-09-21 16:40:34
+ * @LastEditTime: 2023-09-22 17:21:56
  * @Description: 用户管理
  */
 import { useRef } from 'react';
@@ -14,10 +14,10 @@ import dayjs from 'dayjs';
 import { to } from '@/utils/utils';
 import UserTemplate from './template';
 import { OperateType } from '@/types/operate.enum';
-import { useGetScrollCount } from '@/hooks';
+import { useGetScrollCount, useTableProps } from '@/hooks';
 import { pick } from 'lodash-es';
-import './index.scss';
 import { useSelector } from 'react-redux';
+import './index.scss';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -109,7 +109,7 @@ function UserManage() {
       <div className='flex justify-end mb-3'>
         <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button>
       </div>
-      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </div>
   )
 }

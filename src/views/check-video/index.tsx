@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-22 11:10:22
+ * @LastEditTime: 2023-09-22 17:24:35
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
@@ -11,7 +11,7 @@ import { getCheckVideoList } from '@/api/check-video';
 import { TNumberOrString } from '@/types/common.type';
 import type { ColumnsType } from 'antd/es/table';
 import { OperateType } from '@/types/operate.enum';
-import { useGetScrollCount } from '@/hooks';
+import { useGetScrollCount, useTableProps } from '@/hooks';
 import dayjs from 'dayjs';
 import { CustomPlay, CustomSearch } from '@/components';
 
@@ -80,13 +80,12 @@ function CheckVideo() {
 
   const scrollXCount = useGetScrollCount(columns);
 
-  const renderTable = () => {
-    return <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
-  }
 
   return <div className='project-box'>
     {renderSearch()}
-    {renderTable()}
+    <>
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
+    </>
   </div>
 }
 

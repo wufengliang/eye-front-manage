@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-09-22 10:05:50
+ * @LastEditTime: 2023-09-22 11:07:14
  * @Description: 项目管理
  */
 import { Table, Button, Tag } from 'antd';
@@ -70,7 +70,7 @@ function ProjectManage() {
 
   const renderSearch = () => {
     return (
-      <div className='my-6'>
+      <div className='mb-6'>
         <CustomSearch
           ref={searchRef}
           loading={tableProps.loading}

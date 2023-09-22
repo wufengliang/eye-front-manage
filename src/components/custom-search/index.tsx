@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-21 17:14:27
- * @LastEditTime: 2023-09-22 10:01:22
+ * @LastEditTime: 2023-09-22 11:03:51
  * @Description: 自定义搜索
  */
 import { forwardRef, Ref, useRef, useImperativeHandle } from 'react';
@@ -95,12 +95,12 @@ function CustomSearch(props: ICustomSearchType = { columns: [] }, cref?: Ref<unk
       <>
         {
           showSearch ?
-            <Button type='primary' className='margin-right-5' htmlType='submit' loading={loading}>查询</Button>
+            <Button type='primary' className='margin-right-5 margin-bottom-5' htmlType='submit' loading={loading}>查询</Button>
             : null
         }
         {
           showReset ?
-            <Button htmlType='reset' onClick={() => onReset && onReset()}>清空</Button>
+            <Button htmlType='reset' className='margin-bottom-5' onClick={() => onReset && onReset()}>清空</Button>
             : null
         }
       </>

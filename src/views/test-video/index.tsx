@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-21 14:21:24
+ * @LastEditTime: 2023-09-22 11:10:41
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message } from 'antd';
@@ -16,6 +16,7 @@ import { OperateType } from '@/types/operate.enum';
 import { CustomPlay } from '@/components';
 import { getExt, to } from '@/utils/utils';
 import { downloadFile } from '@/utils/download';
+import { CustomSearch } from '@/components';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getTestVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -28,11 +29,15 @@ enum TTestVideoType {
 }
 
 function TestVideo() {
-  const { tableProps } = useAntdTable(getData, {
+  //  表单组件
+  const searchRef = useRef<Record<string, any>>({});
+
+  const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
       { current: 1, pageSize: 10, all: 1 },
       { search: '' }
-    ]
+    ],
+    form: searchRef.current?.form
   });
 
   //  缓存热力图数据
@@ -131,10 +136,27 @@ function TestVideo() {
 
   const scrollXCount = useGetScrollCount(columns);
 
+  //  渲染搜索区域
+  const renderSearch = () => (
+    <div className='test-video-form mb-8'>
+      <CustomSearch
+        columns={[{ name: 'search', label: '测试视频', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        loading={tableProps.loading}
+        onSearch={() => search.submit()}
+        onReset={() => search.reset()}
+        ref={searchRef}
+      />
+    </div>
+  )
+
   return (
     <div className='test-video-box'>
-      <div className='flex justify-end mb-3'>
-        <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button>
+      {renderSearch()}
+      <div className='flex mb-1 flex-wrap'>
+        <Button type='primary' className='mr-3 mb-3'>批量下载热力图数据</Button>
+        <Button type='primary' className='mr-3 mb-3'>批量下载轨迹图数据</Button>
+        <Button className='mr-3 mb-3'>导出选中热力图数据</Button>
+        <Button className='mr-3 mb-3'>导出选中轨迹图数据</Button>
       </div>
       <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
     </div>

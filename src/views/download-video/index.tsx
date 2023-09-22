@@ -1,16 +1,18 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-21 16:42:02
+ * @LastEditTime: 2023-09-22 11:11:06
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
 import { Button, Table, Modal } from 'antd';
+import { useRef } from 'react';
 import { getDownloadVideoList } from '@/api/download-video';
 import { TNumberOrString } from '@/types/common.type';
 import type { ColumnsType } from 'antd/es/table';
 import { useGetScrollCount } from '@/hooks';
 import DownloadVideoTemplate from './template';
+import { CustomSearch } from '@/components';
 
 enum VideoType {
   TEST_VIDEO,
@@ -22,11 +24,15 @@ const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, 
 }
 
 function DownloadVideo() {
-  const { tableProps } = useAntdTable(getData, {
+  //  表单组件
+  const searchRef = useRef<Record<string, any>>({});
+
+  const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
       { current: 1, pageSize: 10, all: 1 },
       { search: '' }
-    ]
+    ],
+    form: searchRef.current?.form
   });
 
   const columns: ColumnsType<any> = [
@@ -56,6 +62,19 @@ function DownloadVideo() {
     })
   }
 
+  //  渲染搜索区域
+  const renderSearch = () => (
+    <div className='test-video-form mb-8'>
+      <CustomSearch
+        columns={[{ name: 'search', label: '问卷', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        loading={tableProps.loading}
+        onSearch={() => search.submit()}
+        onReset={() => search.reset()}
+        ref={searchRef}
+      />
+    </div>
+  )
+
   const scrollXCount = useGetScrollCount(columns);
 
   const renderTable = () => {
@@ -63,6 +82,7 @@ function DownloadVideo() {
   }
 
   return <div className='project-box'>
+    {renderSearch()}
     {renderTable()}
   </div>
 }

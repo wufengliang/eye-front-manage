@@ -1,10 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-21 14:16:21
+ * @LastEditTime: 2023-09-22 11:10:22
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
+import { useRef } from 'react';
 import { Button, Table, Modal } from 'antd';
 import { getCheckVideoList } from '@/api/check-video';
 import { TNumberOrString } from '@/types/common.type';
@@ -12,18 +13,22 @@ import type { ColumnsType } from 'antd/es/table';
 import { OperateType } from '@/types/operate.enum';
 import { useGetScrollCount } from '@/hooks';
 import dayjs from 'dayjs';
-import { CustomPlay } from '@/components';
+import { CustomPlay, CustomSearch } from '@/components';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getCheckVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
 }
 
 function CheckVideo() {
-  const { tableProps } = useAntdTable(getData, {
+  //  表单组件
+  const searchRef = useRef<Record<string, any>>({});
+
+  const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
       { current: 1, pageSize: 10, all: 1 },
       { search: '' }
-    ]
+    ],
+    form: searchRef.current?.form
   });
 
   const columns: ColumnsType<any> = [
@@ -60,6 +65,19 @@ function CheckVideo() {
     }
   }
 
+  //  渲染搜索区域
+  const renderSearch = () => (
+    <div className='test-video-form mb-8'>
+      <CustomSearch
+        columns={[{ name: 'search', label: '校准视频', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        loading={tableProps.loading}
+        onSearch={() => search.submit()}
+        onReset={() => search.reset()}
+        ref={searchRef}
+      />
+    </div>
+  )
+
   const scrollXCount = useGetScrollCount(columns);
 
   const renderTable = () => {
@@ -67,6 +85,7 @@ function CheckVideo() {
   }
 
   return <div className='project-box'>
+    {renderSearch()}
     {renderTable()}
   </div>
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-21 16:41:43
+ * @LastEditTime: 2023-09-22 11:14:29
  * @Description: 手机型号
  */
 import { useRef } from 'react';
@@ -14,17 +14,23 @@ import { useGetScrollCount } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
 import PhoneTypeTemplate from './template';
 import { to } from '@/utils/utils';
+import { CustomSearch } from '@/components';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getPhoneTypeList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
 }
 
 function PhoneType() {
+
+  //  表单组件
+  const searchRef = useRef<Record<string, any>>({});
+
   const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
       { current: 1, pageSize: 10, all: 1 },
       { search: '' }
-    ]
+    ],
+    form: searchRef.current?.form
   });
 
   const modalRef = useRef();
@@ -95,10 +101,25 @@ function PhoneType() {
     })
   }
 
+
+  //  渲染搜索区域
+  const renderSearch = () => (
+    <div className='test-video-form mb-8'>
+      <CustomSearch
+        columns={[{ name: 'search', label: '手机型号', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        loading={tableProps.loading}
+        onSearch={() => search.submit()}
+        onReset={() => search.reset()}
+        ref={searchRef}
+      />
+    </div>
+  )
+
   const scrollXCount = useGetScrollCount(columns);
 
   return (
     <div className='test-video-box'>
+      {renderSearch()}
       <div className='flex justify-end mb-3'>
         <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加手机型号</Button>
       </div>

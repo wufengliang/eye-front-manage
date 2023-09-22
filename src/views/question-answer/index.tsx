@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-09-13 17:32:50
+ * @LastEditTime: 2023-09-22 11:29:29
  * @Description: 问卷答案
  */
-import { Table, Button } from 'antd';
+import { Table, Button, Tag } from 'antd';
 import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table';
 import { OperateType } from '@/types/operate.enum';
@@ -36,7 +36,7 @@ function QuestionAnswer() {
       dataIndex: 'status',
       width: 150,
       render: (_, record) => (
-        <>{record.status === 0 ? '正在回收' : '待投放'}</>
+        <Tag color={record.status === 0 ? 'red' : 'green'}>{record.status === 0 ? '正在回收' : '待投放'}</Tag>
       )
     },
     {

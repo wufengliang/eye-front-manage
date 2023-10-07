@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-09-22 17:22:39
+ * @LastEditTime: 2023-09-23 10:10:22
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -16,6 +16,7 @@ import { CustomSearch } from '@/components';
 import { DeleteOutlined } from '@ant-design/icons';
 import ProjectTemplate from './template';
 import RecoveryTemplate from './recovery';
+import FaceTemplate from './face';
 import { to } from '@/utils/utils';
 import dayjs from 'dayjs';
 
@@ -98,9 +99,26 @@ function ProjectManage() {
         return showRecovery();
       case OperateType.DELETE:
         return deleteProject(data);
+      case OperateType.FACESHOW:
+        return showFaceManage();
       default:
         return;
     }
+  }
+
+  /**
+   * @desc 展示人脸示范管理
+   */
+  const showFaceManage = async () => {
+    Modal.confirm({
+      title: "人脸识别示范管理",
+      content: <FaceTemplate />,
+      width: 600,
+      maskClosable: false,
+      closable: true,
+      icon: null,
+      footer: null,
+    })
   }
 
   /**

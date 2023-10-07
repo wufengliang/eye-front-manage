@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 11:49:57
- * @LastEditTime: 2023-09-13 11:27:05
+ * @LastEditTime: 2023-09-23 12:03:49
  * @Description: 公共类型
  */
 
@@ -23,4 +23,14 @@ export interface IColumnType {
   dataIndex: string;
   fixed?: string;
   width: number;
+}
+
+/**
+ * @desc 上传通用类型
+ */
+export interface IUploadType {
+  contentType: string;
+  expireTime: number;
+  fileName: string;
+  urlPath: string;
 }

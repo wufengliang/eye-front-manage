@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-09-22 16:54:09
+ * @LastEditTime: 2023-09-23 10:55:54
  * @Description:
  */
 import instance from './instance';
@@ -32,4 +32,19 @@ export function createProjectData(data: unknown) {
  */
 export function updateProjectData(id: string | number, status = 1) {
   return instance.post(`/api/survey/update`, { id: Number(`${id}`), status })
+}
+
+
+/**
+ * @desc 获取人脸示范管理数据
+ */
+export function getShowFaceList() {
+  return instance.get(`/api/file/system/getFile?fileSystemId=8`)
+}
+
+/**
+ * @desc 删除人脸示范数据
+ */
+export function deleteFaceItem(fileId: string | number) {
+  return instance.delete(`/api/file/delete?fileId=${fileId}`)
 }

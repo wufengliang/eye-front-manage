@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-22 11:11:06
+ * @LastEditTime: 2023-09-23 11:54:05
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import { getDownloadVideoList } from '@/api/download-video';
 import { TNumberOrString } from '@/types/common.type';
 import type { ColumnsType } from 'antd/es/table';
-import { useGetScrollCount } from '@/hooks';
+import { useGetScrollCount, useTableProps } from '@/hooks';
 import DownloadVideoTemplate from './template';
 import { CustomSearch } from '@/components';
 
@@ -77,13 +77,10 @@ function DownloadVideo() {
 
   const scrollXCount = useGetScrollCount(columns);
 
-  const renderTable = () => {
-    return <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...tableProps} />
-  }
 
   return <div className='project-box'>
     {renderSearch()}
-    {renderTable()}
+    <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
   </div>
 }
 

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-09-22 17:21:56
+ * @LastEditTime: 2023-09-23 10:02:25
  * @Description: 用户管理
  */
 import { useRef } from 'react';
@@ -85,7 +85,7 @@ function UserManage() {
       title: '最近登录',
       dataIndex: 'lastLoginTime',
       width: 170,
-      render: (_, record) => <a href='javascript'>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</a>
+      render: (_, record) => <>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</>
     },
     { title: '备注', dataIndex: 'remark', width: 150, },
     {

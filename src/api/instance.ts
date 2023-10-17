@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-31 14:50:25
- * @LastEditTime: 2023-09-23 14:12:11
+ * @LastEditTime: 2023-10-07 19:37:01
  * @Description: 拦截器
  */
 import axios from 'axios';
@@ -35,14 +35,14 @@ instance.interceptors.response.use(response => {
   const { code, message, data: result } = response.data;
   switch (response.status) {
     case 200:
-      if ([403, 404, 4005].includes(code)) {
-        notification.error({ message: '提示', description: message, duration: 2 });
+      if ([403, 404, 500].includes(code)) {
+        notification.error({ message: '提示', description: message || '接口异常', duration: 2 });
         return Promise.reject(response);
       }
 
-      if ([500].includes(code)) {
-        notification.error({ message: '提示', description: message || '接口异常', duration: 2 });
-        return Promise.reject(response);
+      if ([4005].includes(code)) {
+        notification.error({ message: '提示', description: message, duration: 2 });
+        return login();
       }
 
       if (code === 200) {

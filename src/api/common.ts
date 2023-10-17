@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-23 10:20:24
- * @LastEditTime: 2023-09-23 14:33:22
+ * @LastEditTime: 2023-10-16 11:30:10
  * @Description: 公共调用接口
  */
 import { IUploadType } from '@/types/common.type';
@@ -34,4 +34,12 @@ export async function uploadFile(data: IUploadType) {
     return [error1];
   }
   return [error];
+}
+
+/**
+ * @desc 根据图片获取用户的分辨率
+ * @param {String} session session字段
+ */
+export function getScreenInfo(session: string) {
+  return instance.get(`/answer/getClientScreen?session=${session}`);
 }

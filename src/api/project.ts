@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-09-23 10:55:54
+ * @LastEditTime: 2023-10-17 14:22:38
  * @Description:
  */
 import instance from './instance';
@@ -47,4 +47,11 @@ export function getShowFaceList() {
  */
 export function deleteFaceItem(fileId: string | number) {
   return instance.delete(`/api/file/delete?fileId=${fileId}`)
+}
+
+/**
+ * @desc 获取问卷信息
+ */
+export function getSurveyData(id: string) {
+  return instance.get(`https://vision.idp-tech.com/api/question/get?surveyId=${id}`);
 }

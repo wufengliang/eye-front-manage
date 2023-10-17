@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:14:07
- * @LastEditTime: 2023-09-19 16:39:34
+ * @LastEditTime: 2023-10-16 11:28:23
  * @Description: 测试视频
  */
 import instance from './instance';
@@ -33,4 +33,12 @@ export function getTrajectoryData(videoIds: number[]) {
  */
 export function getDynamicHotData(videoId: string) {
   return instance.get(`/api/viewTrace/getHeatmapImage?videoId=${videoId}`);
+}
+
+/**
+ * @desc 下载轨迹图数据
+ * @param {Object} data 数据体
+ */
+export function donwloadMoveMapData(data: Record<string, any>) {
+  return instance.post(`/viewTrace/batchGetEyeTrackData`, { ...data });
 }

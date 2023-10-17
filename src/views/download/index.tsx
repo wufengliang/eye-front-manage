@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 15:30:18
- * @LastEditTime: 2023-09-05 16:37:38
+ * @LastEditTime: 2023-10-07 19:45:51
  * @Description: 下载界面
  */
 import { useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getReleaseAppInfo } from '@/api/donwload';
 import { to } from '@/utils/utils';
 import { IDownloadType } from '@/types/download.type';
+import { downloadFile } from '@/utils/download';
 import './index.scss'
 
 function Download() {
@@ -26,6 +27,15 @@ function Download() {
       setConfig(result);
     }
   }
+
+  //    下载apk
+  const downloadApp = () => {
+    message.info(`正在下载中，请耐心等待...`);
+    downloadFile(config.link!, `${config.fileName}.apk`)
+      .then(() => {
+        message.success(`下载成功`);
+      });
+  };
 
   return (
     <div className='download-box flex items-center justify-center w-full h-full'>
@@ -60,11 +70,13 @@ function Download() {
           <Button type='primary'
             className='bg-[#1677ff] hover:bg-[#1677ff]'
             icon={<DownloadOutlined />}
+            onClick={() => downloadApp()}
           >手机端下载</Button>
           <Button
             type='primary'
             className='margin-left-12 bg-[#1677ff] hover:bg-[#1677ff]'
             icon={<DownloadOutlined />}
+            onClick={() => downloadApp()}
           >Pad版下载</Button>
         </div>
         <div className="flex items-center justify-center margin-bottom-18 font-14">

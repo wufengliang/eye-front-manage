@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 11:49:57
- * @LastEditTime: 2023-09-23 12:03:49
+ * @LastEditTime: 2023-10-16 11:35:38
  * @Description: 公共类型
  */
 
@@ -33,4 +33,13 @@ export interface IUploadType {
   expireTime: number;
   fileName: string;
   urlPath: string;
+}
+
+
+export interface IMoveType {
+  container: HTMLElement;
+  width: number;
+  height: number;
+  data: any[];
+  url: string;
 }

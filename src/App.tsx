@@ -1,8 +1,8 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-09-21 11:54:47
- * @Description:
+ * @LastEditTime: 2023-10-17 13:51:47
+ * @Description: 路由注册
  */
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, } from 'react-router-dom';
@@ -19,6 +19,8 @@ import DownloadVideo from '@/views/download-video';
 import PhoneType from '@/views/phone-type';
 import QuestionAnswer from '@/views/question-answer';
 import Upload from '@/views/upload';
+import QuestionDownload from '@/views/question-download';
+import ProjectDetail from '@/views/project-detail';
 import './App.scss';
 
 export default function App() {
@@ -34,14 +36,16 @@ export default function App() {
       <Routes>
         <Route path='/' element={<LayoutBox />}>
           <Route index element={<Navigate to={'/user'} />} />
-          <Route index path='/user' element={<User />} />
-          <Route index path='/project' element={<Project />} />
-          <Route index path='/testVideo' element={<TestVideo />} />
-          <Route index path='/checkVideo' element={<CheckVideo />} />
-          <Route index path='/downloadVideo' element={<DownloadVideo />} />
-          <Route index path='/phoneType' element={<PhoneType />} />
-          <Route index path='/questionAnswer' element={<QuestionAnswer />} />
-          <Route index path='/upload' element={<Upload />} />
+          <Route path='/user' element={<User />} />
+          <Route path='/project' element={<Project />} />
+          <Route path='/projectDetail/:id' element={<ProjectDetail />} />
+          <Route path='/testVideo' element={<TestVideo />} />
+          <Route path='/checkVideo' element={<CheckVideo />} />
+          <Route path='/downloadVideo' element={<DownloadVideo />} />
+          <Route path='/phoneType' element={<PhoneType />} />
+          <Route path='/questionAnswer' element={<QuestionAnswer />} />
+          <Route path='/upload' element={<Upload />} />
+          <Route path='/questionDownload' element={<QuestionDownload />} />
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />

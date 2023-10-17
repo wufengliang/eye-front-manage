@@ -1,12 +1,12 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-19 16:19:28
- * @LastEditTime: 2023-09-19 16:20:03
+ * @LastEditTime: 2023-10-07 19:42:46
  * @Description: 下载类
  */
 /**
- * @desc 下载图片
- * @param {String} url 图片地址
+ * @desc 下载文件
+ * @param {String} url 文件地址
  * @param {String} filename  保存文件名
  */
 export function downloadFile(url: string, filename: string) {

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-23 11:54:05
+ * @LastEditTime: 2023-10-16 13:53:49
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
@@ -59,6 +59,7 @@ function DownloadVideo() {
       maskClosable: false,
       closable: true,
       icon: null,
+      width: 600,
     })
   }
 

@@ -1,20 +1,21 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-09-22 17:24:02
+ * @LastEditTime: 2023-10-16 12:06:47
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
 import { useAntdTable } from 'ahooks';
 import { useRef } from 'react';
-import type { ColumnsType } from 'antd/es/table'
-import { getTestVideoList, getHotPicture } from '@/api/test-video';
+import type { ColumnsType } from 'antd/es/table';
+import { getTestVideoList, getHotPicture, donwloadMoveMapData } from '@/api/test-video';
+import { getScreenInfo } from '@/api/common';
 import { TNumberOrString } from '@/types/common.type';
 import dayjs from 'dayjs';
 import { useGetScrollCount, useTableProps } from '@/hooks';
 import { OperateType } from '@/types/operate.enum';
 import { CustomPlay } from '@/components';
-import { getExt, to } from '@/utils/utils';
+import { getExt, to, createMoveMap } from '@/utils/utils';
 import { downloadFile } from '@/utils/download';
 import { CustomSearch } from '@/components';
 
@@ -92,8 +93,11 @@ function TestVideo() {
 
     // 热力图查看详情、下载 + 下载动态热力图
     if ([OperateType.DETAIL, OperateType.DOWNLOAD].includes(type) && ([TTestVideoType.HOT, TTestVideoType.DYNAMIC_HOT].includes(currentType!))) {
-      hotPictureOperate(type, currentType!, data);
+      return hotPictureOperate(type, currentType!, data);
     }
+
+    //  轨迹图操作
+    return movePictureOperate(type, currentType!, data);
   }
 
   /**
@@ -129,10 +133,79 @@ function TestVideo() {
       });
     }
 
-    const ext = getExt((currentType === TTestVideoType.HOT ? value.heatmapLink : value.heatmapVideoLink).split('?'));
-    const filename = `热力图_(问卷ID_${surveyId})-(问题ID_${questionId})-(用户ID_${userId})-(视频ID_${id}).${ext || ('jpg')}`;
+    const array = (currentType === TTestVideoType.HOT ? value.heatmapLink : value.heatmapVideoLink).split('?');
+    const ext = getExt(array.length > 1 ? array[0] : array);
+    const filename = `${currentType === TTestVideoType.HOT ? '' : '动态'}热力图_(问卷ID_${surveyId})-(问题ID_${questionId})-(用户ID_${userId})-(视频ID_${id}).${ext || ('jpg')}`;
     downloadFile(value.heatmapLink, filename).then(() => message.success('下载成功'));
   }
+
+  /**
+   * @desc 获取轨迹图数据进行操作
+   * @param {OperateType} operateType 操作类
+   * @param {TTestVideoType} currentType 当前数据类
+   * @param {Record} data 单项数据体
+   */
+  const movePictureOperate = async (operateType: OperateType, currentType: TTestVideoType, data?: Record<string, any>) => {
+    const receiveData = await getMovePointData(data!);
+
+    if (!receiveData) {
+      return;
+    }
+
+    const { indexList, rowPixel, columnPixel, statusBarHeight, questionFilePath } = receiveData;
+
+    const container = document.createElement('div');
+
+    createMoveMap({
+      container,
+      width: rowPixel || 1080,
+      height: (columnPixel || 1670) - statusBarHeight,
+      url: questionFilePath,
+      data: indexList,
+    })
+
+    if (operateType === OperateType.DETAIL) {
+      return Modal.confirm({
+        title: '查看轨迹图',
+        icon: null,
+        maskClosable: false,
+        closable: true,
+        width: 520,
+        footer: null,
+        content: <div dangerouslySetInnerHTML={{ __html: container.outerHTML }}></div>,
+      })
+    }
+  }
+
+  //  获取轨迹图坐标基础数据
+  const getMovePointData = async (data: Record<string, any>) => {
+    const { session, questionFilePath, id } = data;
+    if (!questionFilePath) {
+      message.error(`暂无轨迹图数据`);
+      return;
+    }
+    const result = await donwloadMoveMapData([id]);
+    if (
+      !Array.isArray(result.data.data) ||
+      (Array.isArray(result.data.data) && !result.data.data.length)
+    ) {
+      message.error("暂无轨迹图数据");
+      return;
+    }
+    const _result = await getScreenInfo(session);
+    const {
+      rowPixel = 1080,
+      columnPixel = 1670,
+      statusBarHeight = 0,
+    } = _result.data.data;
+    return {
+      indexList: result.data.data[0].indexList,
+      rowPixel,
+      columnPixel,
+      statusBarHeight,
+      questionFilePath,
+    };
+  };
 
   const scrollXCount = useGetScrollCount(columns);
 

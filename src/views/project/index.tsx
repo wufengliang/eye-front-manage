@@ -1,13 +1,14 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-09-23 10:10:22
+ * @LastEditTime: 2023-10-17 13:58:46
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
 import { useRef, useState } from 'react';
 import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table';
+import { useNavigate } from 'react-router-dom';
 import { OperateType } from '@/types/operate.enum';
 import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount, useTableProps } from '@/hooks';
@@ -27,6 +28,7 @@ const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, 
 function ProjectManage() {
   const searchRef = useRef<unknown>(null);
   const createProjectRef = useRef(null);
+  const navigate = useNavigate();
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
 
   const { tableProps, search } = useAntdTable(getData, {
@@ -73,7 +75,7 @@ function ProjectManage() {
       fixed: 'right',
       render: (_, record) => (
         <>
-          {record.status !== 0 ? <Button className='margin-bottom-10' type='primary'>重新编辑</Button> : null}
+          {record.status !== 0 ? <Button className='margin-bottom-10'>重新编辑</Button> : null}
           <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.DETAIL, record)}>查看详情</Button>
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
         </>
@@ -101,6 +103,9 @@ function ProjectManage() {
         return deleteProject(data);
       case OperateType.FACESHOW:
         return showFaceManage();
+      case OperateType.DETAIL:
+        const { id, title, startTips, endTips } = data as Record<string, any>;
+        return navigate(`/projectDetail/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`)
       default:
         return;
     }

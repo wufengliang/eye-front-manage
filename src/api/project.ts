@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-17 14:22:38
+ * @LastEditTime: 2023-10-17 17:02:17
  * @Description:
  */
 import instance from './instance';
@@ -53,5 +53,12 @@ export function deleteFaceItem(fileId: string | number) {
  * @desc 获取问卷信息
  */
 export function getSurveyData(id: string) {
-  return instance.get(`https://vision.idp-tech.com/api/question/get?surveyId=${id}`);
+  return instance.get(`/api/question/get?surveyId=${id}`);
+}
+
+/**
+ * @desc 复制问卷
+ */
+export function copySurvey(surveyId: string, userId: string) {
+  return instance.get(`/api/survey/copy?surveyId=${surveyId}&userId=${userId}`);
 }

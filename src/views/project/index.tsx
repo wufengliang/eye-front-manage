@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-17 13:58:46
+ * @LastEditTime: 2023-10-17 17:06:34
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -12,12 +12,13 @@ import { useNavigate } from 'react-router-dom';
 import { OperateType } from '@/types/operate.enum';
 import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount, useTableProps } from '@/hooks';
-import { getProjectList, createProjectData, updateProjectData } from '@/api/project';
+import { getProjectList, createProjectData, updateProjectData, copySurvey } from '@/api/project';
 import { CustomSearch } from '@/components';
 import { DeleteOutlined } from '@ant-design/icons';
 import ProjectTemplate from './template';
 import RecoveryTemplate from './recovery';
 import FaceTemplate from './face';
+import UserTemplate from './user';
 import { to } from '@/utils/utils';
 import dayjs from 'dayjs';
 
@@ -27,6 +28,7 @@ const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, 
 
 function ProjectManage() {
   const searchRef = useRef<unknown>(null);
+  const userRef = useRef<unknown>(null);
   const createProjectRef = useRef(null);
   const navigate = useNavigate();
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
@@ -95,17 +97,52 @@ function ProjectManage() {
 
   const handleOperate = async (type: OperateType, data?: unknown) => {
     switch (type) {
+      //  添加
       case OperateType.ADD:
         return createProject();
+      //  回收站
       case OperateType.RECOVERY:
         return showRecovery();
+      //  删除
       case OperateType.DELETE:
         return deleteProject(data);
+      //  脸部
       case OperateType.FACESHOW:
         return showFaceManage();
+      //  详情
       case OperateType.DETAIL:
         const { id, title, startTips, endTips } = data as Record<string, any>;
         return navigate(`/projectDetail/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`)
+      //  复制
+      case OperateType.COPY:
+        return Modal.confirm({
+          title: '选择收到问卷的用户',
+          content: <UserTemplate ref={userRef} />,
+          icon: null,
+          maskClosable: false,
+          closable: true,
+          width: 650,
+          onOk: async () => {
+            const { userList } = userRef.current as Record<string, any>;
+            if (userList.length === 0) {
+              message.error(`请选择收到问卷的用户`);
+              return Promise.reject('请选择收到问卷的用户');
+            }
+            const userIds = userList.map((item: any) => item.id);
+            const projectIds = selectedArray.map((item: any) => item.id);
+            const pArray: any[] = [];
+            projectIds.forEach(id => {
+              userIds.forEach((userId: string) => pArray.push(copySurvey(id, userId)));
+            });
+            Promise.all(pArray)
+              .then(() => {
+                message.success(`复制成功`);
+              })
+              .catch(() => {
+                message.error(`复制异常，请联系管理员操作`);
+              })
+          }
+        })
       default:
         return;
     }

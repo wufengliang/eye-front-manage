@@ -1,10 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-09-22 17:25:20
+ * @LastEditTime: 2023-10-17 17:29:21
  * @Description: 问卷答案
  */
 import { Table, Button, Tag } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table';
 import { OperateType } from '@/types/operate.enum';
@@ -23,6 +24,8 @@ function QuestionAnswer() {
       { search: '' }
     ]
   });
+
+  const navigate = useNavigate();
 
   const columns: ColumnsType<any> = [
     { title: '问卷ID', dataIndex: 'id', fixed: 'left', width: 150, },
@@ -53,7 +56,12 @@ function QuestionAnswer() {
   ];
 
   const handleOperate = async (type: OperateType, data: unknown) => {
-
+    switch (type) {
+      case OperateType.DETAIL:
+        return navigate(`/answerUser?id=${(data as Record<string, any>)?.id}`);
+      default:
+        return;
+    }
   }
 
   const scrollXCount = useGetScrollCount(columns);

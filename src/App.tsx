@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-17 13:51:47
+ * @LastEditTime: 2023-10-17 17:17:46
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
@@ -21,7 +21,7 @@ import QuestionAnswer from '@/views/question-answer';
 import Upload from '@/views/upload';
 import QuestionDownload from '@/views/question-download';
 import ProjectDetail from '@/views/project-detail';
-import './App.scss';
+import AnswerUser from '@/views/answer-user';
 
 export default function App() {
 
@@ -44,6 +44,7 @@ export default function App() {
           <Route path='/downloadVideo' element={<DownloadVideo />} />
           <Route path='/phoneType' element={<PhoneType />} />
           <Route path='/questionAnswer' element={<QuestionAnswer />} />
+          <Route path='/answerUser' element={<AnswerUser />} />
           <Route path='/upload' element={<Upload />} />
           <Route path='/questionDownload' element={<QuestionDownload />} />
         </Route>

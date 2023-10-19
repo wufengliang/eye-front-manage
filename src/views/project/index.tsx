@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-19 10:32:35
+ * @LastEditTime: 2023-10-19 15:13:08
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -199,6 +199,7 @@ function ProjectManage() {
       maskClosable: false,
       icon: null,
       closable: true,
+      style: { top: 5 }
     })
   }
 

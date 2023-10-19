@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-18 11:32:12
+ * @LastEditTime: 2023-10-19 15:31:57
  * @Description: 问卷答案
  */
 import { Table, Button, Tag } from 'antd';
@@ -12,6 +12,7 @@ import { OperateType } from '@/types/operate.enum';
 import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount, useTableProps } from '@/hooks';
 import { getQuestionAnswerList } from '@/api/question-answer';
+import dayjs from 'dayjs';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getQuestionAnswerList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -32,8 +33,30 @@ function QuestionAnswer() {
     { title: '问卷标题', dataIndex: 'title', width: 150, },
     { title: '问卷开始语简介', dataIndex: 'startTips', width: 150, },
     { title: '问卷结束语简介', dataIndex: 'endTips', width: 170, },
-    { title: '投放开始时间', dataIndex: 'startTime', width: 150, },
-    { title: '投放结束时间', dataIndex: 'endTime', width: 150, },
+    {
+      title: '投放开始时间',
+      dataIndex: 'startTime',
+      width: 200,
+      render: (_, record) => {
+        return (
+          <>
+            {dayjs(record.startTime).format('YYYY-MM-DD HH:mm:ss')}
+          </>
+        )
+      }
+    },
+    {
+      title: '投放结束时间',
+      dataIndex: 'endTime',
+      width: 200,
+      render: (_, record) => {
+        return (
+          <>
+            {dayjs(record.startTime).format('YYYY-MM-DD HH:mm:ss')}
+          </>
+        )
+      }
+    },
     {
       title: '问卷状态',
       dataIndex: 'status',

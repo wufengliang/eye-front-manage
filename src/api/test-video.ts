@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:14:07
- * @LastEditTime: 2023-10-17 18:03:12
+ * @LastEditTime: 2023-10-19 14:37:05
  * @Description: 测试视频
  */
 import instance from './instance';
@@ -40,7 +40,7 @@ export function getDynamicHotData(videoId: string) {
  * @param {Object} data 数据体
  */
 export function donwloadMoveMapData(data: Record<string, any>) {
-  return instance.post(`/viewTrace/batchGetEyeTrackData`, { ...data });
+  return instance.post(`/viewTrace/batchGetEyeTrackData`, { data });
 }
 
 /**

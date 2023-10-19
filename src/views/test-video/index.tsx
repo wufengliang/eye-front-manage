@@ -1,14 +1,14 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-10-17 17:58:19
+ * @LastEditTime: 2023-10-19 14:58:40
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
 import { useAntdTable } from 'ahooks';
 import { useRef, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import { getTestVideoList, getHotPicture, donwloadMoveMapData } from '@/api/test-video';
+import { getTestVideoList, getHotPicture, donwloadMoveMapData, downloadHotData } from '@/api/test-video';
 import { getScreenInfo } from '@/api/common';
 import { TNumberOrString } from '@/types/common.type';
 import dayjs from 'dayjs';
@@ -18,6 +18,9 @@ import { CustomPlay } from '@/components';
 import { getExt, to, createMoveMap } from '@/utils/utils';
 import { downloadFile } from '@/utils/download';
 import { CustomSearch } from '@/components';
+import DownloadOptionsTemplate from './download-options';
+import JSZip from 'jszip';
+import fileSaver from 'file-saver';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getTestVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
@@ -32,6 +35,7 @@ enum TTestVideoType {
 function TestVideo() {
   //  表单组件
   const searchRef = useRef<Record<string, any>>({});
+  const optionsRef = useRef<Record<string, any>>({});
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
 
   const { tableProps, search } = useAntdTable(getData, {
@@ -195,7 +199,7 @@ function TestVideo() {
       message.error(`暂无轨迹图数据`);
       return;
     }
-    const result = await donwloadMoveMapData([id]);
+    const result = await donwloadMoveMapData({ videoIds: [id] });
     if (
       !Array.isArray(result.data.data) ||
       (Array.isArray(result.data.data) && !result.data.data.length)
@@ -218,6 +222,85 @@ function TestVideo() {
     };
   };
 
+  //  批量下载操作
+  const moreDownloadOptions = async (currentType: TTestVideoType) => {
+    Modal.confirm({
+      title: `${currentType === TTestVideoType.HOT ? '热力图' : '轨迹图'}批量下载选项`,
+      content: <DownloadOptionsTemplate ref={optionsRef} />,
+      maskClosable: false,
+      closeIcon: true,
+      icon: null,
+      width: 520,
+      onOk: async () => {
+        const { getValues } = optionsRef.current;
+        const values = getValues();
+        handleExportData(currentType, values);
+      }
+    })
+  }
+
+  //  导出操作
+  const handleExportData = async (currentType: TTestVideoType, values: Record<string, any> = {}) => {
+    const { createTime = [], surveyId, videoIds } = values;
+    const params: Record<string, any> = {
+      surveyId: `${surveyId}`,
+      videoIds,
+      createTime
+    };
+    if (Array.isArray(createTime) && createTime.length === 2) {
+      const [startDate, endDate] = createTime;
+      params.createTime = [
+        `${dayjs(startDate).format("YYYY-MM-DDT00:00:00")}`,
+        `${dayjs(endDate).format("YYYY-MM-DDT00:00:00")}`,
+      ];
+    }
+    message.info(`正在导出数据中，请耐心等待...`);
+    const [error, array] = await to(currentType === TTestVideoType.HOT ? downloadHotData(params) : donwloadMoveMapData(params));
+    if (error) {
+      message.destroy();
+      return message.error(`导出失败，请联系管理员`);
+    }
+
+    if (!Array.isArray(array) || (Array.isArray(array) && !array.length)) {
+      message.destroy();
+      return message.error("暂无坐标数据");
+    }
+
+    if (Array.isArray(array)) {
+      const zip = new JSZip();
+      array.forEach(({ videoId, indexList, surveyId, userId, questionId }) => {
+        if (!indexList) return;
+        const newIndexList = indexList.map((item: { x: any; y: any; }, index: number) => {
+          const { x, y } = item;
+          return `${index + 1} ${x} ${y}`;
+        });
+        zip.file(
+          `${currentType === TTestVideoType.HOT ? '热力图' : '轨迹图'}_(问卷ID_${surveyId})-(问题ID_${questionId})-(用户ID_${userId})-(视频ID_${videoId}).txt`,
+          newIndexList.join("\n")
+        );
+      });
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        fileSaver.saveAs(content, `导出${currentType === TTestVideoType.HOT ? '热力图' : '轨迹图'}数据.zip`);
+        message.destroy();
+        message.success(`数据导出成功`);
+      });
+    } else {
+      message.destroy();
+      message.error(`数据异常，请联系管理员`);
+    }
+  }
+
+  //  导出部分数据
+  const exportChooseData = async (currentType: TTestVideoType) => {
+    const videoIds = selectedArray.map((item: any) => item.id);
+    const params = {
+      createTime: [],
+      surveyId: '',
+      videoIds
+    }
+    handleExportData(currentType, params);
+  }
+
   const scrollXCount = useGetScrollCount(columns);
 
   //  渲染搜索区域
@@ -237,10 +320,10 @@ function TestVideo() {
     <div className='test-video-box'>
       {renderSearch()}
       <Row className='mb-1 flex-wrap' justify={'end'}>
-        <Button type='primary' className='mr-3 mb-3'>批量下载热力图数据</Button>
-        <Button type='primary' className='mr-3 mb-3'>批量下载轨迹图数据</Button>
-        <Button className='mr-3 mb-3' disabled={selectedArray.length === 0}>导出选中热力图数据</Button>
-        <Button className='mr-3 mb-3' disabled={selectedArray.length === 0}>导出选中轨迹图数据</Button>
+        <Button type='primary' className='mr-3 mb-3' onClick={() => moreDownloadOptions(TTestVideoType.HOT)}>批量下载热力图数据</Button>
+        <Button type='primary' className='mr-3 mb-3' onClick={() => moreDownloadOptions(TTestVideoType.TRAJECTORY)}>批量下载轨迹图数据</Button>
+        <Button className='mr-3 mb-3' disabled={selectedArray.length === 0} onClick={() => exportChooseData(TTestVideoType.HOT)}>导出选中热力图数据</Button>
+        <Button className='mr-3 mb-3' disabled={selectedArray.length === 0} onClick={() => exportChooseData(TTestVideoType.TRAJECTORY)}>导出选中轨迹图数据</Button>
       </Row>
       <Table columns={columns} rowSelection={rowSelection} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </div>

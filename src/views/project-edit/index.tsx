@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-18 14:26:41
+ * @LastEditTime: 2023-10-19 10:29:06
  * @Description: 项目编辑
  */
 
@@ -11,10 +11,11 @@ import { Tabs, Switch, Button } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import ProjectTemplate from '@/views/project/template';
 import { CustomBack } from '@/components';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 function ProjectEdit() {
-  const [searchParams] = useSearchParams();
+  const { state } = useLocation();
 
   /**
    * @desc 左侧空间
@@ -54,7 +55,9 @@ function ProjectEdit() {
           <ProjectTemplate layout={{
             labelCol: { span: 10 },
             wrapperCol: { span: 14 }
-          }} />
+          }}
+            {...Object.assign({}, state, { startTime: dayjs(state.startTime), endTime: dayjs(state.endTime) })}
+          />
         </div>
       </div>
     )
@@ -73,8 +76,8 @@ function ProjectEdit() {
               key: '1',
               children: (
                 <div>
-                  <h3 className='text-center'>{searchParams.get('title')}</h3>
-                  <p className='text-center'>{searchParams.get('startTips')}</p>
+                  <h3 className='text-center'>{state?.title}</h3>
+                  <p className='text-center'>{state?.startTips}</p>
                 </div>
               )
             },
@@ -82,7 +85,7 @@ function ProjectEdit() {
               label: '结束页',
               key: '2',
               children: (
-                <p className="text-center">{searchParams.get('endTips')}</p>
+                <p className="text-center">{state?.endTips}</p>
               )
             }
           ]} />

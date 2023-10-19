@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2023-10-18 14:20:12
+ * @LastEditTime: 2023-10-19 10:26:08
  * @Description: 项目创建模板内容
  */
 import { forwardRef, useImperativeHandle, Ref, useRef } from 'react';
@@ -27,7 +27,7 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
 
   return (
     <>
-      <Form ref={form} {...(props?.layout || layout)}>
+      <Form ref={form} {...(props?.layout || layout)} initialValues={props}>
         <Form.Item label='问卷标题' name='title' rules={[{ required: true, message: '请输入问卷标题' }]}>
           <Input placeholder='请输入问卷标题...' />
         </Form.Item>

@@ -1,11 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 13:50:29
- * @LastEditTime: 2023-10-19 09:53:53
+ * @LastEditTime: 2023-10-19 10:32:20
  * @Description: 项目详情
  */
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Radio, Space, Checkbox, Input, Row, Col } from 'antd';
 import { getSurveyData } from '@/api/project';
 import { to } from '@/utils/utils';
@@ -14,9 +14,8 @@ import { CustomBack } from '@/components';
 import './index.scss';
 
 function ProjectDetail() {
-  const navigate = useNavigate();
   const routeParams = useParams();
-  const [searchParams] = useSearchParams();
+  const { state } = useLocation();
   const [list, setList] = useState<any[]>([]);
 
 
@@ -148,12 +147,12 @@ function ProjectDetail() {
     return (
       <div className='main-box'>
         <div className='w-3/4 bg-white py-40 m-auto'>
-          <h1 className='text-center'>{searchParams.get('title')}</h1>
-          <h3 className='text-center mb-20'>{searchParams.get('startTips')}</h3>
+          <h1 className='text-center'>{state?.title}</h1>
+          <h3 className='text-center mb-20'>{state?.startTips}</h3>
           <div className='px-20'>
             {list.map(renderSingleQuestion)}
           </div>
-          <h3 className='text-center'>{searchParams.get('endTips')}</h3>
+          <h3 className='text-center'>{state?.endTips}</h3>
         </div>
       </div>
     )

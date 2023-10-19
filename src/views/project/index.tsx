@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-17 17:50:12
+ * @LastEditTime: 2023-10-19 10:32:35
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -96,14 +96,14 @@ function ProjectManage() {
   }
 
   const handleOperate = async (type: OperateType, data?: unknown) => {
-    const { id, title, startTips, endTips } = (data || {}) as Record<string, any>;
+    const { id } = (data || {}) as Record<string, any>;
     switch (type) {
       //  添加
       case OperateType.ADD:
         return createProject();
       //  编辑
       case OperateType.EDIT:
-        return navigate(`/projectEdit/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`)
+        return navigate(`/projectEdit/${id}`, { state: data })
       //  回收站
       case OperateType.RECOVERY:
         return showRecovery();
@@ -115,7 +115,7 @@ function ProjectManage() {
         return showFaceManage();
       //  详情
       case OperateType.DETAIL:
-        return navigate(`/projectDetail/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`);
+        return navigate(`/projectDetail/${id}`, { state: data });
       //  复制
       case OperateType.COPY:
         return Modal.confirm({

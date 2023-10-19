@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-17 17:06:34
+ * @LastEditTime: 2023-10-17 17:50:12
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -77,7 +77,7 @@ function ProjectManage() {
       fixed: 'right',
       render: (_, record) => (
         <>
-          {record.status !== 0 ? <Button className='margin-bottom-10'>重新编辑</Button> : null}
+          {record.status !== 0 ? <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>重新编辑</Button> : null}
           <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.DETAIL, record)}>查看详情</Button>
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
         </>
@@ -96,10 +96,14 @@ function ProjectManage() {
   }
 
   const handleOperate = async (type: OperateType, data?: unknown) => {
+    const { id, title, startTips, endTips } = (data || {}) as Record<string, any>;
     switch (type) {
       //  添加
       case OperateType.ADD:
         return createProject();
+      //  编辑
+      case OperateType.EDIT:
+        return navigate(`/projectEdit/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`)
       //  回收站
       case OperateType.RECOVERY:
         return showRecovery();
@@ -111,8 +115,7 @@ function ProjectManage() {
         return showFaceManage();
       //  详情
       case OperateType.DETAIL:
-        const { id, title, startTips, endTips } = data as Record<string, any>;
-        return navigate(`/projectDetail/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`)
+        return navigate(`/projectDetail/${id}?title=${title}&startTips=${startTips}&endTips=${endTips}`);
       //  复制
       case OperateType.COPY:
         return Modal.confirm({

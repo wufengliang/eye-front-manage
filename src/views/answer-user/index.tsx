@@ -1,10 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:16:24
- * @LastEditTime: 2023-10-17 17:34:12
+ * @LastEditTime: 2023-10-18 11:32:32
  * @Description: 问卷答案下的所有用户
  */
 import { getUserList } from '@/api/user';
+import { CustomBack } from '@/components';
 import { useGetScrollCount, useTableProps } from '@/hooks';
 import { TNumberOrString } from '@/types/common.type';
 import { useAntdTable } from 'ahooks';
@@ -53,7 +54,7 @@ function AnswerUser() {
   return (
     <>
       <div className='my-4'>
-        <a className='cursor-pointer sticky top-20' onClick={() => navigate(-1)}>&lt; 返回</a>
+        <CustomBack />
       </div>
       <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </>

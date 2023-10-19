@@ -1,12 +1,12 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2023-09-22 11:27:00
+ * @LastEditTime: 2023-10-18 13:47:13
  * @Description: 创建用户、编辑用户
  */
 import { useRef, forwardRef, useImperativeHandle, Ref } from 'react';
 import { Form, Input, Select } from 'antd';
-import { UserTypeList } from '@/utils/const';
+import { USER_TYPE_LIST } from '@/utils/const';
 
 function UserTemplate(props = {}, cref?: Ref<unknown>) {
   const layout = {
@@ -40,7 +40,7 @@ function UserTemplate(props = {}, cref?: Ref<unknown>) {
         </Form.Item>
         <Form.Item name={'role'} label='角色'>
           <Select placeholder='请选择用户角色'>
-            {UserTypeList.map(item => (
+            {USER_TYPE_LIST.map(item => (
               <Select.Option value={item.value}>{item.label}</Select.Option>
             ))}
           </Select>

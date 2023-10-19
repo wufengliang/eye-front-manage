@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-17 17:29:21
+ * @LastEditTime: 2023-10-18 11:32:12
  * @Description: 问卷答案
  */
 import { Table, Button, Tag } from 'antd';
@@ -66,9 +66,11 @@ function QuestionAnswer() {
 
   const scrollXCount = useGetScrollCount(columns);
 
-  return <div className='project-box'>
-    <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
-  </div>
+  return (
+    <div className='project-box'>
+      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
+    </div>
+  )
 }
 
 export default QuestionAnswer;

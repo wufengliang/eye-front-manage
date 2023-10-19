@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-17 17:17:46
+ * @LastEditTime: 2023-10-17 17:47:07
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
@@ -22,6 +22,7 @@ import Upload from '@/views/upload';
 import QuestionDownload from '@/views/question-download';
 import ProjectDetail from '@/views/project-detail';
 import AnswerUser from '@/views/answer-user';
+import ProjectEdit from '@/views/project-edit';
 
 export default function App() {
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path='/user' element={<User />} />
           <Route path='/project' element={<Project />} />
           <Route path='/projectDetail/:id' element={<ProjectDetail />} />
+          <Route path='/projectEdit/:id' element={<ProjectEdit />} />
           <Route path='/testVideo' element={<TestVideo />} />
           <Route path='/checkVideo' element={<CheckVideo />} />
           <Route path='/downloadVideo' element={<DownloadVideo />} />

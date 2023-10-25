@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-10-20 12:09:28
+ * @LastEditTime: 2023-10-25 20:20:07
  * @Description: 界面布局
  */
 import { useState, useEffect } from 'react';
@@ -88,7 +88,7 @@ function LayoutBox() {
       />
     </Sider>
     <Layout className='flex-1 flex h-full'>
-      <Header className='p-0 bg-white flex justify-between'>
+      <Header className='p-0 bg-white flex justify-between shadow-md z-10'>
         <Button
           className='!w-16 h-16 text-base'
           type="text"

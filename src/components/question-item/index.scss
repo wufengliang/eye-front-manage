@@ -1,0 +1,16 @@
+.choose-box {
+    .operate-box {
+        width: 0;
+        transition: width .3s ease-in-out;
+        background-color: #f7f7f7;
+        border-width: 0;
+        overflow: hidden;
+    }
+
+    &:hover {
+        .operate-box {
+            width: 50px;
+            border-left-width: 1px;
+        }
+    }
+}

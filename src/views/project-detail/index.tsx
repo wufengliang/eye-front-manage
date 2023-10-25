@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 13:50:29
- * @LastEditTime: 2023-10-24 16:38:17
+ * @LastEditTime: 2023-10-25 19:53:09
  * @Description: 项目详情
  */
 import { useState, useEffect } from 'react';
@@ -26,8 +26,9 @@ function ProjectDetail() {
    */
   const getData = async () => {
     const [, result] = await to(getSurveyData(routeParams.id!));
-    result && setList(result);
+    result && setList((result || []).map((item: Record<string, any>) => ({ isEditMode: false, value: item })));
   }
+
 
   /**
    * @desc 渲染主体内容
@@ -43,7 +44,14 @@ function ProjectDetail() {
               disabled
               dataSource={list}
               onChange={(items) => setList(items)}
-              renderItem={(item: any) => <QuestionItem key={item?.question?.id} {...item} />}
+              renderItem={
+                (item: any) => (
+                  <QuestionItem
+                    key={item?.question?.id}
+                    {...item}
+                  />
+                )
+              }
             />
           </div>
           <h3 className='text-center'>{state?.endTips}</h3>

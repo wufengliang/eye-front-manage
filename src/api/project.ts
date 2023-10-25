@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-17 17:02:17
+ * @LastEditTime: 2023-10-25 16:14:22
  * @Description:
  */
 import instance from './instance';
@@ -61,4 +61,18 @@ export function getSurveyData(id: string) {
  */
 export function copySurvey(surveyId: string, userId: string) {
   return instance.get(`/api/survey/copy?surveyId=${surveyId}&userId=${userId}`);
+}
+
+/**
+ * @desc 删除问题
+ */
+export function deleteQuestion(id: number | string) {
+  return instance.delete(`/api/question/delete`, { data: { id: Number(`${id}`) } })
+}
+
+/**
+ * @desc 添加问题
+ */
+export function addQuestion(data: unknown) {
+  return instance.put(`/api/question/add`, { data })
 }

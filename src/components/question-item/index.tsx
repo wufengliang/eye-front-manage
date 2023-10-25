@@ -1,30 +1,32 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-25 14:12:28
+ * @LastEditTime: 2023-10-26 00:52:30
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
 import { type IQuestionItemType } from '@/types/question.type';
 import { QUESTTION_TYPE_LIST } from '@/utils/const';
 import classNames from 'classnames';
-import { Checkbox, Col, Input, Radio, Row, Space } from 'antd';
+import { Checkbox, Col, Input, Radio, Row, Space, Modal } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
+import { OperateType } from '@/types/operate.enum';
+import { omit } from 'lodash-es';
+import './index.scss';
 
 function QuestionItem(props: IQuestionItemType) {
+  const { disabled = false, hasMask = false, index, onChange, isEditMode } = props;
   const {
-    disabled,
     question,
     questionFiles,
     choicePrepares,
     choiceOptions,
     answer,
     choiceMarks,
-    index,
-  } = props;
+  } = props.value;
 
   const [isHover, setHover] = useState<boolean>(false);
-  const [isEditMode, setEditMode] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(isEditMode || false);
   const isEdit = useRef<boolean>(false);
 
   //  标题
@@ -44,21 +46,21 @@ function QuestionItem(props: IQuestionItemType) {
         //  图片
         content = questionFiles.map((_item: any, i: number) => (
           <section key={i}>
-            <img style={{ width: '100%' }} key={_item} src={_item.filePath} alt='上传图片' />
+            <img style={{ width: '200px' }} key={_item} src={_item.filePath} alt='上传图片' />
           </section>
         ))
       } else if (questionFiles[0].fileType === 2) {
         //  视频
         content = questionFiles.map((_item: any, i: number) => (
           <section key={i}>
-            <video style={{ width: '100%' }} key={_item} src={_item.filePath} controls />
+            <video style={{ width: '200px' }} key={_item} src={_item.filePath} controls />
           </section>
         ))
       } else if (questionFiles[0].fileType === 3) {
         //  音频
         content = questionFiles.map((_item: any, i: number) => (
           <section key={i}>
-            <audio style={{ width: '100%' }} key={_item} src={_item.filePath} controls />
+            <audio style={{ width: '200px' }} key={_item} src={_item.filePath} controls />
           </section>
         ))
       }
@@ -143,19 +145,34 @@ function QuestionItem(props: IQuestionItemType) {
         <>
           <div className={
             classNames(
-              'p-5 cursor-auto box-border absolute right-0 top-0 h-full border border-solid bg-white border-gray-300  flex flex-col justify-center',
-              { 'block': isHover, 'hidden': !isHover }
+              'operate-box cursor-auto box-border absolute right-0 top-0 h-full border-solid bg-white border-gray-300  flex flex-col justify-center z-10',
             )
-          }>
-            <div className='my-2'>
-              {/* <i className="iconfont cursor-pointer icon-fuzhi-" title='复制'></i> */}
-              <CopyOutlined className='cursor-pointer' title='复制' />
+          }
+          >
+            <div className='my-2 text-center'>
+              <CopyOutlined
+                className='cursor-pointer'
+                title='复制'
+                onClick={() => onChange?.(OperateType.COPY, index, omit(props, ['disabled', 'onChange', 'hasMask', 'key']))}
+              />
             </div>
-            <div className='my-2'>
-              <i className="iconfont cursor-pointer icon-bianji" title='编辑'></i>
+            <div className='my-2 text-center'>
+              <i
+                className="iconfont cursor-pointer icon-bianji"
+                title='编辑'
+                onClick={() => onChange?.(OperateType.EDIT, index, omit(props, ['disabled', 'onChange', 'hasMask', 'key']))}
+              />
             </div>
-            <div className='my-2'>
-              <i className="iconfont cursor-pointer icon-shanchu" title='删除'></i>
+            <div className='my-2 text-center'>
+              <i
+                className="iconfont cursor-pointer icon-shanchu"
+                title='删除'
+                onClick={() => Modal.confirm({
+                  title: '提示',
+                  content: `您确定删除该题目吗？`,
+                  onOk: () => onChange?.(OperateType.DELETE, index)
+                })}
+              />
             </div>
           </div>
         </>
@@ -165,16 +182,17 @@ function QuestionItem(props: IQuestionItemType) {
     return (
       <div
         className={classNames(
-          'mb-20 p-5 flex relative',
-          { 'border border-solid border-gray-300': isHover },
+          'mb-20 p-5 flex relative choose-box',
+          { 'border border-solid border-gray-300': !disabled && isHover },
         )
         }
         key={index}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {isEditMode ? null : showDetail()}
-        {isHover && !disabled ? operateBox() : null}
+        {hasMask ? <div className='absolute top-0 left-0 w-full h-full z-10'></div> : null}
+        {editMode ? null : showDetail()}
+        {editMode ? null : operateBox()}
       </div>
     )
   }

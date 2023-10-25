@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:16:03
- * @LastEditTime: 2023-09-22 16:41:20
+ * @LastEditTime: 2023-10-25 17:47:48
  * @Description:
  */
 export enum OperateType {
@@ -15,4 +15,6 @@ export enum OperateType {
   RECOVERY, //  回收站
   FACESHOW, //  展示
   RESTORE,  //  恢复
+  REFRESH,  //  刷新
+  CANCEL, //  取消
 }

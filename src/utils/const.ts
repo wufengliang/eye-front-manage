@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:44:36
- * @LastEditTime: 2023-10-18 13:47:03
+ * @LastEditTime: 2023-10-25 17:12:11
  * @Description: 常量数据
  */
 import { IUserAuthType } from "@/types/common.type";
@@ -62,4 +62,12 @@ export const QUESTTION_ICON_LIST = [
     label: '矩阵题',
     iconName: 'icon-icon_juzhentiankong',
   },
+]
+
+//  测试文件类型
+export const TEST_FILES_TYPE_LIST = [
+  { label: '图片', value: 0 },
+  { label: '视频', value: 1 },
+  { label: '音频', value: 2 },
+  { label: '无', value: 3 },
 ]

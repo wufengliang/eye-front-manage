@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-19 15:23:14
+ * @LastEditTime: 2023-10-22 17:36:35
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
@@ -41,7 +41,6 @@ export default function App() {
           <Route path='/user' element={<User />} />
           <Route path='/project' element={<Project />} />
           <Route path='/projectDetail/:id' element={<ProjectDetail />} />
-          <Route path='/projectEdit/:id' element={<ProjectEdit />} />
           <Route path='/testVideo' element={<TestVideo />} />
           <Route path='/checkVideo' element={<CheckVideo />} />
           <Route path='/downloadVideo' element={<DownloadVideo />} />
@@ -54,6 +53,7 @@ export default function App() {
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />
+        <Route path='/projectEdit/:id' element={<ProjectEdit />} />
       </Routes>
     </Router>
   );

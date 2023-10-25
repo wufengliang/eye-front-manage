@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-19 15:31:57
+ * @LastEditTime: 2023-10-23 15:48:45
  * @Description: 问卷答案
  */
 import { Table, Button, Tag } from 'antd';
@@ -13,17 +13,23 @@ import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount, useTableProps } from '@/hooks';
 import { getQuestionAnswerList } from '@/api/question-answer';
 import dayjs from 'dayjs';
+import { CustomSearch } from '@/components';
+import { useRef } from 'react';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getQuestionAnswerList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
 }
 
 function QuestionAnswer() {
-  const { tableProps } = useAntdTable(getData, {
+
+  const searchRef = useRef<Record<string, any>>({});
+
+  const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
       { current: 1, pageSize: 10, all: 1 },
       { search: '' }
-    ]
+    ],
+    form: searchRef.current?.form
   });
 
   const navigate = useNavigate();
@@ -89,8 +95,22 @@ function QuestionAnswer() {
 
   const scrollXCount = useGetScrollCount(columns);
 
+  //  渲染搜索区域
+  const renderSearch = () => (
+    <div className='test-video-form mb-8'>
+      <CustomSearch
+        columns={[{ name: 'search', label: '问卷标题', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        loading={tableProps.loading}
+        onSearch={() => search.submit()}
+        onReset={() => search.reset()}
+        ref={searchRef}
+      />
+    </div>
+  )
+
   return (
     <div className='project-box'>
+      {renderSearch()}
       <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
     </div>
   )

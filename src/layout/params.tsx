@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:44:59
- * @LastEditTime: 2023-10-17 09:40:58
+ * @LastEditTime: 2023-10-20 15:32:10
  * @Description:
  */
 import {
@@ -15,8 +15,10 @@ import {
   QuestionCircleOutlined,
   CloudUploadOutlined,
   CloudServerOutlined,
+  BgColorsOutlined,
 } from '@ant-design/icons';
 
+//  超级管理员
 export const SUPER_ADMIN_MENUS: Array<Record<string, any>> = [
   { key: 'user', label: '用户管理', icon: <UsergroupAddOutlined /> },
   { key: 'project', label: '项目管理', icon: <ProjectOutlined /> },
@@ -27,5 +29,13 @@ export const SUPER_ADMIN_MENUS: Array<Record<string, any>> = [
   { key: 'phoneType', label: '手机型号', icon: <PhoneOutlined /> },
   { key: 'questionAnswer', label: '问卷答案', icon: <QuestionCircleOutlined /> },
   { key: 'upload', label: '上传管理', icon: <CloudUploadOutlined /> },
-  { key: 'questionDownload', label: '问卷下载', icon: <CloudServerOutlined /> }
+  { key: 'questionDownload', label: '问卷管理', icon: <CloudServerOutlined /> }
 ]
+
+//  管理员
+export const ADMIN_MENUS: Array<Record<string, any>> = [
+  { key: 'user', label: '用户管理', icon: <UsergroupAddOutlined /> },
+  { key: 'testVideo', label: '测试视频', icon: <VideoCameraOutlined /> },
+  { key: 'questionAnswer', label: '问卷答案', icon: <QuestionCircleOutlined /> },
+  { key: 'questionDownload', label: '问卷管理', icon: <CloudServerOutlined /> }
+];

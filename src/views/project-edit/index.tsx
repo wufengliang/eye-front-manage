@@ -1,21 +1,39 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-19 10:29:06
+ * @LastEditTime: 2023-10-24 19:16:23
  * @Description: 项目编辑
  */
-
+import { useEffect, useState } from 'react';
 import { QUESTTION_ICON_LIST } from '@/utils/const';
 import classNames from 'classnames';
 import { Tabs, Switch, Button } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import ProjectTemplate from '@/views/project/template';
-import { CustomBack } from '@/components';
-import { useLocation } from 'react-router-dom';
+import { CustomBack, CustomMove, QuestionItem } from '@/components';
+import { useLocation, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { getSurveyData } from '@/api/project';
+import { to } from '@/utils/utils';
+import './index.scss';
 
 function ProjectEdit() {
   const { state } = useLocation();
+  const params = useParams();
+  const [list, setList] = useState<any[]>([]);
+
+
+  useEffect(() => {
+    getData();
+  }, [])
+  /**
+   * @desc 获取数据
+   */
+  const getData = async () => {
+    const { id } = params;
+    const [, result] = await to(getSurveyData(id!));
+    result && setList(result);
+  }
 
   /**
    * @desc 左侧空间
@@ -41,7 +59,7 @@ function ProjectEdit() {
    */
   const rightBox = () => {
     return (
-      <div className="right-box px-3">
+      <div className="right-box px-3 sticky top-0 h-full">
         <div className="flex items-center">
           <span className='mr-2'>允许提交</span>
           <Switch
@@ -69,34 +87,45 @@ function ProjectEdit() {
   const centerBox = () => {
     return (
       <div className="center-box flex-1 border border-solid border-gray-200">
-        <Tabs type='card'
-          items={[
-            {
-              label: '开始页',
-              key: '1',
-              children: (
-                <div>
-                  <h3 className='text-center'>{state?.title}</h3>
-                  <p className='text-center'>{state?.startTips}</p>
-                </div>
-              )
-            },
-            {
-              label: '结束页',
-              key: '2',
-              children: (
-                <p className="text-center">{state?.endTips}</p>
-              )
-            }
-          ]} />
+        <div className='h-full'>
+          <Tabs type='card'
+            items={[
+              {
+                label: '开始页',
+                key: '1',
+                children: (
+                  <div className='h-full overflow-y-auto'>
+                    <h3 className='text-center'>{state?.title}</h3>
+                    <p className='text-center'>{state?.startTips}</p>
+                    <div className='p-5'>
+                      <CustomMove
+                        dataSource={list}
+                        onChange={(items) => setList(items)}
+                        renderItem={(item: any) => <QuestionItem key={item?.question?.id} {...item} />}
+                      />
+                    </div>
+                  </div>
+                )
+              },
+              {
+                label: '结束页',
+                key: '2',
+                children: (
+                  <p className="text-center">{state?.endTips}</p>
+                )
+              }
+            ]} />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="edit-box">
-      <CustomBack />
-      <div className='flex'>
+    <div className="edit-box h-screen flex flex-col overflow-hidden">
+      {/* <div className="bg-white p-5">
+        <CustomBack />
+      </div> */}
+      <div className='flex flex-1 p-5 h-full box-border'>
         {leftBox()}
         {centerBox()}
         {rightBox()}

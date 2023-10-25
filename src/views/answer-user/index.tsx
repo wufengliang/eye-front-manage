@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:16:24
- * @LastEditTime: 2023-10-18 11:32:32
+ * @LastEditTime: 2023-10-23 15:44:15
  * @Description: 问卷答案下的所有用户
  */
 import { getUserList } from '@/api/user';
@@ -43,7 +43,8 @@ function AnswerUser() {
       fixed: 'right',
       render: (_, record) => (
         <>
-          <Button type='primary' onClick={() => navigate(`/projectDetail/${searchParams.get('id')}`)}>查看用户用户填写</Button>
+          <Button type='primary' className='m-1'>答案预览</Button>
+          <Button type='primary' className='m-1' onClick={() => navigate(`/projectDetail/${searchParams.get('id')}`)}>查看用户用户填写</Button>
         </>
       )
     }

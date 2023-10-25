@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:19:33
- * @LastEditTime: 2023-09-21 14:03:53
+ * @LastEditTime: 2023-10-20 12:09:28
  * @Description: 界面布局
  */
 import { useState, useEffect } from 'react';
@@ -12,10 +12,10 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, Dropdown, Space, message } from 'antd';
-import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation, } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentUser } from '@/store/slices/user';
-import { SUPER_ADMIN_MENUS } from './params';
+import { ADMIN_MENUS, SUPER_ADMIN_MENUS } from './params';
 import { checkHasLogin } from '@/utils/utils';
 import SystemLogo from './system-logo';
 import AvatorJPG from '@/assets/images/header/avator.jpg';
@@ -28,9 +28,10 @@ const { Header, Sider, Content } = Layout;
 
 function LayoutBox() {
   const reactLocation = useLocation();
-  const userInfo = useSelector((state: Record<string, any>) => state.user);
+  const { userInfo } = useSelector((state: Record<string, any>) => state.user);
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState<string[]>([]);
+  const [menus, setMenus] = useState<any[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,6 +45,10 @@ function LayoutBox() {
       navigate('/login');
     }
   }, []);
+
+  useEffect(() => {
+    setMenus(userInfo?.role === 1 ? SUPER_ADMIN_MENUS : ADMIN_MENUS);
+  }, [userInfo?.role])
 
   /**
    * @desc 点击菜单
@@ -78,7 +83,7 @@ function LayoutBox() {
         theme="dark"
         mode="inline"
         selectedKeys={key}
-        items={SUPER_ADMIN_MENUS as any[]}
+        items={menus}
         onClick={(info) => onClickMenuItem(info)}
       />
     </Sider>
@@ -92,7 +97,7 @@ function LayoutBox() {
 
         />
         <div className='mr-4 flex items-center'>
-          <span className='text-blue-500'>{userInfo?.userInfo?.username}</span>
+          <span className='text-blue-500'>{userInfo?.username}</span>
           <Dropdown menu={{
             items: [{
               key: '', label: (

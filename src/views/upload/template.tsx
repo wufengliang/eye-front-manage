@@ -1,6 +1,13 @@
+/*
+ * @Author: wufengliang 44823912@qq.com
+ * @Date: 2023-10-07 19:49:19
+ * @LastEditTime: 2023-10-26 14:41:01
+ * @Description:
+ */
 
-import { useRef, forwardRef, useImperativeHandle, Ref, useState } from 'react';
+import { forwardRef, useImperativeHandle, Ref, useState } from 'react';
 import { Form, Input } from 'antd';
+import { CustomUpload } from '@/components';
 import { IDownloadType } from '@/types/download.type';
 
 function UploadTemplate(props = {}, ref?: Ref<unknown>) {
@@ -10,14 +17,14 @@ function UploadTemplate(props = {}, ref?: Ref<unknown>) {
     wrapperCol: { span: 15 },
   };
 
-  const [params, setParams] = useState<IDownloadType>({ fileName: '视觉评价系统移动端' })
+  const [params, setParams] = useState<IDownloadType>({ fileName: '视觉评价系统移动端', version: '', link: '' })
 
-  const form = useRef(null);
+  const [form] = Form.useForm();
 
   useImperativeHandle(ref, () => {
     return {
       validate() {
-        return (form.current! as Record<string, any>).validateFields();
+        return form.validateFields()
       }
     }
   })
@@ -25,15 +32,15 @@ function UploadTemplate(props = {}, ref?: Ref<unknown>) {
 
   return (
     <>
-      <Form {...layout} ref={form}>
-        <Form.Item label='App名称'>
-          <Input disabled value={params?.fileName} />
+      <Form {...layout} form={form} initialValues={Object.assign(params, props)}>
+        <Form.Item label='App名称' name='fileName' rules={[{ required: true, message: '请输入App版本名称' }]}>
+          <Input placeholder='请输入App名称' />
         </Form.Item>
-        <Form.Item label='版本号' name='version' required>
+        <Form.Item label='版本号' name='version' rules={[{ required: true, message: '请输入版本号' }]}>
           <Input placeholder='请输入版本号' />
         </Form.Item>
-        <Form.Item label='上传文件' name='link' required>
-
+        <Form.Item label='上传文件' name='link' rules={[{ required: true, message: '请上传文件' }]}>
+          <CustomUpload urlPath='/admin/release' accept=".apk" maxCount={1} />
         </Form.Item>
       </Form>
     </>

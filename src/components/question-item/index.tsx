@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-26 00:52:30
+ * @LastEditTime: 2023-10-26 10:44:36
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
@@ -53,14 +53,14 @@ function QuestionItem(props: IQuestionItemType) {
         //  视频
         content = questionFiles.map((_item: any, i: number) => (
           <section key={i}>
-            <video style={{ width: '200px' }} key={_item} src={_item.filePath} controls />
+            <video style={{ width: '80%' }} key={_item} src={_item.filePath} controls />
           </section>
         ))
       } else if (questionFiles[0].fileType === 3) {
         //  音频
         content = questionFiles.map((_item: any, i: number) => (
           <section key={i}>
-            <audio style={{ width: '200px' }} key={_item} src={_item.filePath} controls />
+            <audio style={{ width: '80%' }} key={_item} src={_item.filePath} controls />
           </section>
         ))
       }
@@ -69,13 +69,11 @@ function QuestionItem(props: IQuestionItemType) {
     if (question.type === 0) {
       //  筛选题
       footer = (
-        <Radio.Group disabled>
-          <Space direction='vertical'>
-            {(choicePrepares || []).map((_item: any, i: number) => (
-              <Radio key={_item} value={i}>{_item.prepareName}</Radio>
-            ))}
-          </Space>
-        </Radio.Group>
+        <Space direction='vertical'>
+          {(choicePrepares || []).map((_item: any, i: number) => (
+            <Radio key={_item} disabled={disabled} value={i} checked={_item.flag}>{_item.prepareName}</Radio>
+          ))}
+        </Space>
       )
     }
 
@@ -192,7 +190,7 @@ function QuestionItem(props: IQuestionItemType) {
       >
         {hasMask ? <div className='absolute top-0 left-0 w-full h-full z-10'></div> : null}
         {editMode ? null : showDetail()}
-        {editMode ? null : operateBox()}
+        {editMode || disabled ? null : operateBox()}
       </div>
     )
   }

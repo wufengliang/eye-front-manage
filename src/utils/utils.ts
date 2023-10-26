@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2023-10-16 11:53:42
+ * @LastEditTime: 2023-10-26 15:03:42
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -42,7 +42,6 @@ export async function to(p: Promise<any>): Promise<Array<any>> {
  */
 export function getExt(value: string) {
   const array = value.match(/\.([^.]+)$/);
-  console.log(array);
   return array ? array[1] : null;
 }
 
@@ -101,4 +100,16 @@ export function createMoveMap(options: IMoveType) {
   })
   chart.render();
   return chart;
+}
+
+
+/**
+ * @desc 生成随机UUID
+ */
+export function createUUid() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }

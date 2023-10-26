@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-10-19 14:58:40
+ * @LastEditTime: 2023-10-26 15:01:47
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -180,12 +180,13 @@ function TestVideo() {
     })
 
     if (operateType === OperateType.DETAIL) {
+      console.log(container);
       return Modal.confirm({
         title: '查看轨迹图',
         icon: null,
         maskClosable: false,
         closable: true,
-        width: 520,
+        width: 800,
         footer: null,
         content: <div dangerouslySetInnerHTML={{ __html: container.outerHTML }}></div>,
       })
@@ -201,20 +202,21 @@ function TestVideo() {
     }
     const result = await donwloadMoveMapData({ videoIds: [id] });
     if (
-      !Array.isArray(result.data.data) ||
-      (Array.isArray(result.data.data) && !result.data.data.length)
+      !Array.isArray(result) ||
+      (Array.isArray(result) && !result.length)
     ) {
       message.error("暂无轨迹图数据");
       return;
     }
-    const _result = await getScreenInfo(session);
+    const _result: Record<string, any> = await getScreenInfo(session);
+
     const {
       rowPixel = 1080,
       columnPixel = 1670,
       statusBarHeight = 0,
-    } = _result.data.data;
+    } = _result;
     return {
-      indexList: result.data.data[0].indexList,
+      indexList: result[0].indexList,
       rowPixel,
       columnPixel,
       statusBarHeight,

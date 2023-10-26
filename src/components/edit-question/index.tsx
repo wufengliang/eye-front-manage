@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-26 00:30:20
+ * @LastEditTime: 2023-10-26 11:00:23
  * @Description:
  */
 
@@ -31,10 +31,11 @@ function EditQuestion(props: IQuestionItemType) {
 
   const selectQuestionType = Form.useWatch(['question', 'type'], form);
   const selectchoicePrepares = Form.useWatch('choicePrepares', form);
+  const selectTitleType = Form.useWatch('titleType', form);
 
   return (
     <div className="bg-gray-100 p-4">
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} form={form} initialValues={{ question, choicePrepares, choiceMarks }}>
+      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} form={form} initialValues={{ testType: 0, questionAnswer: 0, question, choicePrepares, choiceMarks }}>
         <Form.Item label='题目' className='py-1' name={['question', 'title']}>
           <Input placeholder='请输入...' />
         </Form.Item>
@@ -54,7 +55,7 @@ function EditQuestion(props: IQuestionItemType) {
         {/* 筛选题是没有测试文件类型 */}
         {
           selectQuestionType !== 0 ?
-            <Form.Item label='测试文件类型' className='py-1'>
+            <Form.Item label='测试文件类型' className='py-1' name='titleType'>
               <Radio.Group>
                 {TEST_FILES_TYPE_LIST.map(item => <Radio value={item.value}>{item.label}</Radio>)}
               </Radio.Group>
@@ -62,13 +63,20 @@ function EditQuestion(props: IQuestionItemType) {
             null
         }
 
-        {/* 上传 */}
-
-        {/* 上传文件 */}
+        {/* 测试文件上传 */}
+        {
+          selectQuestionType !== 0 && (selectTitleType !== 3 && typeof selectTitleType === 'number') ?
+            (<>
+              <Form.Item label={TEST_FILES_TYPE_LIST.find(item => item.value === selectTitleType)?.label}>
+                <Button type='primary'>点击上传文件</Button>
+              </Form.Item>
+            </>) : null
+        }
+        {/* 测试文件上传 */}
 
         {/* 图片注视时间 */}
         {
-          [0, 1].includes(selectQuestionType) ?
+          selectQuestionType !== 0 ?
             <Form.Item label='图片注视时间' className='py-1' name={['question', 'stayTime']}>
               <InputNumber placeholder='请输入...' style={{ width: '100%' }} controls={false} />
             </Form.Item> : null
@@ -133,6 +141,27 @@ function EditQuestion(props: IQuestionItemType) {
             null
         }
 
+        {/* 筛选题答案 */}
+        {
+          selectQuestionType === 0 ?
+            (
+              <>
+                <Form.Item label='筛选题答案' name='questionAnswer'>
+                  <Select defaultValue={0}>
+                    {(selectchoicePrepares || []).map((item: Record<string, any>, index: number) => (
+                      <>
+                        <Select.Option value={index}>{item?.prepareName}</Select.Option>
+                      </>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </>
+            ) : null
+        }
+        {/* 筛选题答案 */}
+
+
+        {/* 评分提选项 */}
         {
           ([4].includes(selectQuestionType)) ? <Form.List name='choiceMarks'>
             {(fields, { add, remove }) => {
@@ -158,27 +187,8 @@ function EditQuestion(props: IQuestionItemType) {
             }}
           </Form.List> : null
         }
+        {/* 评分提选项 */}
 
-        {/* {
-          ([4].includes(selectQuestionType)) ?
-            <Form.Item label='最大评分' className='py-1'>
-              <Input placeholder='请输入...' />
-            </Form.Item> : null
-        }
-
-        {
-          [4].includes(selectQuestionType) ?
-            <Form.Item label='最低分说明' className='py-1'>
-              <Input placeholder='请输入...' />
-            </Form.Item> : null
-        }
-
-        {
-          [4].includes(selectQuestionType) ?
-            <Form.Item label='最高分说明' className='py-1'>
-              <Input placeholder='请输入...' />
-            </Form.Item> : null
-        } */}
 
         <Form.Item wrapperCol={{ span: 16, offset: 4 }} className='py-1'>
           <div className='flex justify-end'>
@@ -189,7 +199,7 @@ function EditQuestion(props: IQuestionItemType) {
           </div>
         </Form.Item>
       </Form>
-    </div>
+    </div >
   )
 }
 

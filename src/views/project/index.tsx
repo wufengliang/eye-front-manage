@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-25 20:04:00
+ * @LastEditTime: 2023-10-26 16:20:26
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -177,7 +177,7 @@ function ProjectManage() {
       closable: true,
       onOk: async () => {
         const { id, } = data as Record<string, any>;
-        const [error] = await to(updateProjectData(id, 2));
+        const [error] = await to(updateProjectData({ id, status: 2 }));
 
         if (!!!error) {
           message.success(`删除成功`);
@@ -228,9 +228,10 @@ function ProjectManage() {
         }
         const [err, value] = await to(createProjectData(params));
         if (!err) {
-          updateProjectData(value.surveyId);
-          message.success('创建成功');
-          return search.reset();
+          updateProjectData({ id: value.surveyId, status: 1 });
+          // message.success('创建成功');
+          // return search.reset();
+          navigate(`/projectEdit/${value.surveyId}`, { state: params });
         }
 
       }

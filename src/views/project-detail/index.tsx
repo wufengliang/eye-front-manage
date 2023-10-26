@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 13:50:29
- * @LastEditTime: 2023-10-25 19:53:09
+ * @LastEditTime: 2023-10-26 15:43:08
  * @Description: 项目详情
  */
 import { useState, useEffect } from 'react';
@@ -45,12 +45,7 @@ function ProjectDetail() {
               dataSource={list}
               onChange={(items) => setList(items)}
               renderItem={
-                (item: any) => (
-                  <QuestionItem
-                    key={item?.question?.id}
-                    {...item}
-                  />
-                )
+                (item: any) => (<QuestionItem {...item} />)
               }
             />
           </div>

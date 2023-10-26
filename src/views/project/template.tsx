@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2023-10-25 19:59:24
+ * @LastEditTime: 2023-10-26 16:11:58
  * @Description: 项目创建模板内容
  */
 import { forwardRef, useImperativeHandle, Ref, useRef } from 'react';
@@ -15,19 +15,19 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
     wrapperCol: { span: 16 },
   };
 
-  const form = useRef(null);
+  const [form] = Form.useForm();
 
   useImperativeHandle(ref, () => {
     return {
       validate() {
-        return (form.current! as Record<string, any>).validateFields();
+        return form.validateFields();
       }
     }
   }, []);
 
   return (
     <>
-      <Form ref={form} {...(props?.layout || layout)} initialValues={props}>
+      <Form form={form} {...(props?.layout || layout)} initialValues={props}>
         <Form.Item label='问卷标题' name='title' rules={[{ required: true, message: '请输入问卷标题' }]}>
           <Input placeholder='请输入问卷标题...' />
         </Form.Item>

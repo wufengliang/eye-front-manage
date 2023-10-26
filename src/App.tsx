@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-22 17:36:35
+ * @LastEditTime: 2023-10-26 15:34:25
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
@@ -24,6 +24,7 @@ import ProjectDetail from '@/views/project-detail';
 import AnswerUser from '@/views/answer-user';
 import ProjectEdit from '@/views/project-edit';
 import VideoStatistic from '@/views/video-statistic';
+import PreviewAnswer from '@/views/preview-answer';
 
 export default function App() {
 
@@ -50,6 +51,7 @@ export default function App() {
           <Route path='/upload' element={<Upload />} />
           <Route path='/questionDownload' element={<QuestionDownload />} />
           <Route path='/videoStatistic' element={<VideoStatistic />} />
+          <Route path='/previewAnswer' element={<PreviewAnswer />} />
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />

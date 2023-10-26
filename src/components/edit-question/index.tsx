@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-26 11:00:23
+ * @LastEditTime: 2023-10-26 15:25:39
  * @Description:
  */
 
@@ -10,6 +10,7 @@ import { TEST_FILES_TYPE_LIST, QUESTTION_TYPE_LIST } from '@/utils/const';
 import { IQuestionItemType } from '@/types/question.type';
 import { OperateType } from '@/types/operate.enum';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { CustomUpload } from '@/components';
 
 function EditQuestion(props: IQuestionItemType) {
   const { disabled = false, hasMask = false, index, onChange, isEditMode } = props;
@@ -68,7 +69,7 @@ function EditQuestion(props: IQuestionItemType) {
           selectQuestionType !== 0 && (selectTitleType !== 3 && typeof selectTitleType === 'number') ?
             (<>
               <Form.Item label={TEST_FILES_TYPE_LIST.find(item => item.value === selectTitleType)?.label}>
-                <Button type='primary'>点击上传文件</Button>
+                <CustomUpload maxCount={1} accept='image/*' urlPath='' />
               </Form.Item>
             </>) : null
         }

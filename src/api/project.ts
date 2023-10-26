@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-25 16:14:22
+ * @LastEditTime: 2023-10-26 16:14:36
  * @Description:
  */
 import instance from './instance';
@@ -24,14 +24,14 @@ export function getRecoveryList(data: unknown, status = 2) {
  * @desc 创建项目
  */
 export function createProjectData(data: unknown) {
-  return instance.post(`/api/survey/add`, data);
+  return instance.put(`/api/survey/add`, data);
 }
 
 /**
  * @desc 更新项目 1是上线 2是下线
  */
-export function updateProjectData(id: string | number, status = 1) {
-  return instance.post(`/api/survey/update`, { id: Number(`${id}`), status })
+export function updateProjectData(data: unknown) {
+  return instance.post(`/api/survey/update`, data);
 }
 
 

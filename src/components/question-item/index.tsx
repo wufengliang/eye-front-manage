@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-26 10:44:36
+ * @LastEditTime: 2023-10-26 15:54:04
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
@@ -71,7 +71,7 @@ function QuestionItem(props: IQuestionItemType) {
       footer = (
         <Space direction='vertical'>
           {(choicePrepares || []).map((_item: any, i: number) => (
-            <Radio key={_item} disabled={disabled} value={i} checked={_item.flag}>{_item.prepareName}</Radio>
+            <Radio key={`${_item?.id}-${i}`} disabled={disabled} value={i} checked={_item.flag}>{_item.prepareName}</Radio>
           ))}
         </Space>
       )
@@ -184,7 +184,7 @@ function QuestionItem(props: IQuestionItemType) {
           { 'border border-solid border-gray-300': !disabled && isHover },
         )
         }
-        key={index}
+        key={`${question?.type}-${question?.id}-${index}`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >

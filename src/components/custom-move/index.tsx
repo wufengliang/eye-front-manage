@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 14:15:13
- * @LastEditTime: 2023-10-25 16:47:29
+ * @LastEditTime: 2023-10-26 15:54:26
  * @Description:
  */
 import { type CSSProperties } from 'react';
@@ -63,7 +63,7 @@ function CustomMove(options: IMoveOptions) {
               style={getListStyle(snapshot.isDraggingOver)}
             >
               {options.dataSource.map((item, index) => {
-                const id = `${item?.question?.id}-${index}`;
+                const id = `${item?.value?.question?.id}-${index}`;
                 return (
                   <Draggable
                     key={id}
@@ -81,7 +81,7 @@ function CustomMove(options: IMoveOptions) {
                           provided.draggableProps.style
                         )}
                       >
-                        <options.renderItem {...item} index={index} disabled={options.disabled} />
+                        <options.renderItem  {...item} index={index} disabled={options.disabled} />
                       </div>
                     )}
                   </Draggable>

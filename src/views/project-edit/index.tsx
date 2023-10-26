@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-26 00:54:28
+ * @LastEditTime: 2023-10-26 16:21:10
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -25,6 +25,7 @@ function ProjectEdit() {
   const navigate = useNavigate();
   const [list, setList] = useState<any[]>([]);
   const checked = useRef<boolean>(false);
+  const projectRef = useRef<Record<string, any>>(null);
 
 
   useEffect(() => {
@@ -77,10 +78,21 @@ function ProjectEdit() {
    * @desc 保存问卷
    */
   const saveSurvey = async () => {
-    const [error] = await to(updateProjectData(params.id!, checked.current ? 0 : 1));
-    if (!error) {
-      checked.current && message.warning(`警告：如果已收集数据，更改问卷问题会导致数据错乱！`);
-      navigate(-1);
+    const { validate } = projectRef.current!;
+    const [, value] = await to(validate());
+    if (value) {
+      const postParams = {
+        id: params.id,
+        status: checked.current ? 0 : 1,
+        ...value,
+        startTime: dayjs(value.startTime).format('YYYY-MM-DD[T]HH:mm:ss'),
+        endTime: dayjs(value.startTime).format('YYYY-MM-DD[T]HH:mm:ss')
+      }
+      const [error] = await to(updateProjectData(postParams));
+      if (!error) {
+        checked.current ? message.warning(`警告：如果已收集数据，更改问卷问题会导致数据错乱！`) : message.success(`保存成功`);
+        navigate(-1);
+      }
     }
   }
 
@@ -133,6 +145,7 @@ function ProjectEdit() {
               labelCol: { span: 10 },
               wrapperCol: { span: 14 }
             }}
+            ref={projectRef}
             {...Object.assign({}, state, { startTime: dayjs(state.startTime), endTime: dayjs(state.endTime) })}
           />
         </div>
@@ -163,7 +176,6 @@ function ProjectEdit() {
                         disabled={list.some(item => item.isEditMode)}
                         renderItem={
                           (item: any) => {
-
                             return item?.isEditMode
                               ? <EditQuestion
                                 onChange={(type: OperateType, index: number, currentValue?: Record<string, any>) => handleOperate(type, index, currentValue)}

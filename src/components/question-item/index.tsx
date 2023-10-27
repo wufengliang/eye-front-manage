@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-27 17:35:54
+ * @LastEditTime: 2023-10-27 17:47:36
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
@@ -15,7 +15,7 @@ import { omit } from 'lodash-es';
 import './index.scss';
 
 function QuestionItem(props: IQuestionItemType) {
-  const { disabled = false, hasMask = false, index, onChange, isEditMode } = props;
+  const { disabled = false, hasMask = false, index, onChange, isEditMode, children } = props;
   const {
     question,
     questionFiles,
@@ -241,6 +241,7 @@ function QuestionItem(props: IQuestionItemType) {
   return (
     <>
       {renderSingleQuestion()}
+      {children}
     </>
   )
 }

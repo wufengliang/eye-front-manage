@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-26 16:21:10
+ * @LastEditTime: 2023-10-27 17:22:00
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import { Tabs, Switch, Button, message } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import ProjectTemplate from '@/views/project/template';
-import { CustomBack, CustomMove, QuestionItem, EditQuestion } from '@/components';
+import { CustomMove, QuestionItem, EditQuestion } from '@/components';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { getSurveyData, deleteQuestion, updateProjectData } from '@/api/project';
@@ -51,7 +51,7 @@ function ProjectEdit() {
     const newList = [...list];
     switch (type) {
       case OperateType.DELETE:
-        const { id } = data?.question;
+        const { id } = data?.value?.question;
         const [error] = await to(deleteQuestion(id));
         if (!error) {
           newList.splice(index, 1);
@@ -67,10 +67,27 @@ function ProjectEdit() {
           return message.warning(`当前正有问题编辑中，请核对后重试`)
         }
         newList.splice(index, 1, { isEditMode: true, value: { ...data?.value } });
-        return setList(newList);
+
+        return setList(newList.map(item => (
+          {
+            ...item,
+            value: {
+              ...item.value,
+              choiceOptions: (item?.value?.choiceOptions || []).map((v: any) => ({ ...v, type: v.optionImage ? 2 : 1, value: v.optionImage ?? v.optionName })),
+              choicePrepares: (item?.value?.choicePrepares || []).map((v: any) => ({ ...v, value: v.prepareName })),
+              questionAnswer: (item?.value?.choicePrepares || []).findIndex((v: any) => v.flag)
+            }
+          }
+        )));
       case OperateType.CANCEL:
-        newList.splice(index, 1, { isEditMode: false, value: { ...data?.value } })
+        if (data?.value?.question?.id) {
+          newList.splice(index, 1, { isEditMode: false, value: { ...data?.value } })
+        } else {
+          newList.splice(index, 1);
+        }
         return setList(newList);
+      case OperateType.REFRESH:
+        return getData();
     }
   }
 
@@ -97,6 +114,39 @@ function ProjectEdit() {
   }
 
   /**
+   * @desc 添加问题
+   * @param {Number} type 问题类型
+   */
+  const addQuestion = async (type: number) => {
+    if (list.some(item => item.isEditMode)) {
+      return message.error('当前有问题内容还在编辑中');
+    }
+    const newList = [...list].concat(
+      {
+        isEditMode: true,
+        value: {
+          question: {
+            type,
+            titleType: 1,
+            choiceRandom: 1,
+          },
+          titleType: 1,
+          choiceMarks: type !== 4 ? [] : [{ maxMark: '', lowName: '', maxName: '' }],
+          choicePrepares: type === 0 ? [{ type: 1, value: '' }] : [],
+          choiceOptions: [1, 2, 3].includes(type) ? [{ type: 1, value: '' }] : [],
+          choiceMatrices: [6].includes(type) ? [
+            { matrixName: '选项1', matrixType: true, matrixOrder: 0 },
+            { matrixName: '选项2', matrixType: true, matrixOrder: 1 },
+            { matrixName: '选项3', matrixType: false, matrixOrder: 0 },
+            { matrixName: '选项4', matrixType: false, matrixOrder: 1 },
+          ] : [],
+        }
+      }
+    );
+    setList(newList);
+  }
+
+  /**
    * @desc 左侧空间
    */
   const leftBox = () => {
@@ -105,7 +155,11 @@ function ProjectEdit() {
         <h3 className="text-blue-500 text-center">题目控件</h3>
         {QUESTTION_ICON_LIST.map(item => {
           return (
-            <div className='cursor-pointer mb-4 p-2 w-20 m-auto flex items-center' key={item.value}>
+            <div
+              className='cursor-pointer mb-4 p-2 w-20 m-auto flex items-center'
+              key={item.value}
+              onClick={() => addQuestion(item.value)}
+            >
               <i className={classNames(['iconfont', item.iconName])}></i>
               <span className='ml-1'>{item.label}</span>
             </div>

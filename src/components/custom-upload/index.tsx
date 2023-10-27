@@ -1,11 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2023-10-26 14:53:28
+ * @LastEditTime: 2023-10-27 17:20:30
  * @Description: 自定义上传文件
  */
 import { Upload, Modal } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getImgFileUrl, uploadFile } from '@/api/common';
 import { to } from '@/utils/utils';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -23,16 +23,17 @@ interface IUploadOptions {
   maxCount?: number;
 }
 
+const setData = (array?: any[]): any[] => {
+  if (!array) return [];
+  if (Array.isArray(array)) {
+    return array.map(item => ({ url: item?.url ?? item, status: 'done' }))
+  }
+
+  return [array].map((item: Record<string, any>) => ({ url: item.url ?? item, status: 'done' }))
+}
+
 function CustomUpload(props: IUploadOptions) {
-
-  const [array, setArray] = useState<Array<any>>((Array.isArray(props.dataSource) ? props.dataSource : (!!props.dataSource ? [[props.dataSource]] : []).map((item: any) => ({ url: item?.url || item }))).map((item: Record<string, any>) => {
-    if (typeof item === 'object') {
-      return { url: item.url, status: 'done' }
-    }
-    return { url: item, status: 'done' }
-  }));
-
-
+  const [array, setArray] = useState<any[]>(setData(props.dataSource))
 
   const [loading, setLoading] = useState<boolean>(false);
 

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-26 16:14:36
+ * @LastEditTime: 2023-10-27 16:47:57
  * @Description:
  */
 import instance from './instance';
@@ -74,5 +74,13 @@ export function deleteQuestion(id: number | string) {
  * @desc 添加问题
  */
 export function addQuestion(data: unknown) {
-  return instance.put(`/api/question/add`, { data })
+  return instance.put(`/api/question/add`, { ...(data || {}) })
+}
+
+
+/**
+ * @desc 更新问题
+ */
+export function updateQuestion(data: unknown) {
+  return instance.post(`/api/question/update/question`, data);
 }

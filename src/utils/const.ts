@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:44:36
- * @LastEditTime: 2023-10-25 17:12:11
+ * @LastEditTime: 2023-10-27 16:42:08
  * @Description: 常量数据
  */
 import { IUserAuthType } from "@/types/common.type";
@@ -66,8 +66,10 @@ export const QUESTTION_ICON_LIST = [
 
 //  测试文件类型
 export const TEST_FILES_TYPE_LIST = [
-  { label: '图片', value: 0 },
-  { label: '视频', value: 1 },
-  { label: '音频', value: 2 },
-  { label: '无', value: 3 },
+  { label: '图片', value: 1, accept: 'image/*' },
+  { label: '视频', value: 2, accept: 'video/*' },
+  { label: '音频', value: 3, accept: 'audio/*' },
+  { label: '无', value: 4 },
 ]
+
+export const yearSeconds = 3600 * 24 * 365;

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-26 15:54:04
+ * @LastEditTime: 2023-10-27 17:35:54
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
@@ -23,6 +23,7 @@ function QuestionItem(props: IQuestionItemType) {
     choiceOptions,
     answer,
     choiceMarks,
+    choiceMatrices,
   } = props.value;
 
   const [isHover, setHover] = useState<boolean>(false);
@@ -34,14 +35,14 @@ function QuestionItem(props: IQuestionItemType) {
     <p>
       <span className='text-red-600 mr-2'>*</span>
       <span>{index + 1}.{question?.title}</span>
-      <span className='ml-2 text-gray-400'>[{QUESTTION_TYPE_LIST[question.type]}]</span>
+      <span className='ml-2 text-gray-400'>[{QUESTTION_TYPE_LIST[question?.type]}]</span>
     </p>
   )
 
   const renderSingleQuestion = () => {
     let content: any = null;
     let footer: any = null;
-    if (questionFiles.length > 0) {
+    if (questionFiles && questionFiles.length > 0) {
       if (questionFiles[0].fileType === 1) {
         //  图片
         content = questionFiles.map((_item: any, i: number) => (
@@ -122,7 +123,48 @@ function QuestionItem(props: IQuestionItemType) {
         <Input placeholder='请输入...' disabled={disabled} value={answer} />
       )
     } else if (question.type === 6) {
+      const columnChildren = (choiceMatrices ?? []).filter((item: Record<string, any>) => !!item.matrixType);
+      const rowChildren = (choiceMatrices ?? []).filter((item: Record<string, any>) => !!!item.matrixType);
+
+
       //  矩阵题
+      footer = (
+        <>
+          {
+            Array.from({ length: rowChildren.length + 1 }).map((item, index) => {
+              return (
+                <>
+                  <div className='mb-2 flex'>
+                    {
+                      <>
+                        {Array.from({ length: columnChildren.length + 1 }).map((k, i) => {
+                          return (
+                            <>
+                              <div className='mx-1' style={{ width: `${24 * 100 / (columnChildren.length + 2)}%` }}>
+                                {index === 0 && i === 0 ?
+                                  <div style={{ width: `${1 / columnChildren.length + 2}` }}></div> :
+                                  (index === 0 && i > 0 ?
+                                    <div className='text-center'>{columnChildren[i - 1].matrixName}</div> :
+                                    (index > 0 && i === 0 ?
+                                      <div className='text-center'>{rowChildren[index - 1].matrixName}</div> :
+                                      (i !== columnChildren.length + 1 ? <div className='text-center'><Radio disabled /></div> : null)
+                                    )
+                                  )
+                                }
+                              </div>
+                            </>
+                          )
+                        })}
+                      </>
+                    }
+                  </div>
+
+                </>
+              )
+            })
+          }
+        </>
+      )
     }
 
     const showDetail = () => {
@@ -168,7 +210,7 @@ function QuestionItem(props: IQuestionItemType) {
                 onClick={() => Modal.confirm({
                   title: '提示',
                   content: `您确定删除该题目吗？`,
-                  onOk: () => onChange?.(OperateType.DELETE, index)
+                  onOk: () => onChange?.(OperateType.DELETE, index, props)
                 })}
               />
             </div>
@@ -180,7 +222,7 @@ function QuestionItem(props: IQuestionItemType) {
     return (
       <div
         className={classNames(
-          'mb-20 p-5 flex relative choose-box',
+          'mb-20 p-10 flex relative choose-box',
           { 'border border-solid border-gray-300': !disabled && isHover },
         )
         }

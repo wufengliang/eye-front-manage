@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:31:28
- * @LastEditTime: 2023-10-25 16:45:25
+ * @LastEditTime: 2023-10-27 11:15:12
  * @Description: 问题数据
  */
 
@@ -15,6 +15,7 @@ interface IQuestionDataType {
   choiceOptions?: any[];
   answer?: string;
   choiceMarks?: any[];
+  choiceMatrices?: any[];
   index?: number;
 }
 

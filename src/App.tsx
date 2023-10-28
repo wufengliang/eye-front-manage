@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-26 15:34:25
+ * @LastEditTime: 2023-10-28 16:45:08
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
@@ -29,7 +29,7 @@ import PreviewAnswer from '@/views/preview-answer';
 export default function App() {
 
   const dispatch = useDispatch();
-
+  console.log(process.env.PUBLIC_URL);
   useEffect(() => {
     dispatch(initCurrentUser());
   }, []);

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2023-10-27 17:20:30
+ * @LastEditTime: 2023-10-28 14:53:15
  * @Description: 自定义上传文件
  */
 import { Upload, Modal } from 'antd';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { getImgFileUrl, uploadFile } from '@/api/common';
 import { to } from '@/utils/utils';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { UploadListType } from 'antd/es/upload/interface';
+import { UploadFile, UploadListType } from 'antd/es/upload/interface';
 
 interface IUploadOptions {
   dataSource?: any[];
@@ -37,6 +37,37 @@ function CustomUpload(props: IUploadOptions) {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const remove = async (file: UploadFile<any>) => {
+    if (!props.maxCount || props.maxCount === 1) {
+      props.onChange?.([]);
+      return setArray([]);
+    }
+
+    const newArray = [...array];
+    const index = newArray.findIndex(item => item.url === file.url);
+
+    if (index >= 0) {
+      newArray.splice(index, 1);
+    }
+    props.onChange?.(newArray);
+    return setArray(newArray);
+  }
+
+  const preview = async (file: UploadFile<any>) => {
+    if (typeof props.onPreview === 'function') {
+      return;
+    }
+
+    Modal.info({
+      title: '预览',
+      icon: null,
+      content: <img src={file?.url} width={300} alt='预览图片' />,
+      maskClosable: false,
+      closable: true,
+      footer: null,
+    })
+  }
+
   return (
     <>
       <Upload
@@ -62,8 +93,8 @@ function CustomUpload(props: IUploadOptions) {
           }
           setLoading(false);
         }}
-        onPreview={props.onPreview}
-        onRemove={props.onRemove}
+        onPreview={preview}
+        onRemove={remove}
       >
         {loading ? (
           <div className='flex flex-col items-center justify-center'>

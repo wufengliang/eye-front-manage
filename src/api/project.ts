@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-28 17:40:48
+ * @LastEditTime: 2023-10-28 20:55:11
  * @Description:
  */
 import instance from './instance';
@@ -98,4 +98,18 @@ export function getProfileData(surveyId: number) {
  */
 export function deleteProfileData(id: number) {
   return instance.delete(`/api/question/profile/delete`, { params: { id } })
+}
+
+/**
+ * @desc 更新背景问题信息
+ */
+export function updateProfileData(data: unknown) {
+  return instance.post(`/api/question/profile/update`, data)
+}
+
+/**
+ * @desc 新增背景问题信息
+ */
+export function addProfileData(data: unknown) {
+  return instance.put(`/api/question/profile/add`, data);
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-28 17:33:12
+ * @LastEditTime: 2023-10-28 22:05:34
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { OperateType } from '@/types/operate.enum';
 import { TNumberOrString } from '@/types/common.type';
 import { useGetScrollCount, useTableProps } from '@/hooks';
-import { getProjectList, createProjectData, updateProjectData, copySurvey } from '@/api/project';
+import { getProjectList, createProjectData, updateProjectData, copySurvey, getProfileData, updateProfileData } from '@/api/project';
 import { CustomSearch } from '@/components';
 import { DeleteOutlined } from '@ant-design/icons';
 import ProjectTemplate from './template';
@@ -31,6 +31,7 @@ function ProjectManage() {
   const searchRef = useRef<unknown>(null);
   const userRef = useRef<unknown>(null);
   const createProjectRef = useRef(null);
+  const bgConfigRef = useRef(null);
   const navigate = useNavigate();
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
 
@@ -152,12 +153,27 @@ function ProjectManage() {
       case OperateType.BG:
         return Modal.confirm({
           title: '背景问题配置',
-          content: <BgConfigTemplate />,
+          content: (
+            <BgConfigTemplate
+              surveyId={(data as Record<string, any>)?.id}
+              ref={bgConfigRef}
+            />
+          ),
           icon: null,
           maskClosable: false,
           width: 520,
           closable: true,
-          footer: null
+          onOk: async () => {
+            const { getResult } = bgConfigRef.current! as Record<string, any>;
+            const value = getResult?.();
+            console.log(value);
+            const [error] = await to(Promise.all(value.map((i: unknown) => updateProfileData(i))));
+            if (error) {
+              return Promise.reject(error);
+            }
+            message.success(`更新成功`);
+            search.submit();
+          }
         })
       default:
         return;

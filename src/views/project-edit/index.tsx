@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-29 01:02:29
+ * @LastEditTime: 2023-10-29 01:12:53
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -39,7 +39,6 @@ function ProjectEdit() {
     const { id } = params;
     const [, result] = await to(getSurveyData(id!));
     result && setList((result || []).map((item: Record<string, any>) => ({ isEditMode: false, value: item })));
-    // result && setList(result);
   }
 
 
@@ -61,7 +60,7 @@ function ProjectEdit() {
         }
         return;
       case OperateType.COPY:
-        return setList([...newList].concat({ ...omit({ ...data }, ['index']), isEditMode: true }));
+        return setList([...newList].concat({ ...omit({ ...data, value: { ...data?.value, question: { ...omit(data?.value?.question, ['id']) } } }, ['index']), isEditMode: true }));
       case OperateType.EDIT:
         const bool = newList.some(item => item.isEditMode);
         if (bool) {

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-27 17:47:36
+ * @LastEditTime: 2023-10-29 01:09:25
  * @Description: 问题展示
  */
 import { useState, useRef } from 'react';
@@ -28,7 +28,6 @@ function QuestionItem(props: IQuestionItemType) {
 
   const [isHover, setHover] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(isEditMode || false);
-  const isEdit = useRef<boolean>(false);
 
   //  标题
   const title = (

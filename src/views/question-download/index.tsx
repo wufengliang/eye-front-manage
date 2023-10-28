@@ -1,12 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 09:38:02
- * @LastEditTime: 2023-10-23 15:46:38
+ * @LastEditTime: 2023-10-28 23:48:54
  * @Description: 问卷下载
  */
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Form, InputNumber, DatePicker, Button, Input, Modal, Table } from 'antd';
-import { useAntdTable } from 'ahooks';
+import { Form, InputNumber, DatePicker, Button, Input, Modal, Table, message } from 'antd';
 import { exportSurverData, getSurveyListData } from '@/api/question-download';
 import dayjs from 'dayjs';
 import UserTemplate from './template';
@@ -18,6 +17,7 @@ function QuestionDownload() {
   const [form] = Form.useForm();
   const params = useRef<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
+  const [downLoading, setDownLoading] = useState(false);
   const modalRef = useRef<Record<string, any>>(null);
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1); // 当前页码
@@ -82,6 +82,8 @@ function QuestionDownload() {
         dayjs(end).format("YYYY-MM-DDT00:00:00"),
       ];
     }
+    setDownLoading(true);
+    message.info('正在导出数据中，请耐心等待...');
     try {
       const res = await exportSurverData(params);
       const file = new Blob([res.data], { type: "application/vnd.ms-excel" });
@@ -92,8 +94,11 @@ function QuestionDownload() {
         : `问卷调查结果-${+Date.now()}.xlsx`;
       a.href = url;
       a.click();
+      message.success('数据导出成功');
     } catch (err) {
       console.log(err);
+    } finally {
+      setDownLoading(false);
     }
   }
 
@@ -154,7 +159,7 @@ function QuestionDownload() {
         </Form>
       </div>
       <div className='my-2 flex justify-end'>
-        <Button type='primary' onClick={() => exportData()}>导出问卷</Button>
+        <Button type='primary' loading={downLoading} onClick={() => exportData()}>导出问卷</Button>
       </div>
       <Table
         columns={columns}

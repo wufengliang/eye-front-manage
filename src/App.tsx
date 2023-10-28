@@ -1,11 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-28 16:45:08
+ * @LastEditTime: 2023-10-28 17:00:53
  * @Description: 路由注册
  */
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Navigate, } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { initCurrentUser } from '@/store/slices/user';
 import Login from '@/views/login';
@@ -29,7 +29,6 @@ import PreviewAnswer from '@/views/preview-answer';
 export default function App() {
 
   const dispatch = useDispatch();
-  console.log(process.env.PUBLIC_URL);
   useEffect(() => {
     dispatch(initCurrentUser());
   }, []);

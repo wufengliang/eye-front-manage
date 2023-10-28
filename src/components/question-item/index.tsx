@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:29:11
- * @LastEditTime: 2023-10-29 01:09:25
+ * @LastEditTime: 2023-10-29 01:29:37
  * @Description: 问题展示
  */
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { type IQuestionItemType } from '@/types/question.type';
 import { QUESTTION_TYPE_LIST } from '@/utils/const';
 import classNames from 'classnames';
@@ -27,7 +27,7 @@ function QuestionItem(props: IQuestionItemType) {
   } = props.value;
 
   const [isHover, setHover] = useState<boolean>(false);
-  const [editMode, setEditMode] = useState<boolean>(isEditMode || false);
+  const [editMode] = useState<boolean>(isEditMode || false);
 
   //  标题
   const title = (
@@ -111,9 +111,14 @@ function QuestionItem(props: IQuestionItemType) {
             <Col span={12}>{choiceMarks![0]?.lowName}</Col>
             <Col span={12} className='text-right'>{choiceMarks![0]?.maxName}</Col>
           </Row>
-          <div className='w-full flex border border-solid border-gray-300 mt-2'>
-            {Array.from({ length: choiceMarks![0].maxMark }).map((_item: any, i: number) => <div className='flex-1 my-2 text-center' key={i}>{i + 1}</div>)}
-          </div>
+          {
+            Array.isArray(choiceMarks) && choiceMarks.length > 0 ? (<div className='w-full flex border border-solid border-gray-300 mt-2'>
+              {Array.from({ length: choiceMarks![0].maxMark }).map((_item: any, i: number) => <div className='flex-1 my-2 text-center' key={i}>{i + 1}</div>)}
+            </div>) : (
+              <span className='text-red-400 underline'>数据异常，请重新编辑数据</span>
+            )
+          }
+
         </section>
       )
     } else if (question.type === 5) {

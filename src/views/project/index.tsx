@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-26 16:23:58
+ * @LastEditTime: 2023-10-28 17:33:12
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -19,6 +19,7 @@ import ProjectTemplate from './template';
 import RecoveryTemplate from './recovery';
 import FaceTemplate from './face';
 import UserTemplate from './user';
+import BgConfigTemplate from './bg-config';
 import { to } from '@/utils/utils';
 import dayjs from 'dayjs';
 
@@ -73,10 +74,11 @@ function ProjectManage() {
     {
       title: '操作',
       key: 'operation',
-      width: 120,
+      width: 150,
       fixed: 'right',
       render: (_, record) => (
         <>
+          <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.BG, record)}>背景问题配置</Button>
           {record.status !== 0 ? <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>重新编辑</Button> : null}
           <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.DETAIL, record)}>查看详情</Button>
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
@@ -145,6 +147,17 @@ function ProjectManage() {
                 message.error(`复制异常，请联系管理员操作`);
               })
           }
+        })
+      //  背景问题配置
+      case OperateType.BG:
+        return Modal.confirm({
+          title: '背景问题配置',
+          content: <BgConfigTemplate />,
+          icon: null,
+          maskClosable: false,
+          width: 520,
+          closable: true,
+          footer: null
         })
       default:
         return;

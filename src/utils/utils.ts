@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2023-10-26 15:03:42
+ * @LastEditTime: 2023-10-28 18:20:47
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -49,7 +49,7 @@ export function getExt(value: string) {
  * @desc 生成轨迹图
  * @param {IMoveType} options 配置
  */
-export function createMoveMap(options: IMoveType) {
+export function createMoveMap(options: IMoveType): { container: HTMLElement, chart: G2.Chart } {
   const { container, width, height, url, data } = options;
   const div = document.createElement('div');
   div.style.transform = `scale(0.5)`;
@@ -99,7 +99,11 @@ export function createMoveMap(options: IMoveType) {
     src: url.replace(/(http|https):/, location.protocol),
   })
   chart.render();
-  return chart;
+  document.body.appendChild(container);
+  return {
+    container,
+    chart,
+  };
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 15:27:54
- * @LastEditTime: 2023-09-22 16:49:03
+ * @LastEditTime: 2023-10-28 18:28:18
  * @Description:
  */
 import { Table, Button } from 'antd';
@@ -47,7 +47,7 @@ function RecoveryTemplate() {
       width: 120,
       fixed: 'right',
       render: (_, record) => (
-        <Button type='primary' onClick={() => run(OperateType.RESTORE, record.id)}>恢复</Button>
+        <Button type='primary' onClick={() => run(OperateType.RESTORE, { id: record.id, status: 1 })}>恢复</Button>
       )
     }
   ];

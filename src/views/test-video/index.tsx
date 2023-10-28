@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-10-26 15:01:47
+ * @LastEditTime: 2023-10-28 18:35:48
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -19,6 +19,7 @@ import { getExt, to, createMoveMap } from '@/utils/utils';
 import { downloadFile } from '@/utils/download';
 import { CustomSearch } from '@/components';
 import DownloadOptionsTemplate from './download-options';
+import TrajectoryTemplate from './trajectory';
 import JSZip from 'jszip';
 import fileSaver from 'file-saver';
 
@@ -169,18 +170,18 @@ function TestVideo() {
 
     const { indexList, rowPixel, columnPixel, statusBarHeight, questionFilePath } = receiveData;
 
-    const container = document.createElement('div');
+    const box = document.createElement('div');
 
-    createMoveMap({
-      container,
+    const { container, chart } = createMoveMap({
+      container: box,
       width: rowPixel || 1080,
       height: (columnPixel || 1670) - statusBarHeight,
       url: questionFilePath,
       data: indexList,
     })
 
+
     if (operateType === OperateType.DETAIL) {
-      console.log(container);
       return Modal.confirm({
         title: '查看轨迹图',
         icon: null,
@@ -188,8 +189,18 @@ function TestVideo() {
         closable: true,
         width: 800,
         footer: null,
-        content: <div dangerouslySetInnerHTML={{ __html: container.outerHTML }}></div>,
+        content: <TrajectoryTemplate container={container} />,
       })
+    }
+
+    if (operateType === OperateType.DOWNLOAD && !!data) {
+      const { surveyId, questionId, userId, id } = data;
+      message.info(`正在下载轨迹图图片，请耐性等待...`);
+      setTimeout(() => {
+        container.style.display = 'none';
+        chart.downloadImage(`轨迹图_(问卷ID_${surveyId})-(问题ID_${questionId})-(用户ID_${userId})-(视频ID_${id})`);
+        container.parentElement?.removeChild(container);
+      }, 1500);
     }
   }
 

@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-28 14:53:28
+ * @LastEditTime: 2023-10-29 01:01:34
  * @Description:
  */
-import { useMemo, useEffect, useState, } from 'react';
+import { useState, } from 'react';
 import { Form, Input, Radio, Button, Select, InputNumber, Space, Row, Col, message } from 'antd';
 import { TEST_FILES_TYPE_LIST, QUESTTION_TYPE_LIST, yearSeconds } from '@/utils/const';
 import { IQuestionItemType } from '@/types/question.type';
@@ -18,15 +18,10 @@ import { addQuestion, updateQuestion } from '@/api/project';
 
 function EditQuestion(props: IQuestionItemType) {
   const routerParams = useParams();
-  const { disabled = false, hasMask = false, index, onChange, isEditMode } = props;
+  const { index, onChange } = props;
 
   const {
     question,
-    questionFiles,
-    choicePrepares,
-    choiceOptions,
-    answer,
-    choiceMarks,
     choiceMatrices,
   } = props.value;
 
@@ -43,8 +38,8 @@ function EditQuestion(props: IQuestionItemType) {
    */
   const saveQuesition = async () => {
     const postParams: Record<string, any> = {};
-    const [error, result] = await to(form.validateFields());
-    console.log(result);
+    const [, result] = await to(form.validateFields());
+
     if (result) {
       const {
         question: formQuestion,
@@ -84,7 +79,7 @@ function EditQuestion(props: IQuestionItemType) {
         onChange?.(OperateType.REFRESH, index);
       }
     }
-    console.log(postParams);
+
   }
 
   /**
@@ -238,7 +233,7 @@ function EditQuestion(props: IQuestionItemType) {
 
         {/* 测试文件上传 */}
         {
-          selectQuestionType !== 0 && (selectTitleType !== 4 && typeof selectTitleType === 'number') ?
+          selectQuestionType !== 0 && (selectTitleType !== 4 && selectTitleType > 0 && typeof selectTitleType === 'number') ?
             (<>
               <Form.Item
                 valuePropName='dataSource'
@@ -324,7 +319,7 @@ function EditQuestion(props: IQuestionItemType) {
                                             valuePropName={v === 1 ? 'value' : 'dataSource'}
                                             rules={[{ required: [1, 2].includes(v), message: v === 1 ? '请输入选项值' : (v === 2 ? '请上传文件' : '') }]}
                                           >
-                                            {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ? <CustomUpload expireTime={yearSeconds} urlPath='/admin/question/title' /> : null)}
+                                            {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ? <CustomUpload maxCount={1} expireTime={yearSeconds} urlPath='/admin/question/title' /> : null)}
                                           </Form.Item>
                                         </>
                                       )
@@ -367,7 +362,7 @@ function EditQuestion(props: IQuestionItemType) {
                   return (
                     <>
                       {
-                        fields.map(({ key, name, ...restField }, index: number) => {
+                        fields.map(({ key, name, }) => {
                           return (
                             <>
                               <Row key={key} >
@@ -391,8 +386,13 @@ function EditQuestion(props: IQuestionItemType) {
                                             <Form.Item
                                               name={[name, 'value']}
                                               rules={[{ required: [1, 2].includes(v), message: v === 1 ? '请输入选项值' : (v === 2 ? '请上传文件' : '') }]}
+                                              valuePropName={v === 1 ? 'value' : 'dataSource'}
                                             >
-                                              {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ? <CustomUpload urlPath='/admin/question/title' /> : null)}
+                                              {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ?
+                                                <CustomUpload
+                                                  urlPath='/admin/question/title' maxCount={1}
+                                                  expireTime={yearSeconds}
+                                                /> : null)}
                                             </Form.Item>
                                           </>
                                         )

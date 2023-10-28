@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-27 17:22:00
+ * @LastEditTime: 2023-10-29 01:02:29
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -30,6 +30,7 @@ function ProjectEdit() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   /**
    * @desc 获取数据
@@ -240,7 +241,7 @@ function ProjectEdit() {
                                   hasMask
                                   isEditMode={item.isEditMode}
                                   onChange={(type: OperateType, index: number, currentValue?: Record<string, any>) => handleOperate(type, index, currentValue)}
-                                  {...item}
+                                  {...Object.assign({}, item, { value: { ...item.value, choiceOptions: (item.value?.choiceOptions || []).map((v: Record<string, any>) => ({ ...v, type: v.optionImage ? 2 : 1, value: v?.optionImage || v.optionName })) } })}
                                 />
                               )
                           }}

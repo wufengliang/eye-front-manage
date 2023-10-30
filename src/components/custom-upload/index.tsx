@@ -1,15 +1,16 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2023-10-28 14:53:15
+ * @LastEditTime: 2023-10-30 15:35:53
  * @Description: 自定义上传文件
  */
-import { Upload, Modal } from 'antd';
-import { useEffect, useState } from 'react';
-import { getImgFileUrl, uploadFile } from '@/api/common';
+import { Upload, Modal, message } from 'antd';
+import { useState } from 'react';
+import { uploadFile } from '@/api/common';
 import { to } from '@/utils/utils';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { UploadFile, UploadListType } from 'antd/es/upload/interface';
+import { getExt } from '@/utils/utils';
 
 interface IUploadOptions {
   dataSource?: any[];
@@ -58,10 +59,25 @@ function CustomUpload(props: IUploadOptions) {
       return;
     }
 
+    const ext = getExt(file.url!);
+    const component = ['mp4', 'webm', 'ogg'].includes(ext!) ?
+      'video' :
+      (['jpg', 'jpeg', 'png', 'gif'].includes(ext!) ?
+        'img' : (['mp3', 'wav', 'ogg'].includes(ext!) ? 'audio' : null));
+
+    if (!component) {
+      message.error(`当前文件后缀名为${ext}，请联系管理员处理`);
+      return;
+    }
+
     Modal.info({
       title: '预览',
       icon: null,
-      content: <img src={file?.url} width={300} alt='预览图片' />,
+      content: component === 'img' ?
+        <img src={file?.url} width={300} alt='预览资源' /> :
+        (component === 'audio' ?
+          <audio src={file?.url} style={{ width: `300px` }} controls /> :
+          <video src={file?.url} width={300} controls />),
       maskClosable: false,
       closable: true,
       footer: null,

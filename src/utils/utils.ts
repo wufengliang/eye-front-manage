@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2023-10-28 18:20:47
+ * @LastEditTime: 2023-10-30 15:27:39
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -42,7 +42,7 @@ export async function to(p: Promise<any>): Promise<Array<any>> {
  */
 export function getExt(value: string) {
   const array = value.match(/\.([^.]+)$/);
-  return array ? array[1] : null;
+  return array ? array[1].split('?')[0] : null;
 }
 
 /**

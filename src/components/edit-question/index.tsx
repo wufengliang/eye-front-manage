@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-30 16:41:54
+ * @LastEditTime: 2023-10-30 17:51:31
  * @Description:
  */
 import { useState, } from 'react';
@@ -31,7 +31,7 @@ function EditQuestion(props: IQuestionItemType) {
 
   const selectQuestionType = Form.useWatch(['question', 'type'], form);
   const selectchoicePrepares = Form.useWatch('choicePrepares', form);
-  const selectTitleType = Form.useWatch(['question', 'titleType'], form);
+  const selectTitleType = Form.useWatch(['question', 'sourceType'], form);
 
   /**
    * @desc 保存问题 复制、编辑操作
@@ -230,7 +230,7 @@ function EditQuestion(props: IQuestionItemType) {
             <Form.Item
               label='测试文件类型'
               className='py-1'
-              name={['question', 'titleType']}
+              name={['question', 'sourceType']}
               rules={[{ required: true, message: '请选择测试文件类型' }]}
             >
               <Radio.Group>

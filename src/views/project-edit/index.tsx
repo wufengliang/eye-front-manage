@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-30 16:32:29
+ * @LastEditTime: 2023-10-30 17:50:59
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -126,10 +126,9 @@ function ProjectEdit() {
         value: {
           question: {
             type,
-            titleType: 1,
+            sourceType: 1,
             choiceRandom: 1,
           },
-          titleType: 1,
           questionFiles: [],
           choiceMarks: type !== 4 ? [] : [{ maxMark: '', lowName: '', maxName: '' }],
           choicePrepares: type === 0 ? [{ type: 1, value: '' }] : [],

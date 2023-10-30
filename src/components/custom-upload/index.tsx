@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2023-10-30 15:35:53
+ * @LastEditTime: 2023-10-30 18:05:51
  * @Description: 自定义上传文件
  */
 import { Upload, Modal, message } from 'antd';
@@ -22,6 +22,7 @@ interface IUploadOptions {
   onChange?: (...args: any[]) => void;
   expireTime?: number;
   maxCount?: number;
+  maxSize?: number;
 }
 
 const setData = (array?: any[]): any[] => {
@@ -91,7 +92,7 @@ function CustomUpload(props: IUploadOptions) {
         fileList={array}
         maxCount={props.maxCount}
         accept={props.accept}
-        beforeUpload={() => false}
+        beforeUpload={(file: UploadFile<any>) => file.size! < (props.maxSize ?? 0)}
         onChange={async (event) => {
           if (loading) {
             return;

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-29 01:12:53
+ * @LastEditTime: 2023-10-30 10:50:25
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -103,7 +103,7 @@ function ProjectEdit() {
         status: checked.current ? 0 : 1,
         ...value,
         startTime: dayjs(value.startTime).format('YYYY-MM-DD[T]HH:mm:ss'),
-        endTime: dayjs(value.startTime).format('YYYY-MM-DD[T]HH:mm:ss')
+        endTime: dayjs(value.endTime).format('YYYY-MM-DD[T]HH:mm:ss')
       }
       const [error] = await to(updateProjectData(postParams));
       if (!error) {

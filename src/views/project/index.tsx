@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-28 22:05:34
+ * @LastEditTime: 2023-10-30 10:48:34
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -253,7 +253,7 @@ function ProjectManage() {
         const params = {
           ...result,
           startTime: dayjs(result.startTime).format('YYYY-MM-DD[T]HH:mm:ss'),
-          endTime: dayjs(result.startTime).format('YYYY-MM-DD[T]HH:mm:ss')
+          endTime: dayjs(result.endTime).format('YYYY-MM-DD[T]HH:mm:ss')
         }
         const [err, value] = await to(createProjectData(params));
         if (!err) {

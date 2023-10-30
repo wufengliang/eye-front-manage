@@ -1,0 +1,35 @@
+name: CI Deploy
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 拉取代码
+      - name: Checkout Code
+        uses: actions@checkout@v4.1.1
+        with:
+          persist-credentials: false
+
+      # 安装node环境
+      - name: Get Node Environment
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 16.16.0
+
+      # 生成静态文件
+      - name: Build Project
+        run: |
+          npm install
+          npm run build
+
+      # 部署静态文件
+      - name: Deploy Project
+        uses: peaceiris/actions-gh-pages@v3.9.3
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }} 
+          publish_dir: ./build

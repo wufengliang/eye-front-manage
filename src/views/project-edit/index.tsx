@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-30 10:50:25
+ * @LastEditTime: 2023-10-30 15:01:27
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -67,13 +67,12 @@ function ProjectEdit() {
           return message.warning(`当前正有问题编辑中，请核对后重试`)
         }
         newList.splice(index, 1, { isEditMode: true, value: { ...data?.value } });
-
         return setList(newList.map(item => (
           {
             ...item,
             value: {
               ...item.value,
-              choiceOptions: (item?.value?.choiceOptions || []).map((v: any) => ({ ...v, type: v.optionImage ? 2 : 1, value: v.optionImage ?? v.optionName })),
+              choiceOptions: (item?.value?.choiceOptions || []).map((v: any) => ({ ...v, type: !!v.optionImage ? 2 : 1, value: !!v.optionImage ? v.optionImage : v.optionName })),
               choicePrepares: (item?.value?.choicePrepares || []).map((v: any) => ({ ...v, value: v.prepareName })),
               questionAnswer: (item?.value?.choicePrepares || []).findIndex((v: any) => v.flag)
             }

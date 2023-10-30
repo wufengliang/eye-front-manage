@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-28 17:23:51
- * @LastEditTime: 2023-10-28 23:34:04
+ * @LastEditTime: 2023-10-30 14:54:06
  * @Description:
  */
 import { forwardRef, useImperativeHandle, Ref, useRef, useEffect, useState } from 'react';
@@ -158,7 +158,7 @@ function BgTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
             <QuestionList
               surveyId={props.surveyId}
               dataSource={item}
-              key={index}
+              key={item?.profileQuestion?.id || index}
               index={index}
               disabled={true}
               rightSlot={(

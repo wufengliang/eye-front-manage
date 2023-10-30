@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-29 01:01:34
+ * @LastEditTime: 2023-10-30 14:52:22
  * @Description:
  */
 import { useState, } from 'react';
@@ -319,7 +319,7 @@ function EditQuestion(props: IQuestionItemType) {
                                             valuePropName={v === 1 ? 'value' : 'dataSource'}
                                             rules={[{ required: [1, 2].includes(v), message: v === 1 ? '请输入选项值' : (v === 2 ? '请上传文件' : '') }]}
                                           >
-                                            {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ? <CustomUpload maxCount={1} expireTime={yearSeconds} urlPath='/admin/question/title' /> : null)}
+                                            {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ? <CustomUpload maxCount={1} expireTime={yearSeconds} urlPath='/admin/common' /> : null)}
                                           </Form.Item>
                                         </>
                                       )
@@ -390,7 +390,7 @@ function EditQuestion(props: IQuestionItemType) {
                                             >
                                               {v === 1 ? <Input placeholder='请输入...' /> : ((v === 2) ?
                                                 <CustomUpload
-                                                  urlPath='/admin/question/title' maxCount={1}
+                                                  urlPath='/admin/common' maxCount={1}
                                                   expireTime={yearSeconds}
                                                 /> : null)}
                                             </Form.Item>

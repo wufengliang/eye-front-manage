@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-30 14:52:22
+ * @LastEditTime: 2023-10-30 16:41:54
  * @Description:
  */
 import { useState, } from 'react';
@@ -48,9 +48,9 @@ function EditQuestion(props: IQuestionItemType) {
         choiceOptions,
         choiceMarks,
         titlePath,
-        audioPath
+        audioPath,
+        questionFiles,
       } = result;
-
 
       if (Array.isArray(choiceOptions) && choiceOptions.length > 0) {
         const newChoiceOptions = choiceOptions.map((d: Record<string, any>, i: number) => ({
@@ -67,10 +67,19 @@ function EditQuestion(props: IQuestionItemType) {
         Object.assign(postParams, { choicePrepares: newChoicePrepares, titlePath, audioPath });
       }
 
-      const newQuestion = { ...question, ...formQuestion, questionOrder: index + 1, surveyId: routerParams?.id };
+      const newQuestion = {
+        ...question,
+        ...formQuestion,
+        questionOrder: index + 1,
+        surveyId: routerParams?.id,
+      };
 
 
-      Object.assign(postParams, { choiceMatrices: newChoiceMatrices }, { question: newQuestion, choiceMarks });
+      Object.assign(postParams,
+        { choiceMatrices: newChoiceMatrices },
+        { question: newQuestion, choiceMarks },
+        { questionFiles: (questionFiles ?? []).map((item: Record<string, any>, index: number) => ({ filePath: item.url, fileOrder: index + 1 })) }
+      );
 
 
       const [, value] = await to(question?.id ? updateQuestion(postParams) : addQuestion(postParams));
@@ -239,10 +248,10 @@ function EditQuestion(props: IQuestionItemType) {
                 valuePropName='dataSource'
                 label={TEST_FILES_TYPE_LIST.find(item => item.value === selectTitleType)?.label}
                 rules={[{ required: true, message: `请上传测试文件` }]}
-                name={['question', `${selectTitleType === 1 ? 'titlePath' : ([2, 3].includes(selectTitleType) ? 'audioPath' : '')}`]}
+                name={selectTitleType === 1 ? 'questionFiles' : ['question', ([2, 3].includes(selectTitleType) ? 'audioPath' : '')]}
               >
                 <CustomUpload
-                  maxCount={1}
+                  maxCount={selectTitleType === 1 ? 100 : 1}
                   expireTime={yearSeconds}
                   accept={TEST_FILES_TYPE_LIST.find(item => item.value === selectTitleType)?.accept}
                   urlPath='/admin/question/title'

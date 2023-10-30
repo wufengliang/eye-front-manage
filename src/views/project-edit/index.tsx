@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-30 15:01:27
+ * @LastEditTime: 2023-10-30 16:32:29
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -66,7 +66,7 @@ function ProjectEdit() {
         if (bool) {
           return message.warning(`当前正有问题编辑中，请核对后重试`)
         }
-        newList.splice(index, 1, { isEditMode: true, value: { ...data?.value } });
+        newList.splice(index, 1, { isEditMode: true, value: { ...data?.value, questionFiles: (data?.value?.questionFiles || []).map((item: Record<string, any>) => ({ url: item.filePath })) } });
         return setList(newList.map(item => (
           {
             ...item,
@@ -130,6 +130,7 @@ function ProjectEdit() {
             choiceRandom: 1,
           },
           titleType: 1,
+          questionFiles: [],
           choiceMarks: type !== 4 ? [] : [{ maxMark: '', lowName: '', maxName: '' }],
           choicePrepares: type === 0 ? [{ type: 1, value: '' }] : [],
           choiceOptions: [1, 2, 3].includes(type) ? [{ type: 1, value: '' }] : [],

@@ -80,7 +80,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "cross-env CI=false node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
@@ -110,6 +110,7 @@
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.14",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.27",
     "sass": "^1.64.1",
     "tailwindcss": "^3.3.3"

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-19 15:22:00
- * @LastEditTime: 2023-10-19 18:16:46
+ * @LastEditTime: 2023-10-30 21:08:56
  * @Description: 视频统计
  */
 import { Row, Col, DatePicker, Table, message } from 'antd';
@@ -53,6 +53,7 @@ function VideoStatistic() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -75,6 +76,10 @@ function VideoStatistic() {
    * @desc 设置折线图
    */
   const setFoldLine = async (value: Record<string, any>) => {
+    const node = document.querySelector('#fold-line-box');
+    while (node?.firstChild) {
+      node.removeChild(node?.firstChild);
+    }
     const { weekQuestionNum, weekAverageTime, weekFinishNum } = value;
     const array = [
       { value: weekQuestionNum, label: '题目数量' },
@@ -217,6 +222,9 @@ function VideoStatistic() {
                     onChange={v => {
                       if (!!!selectItem.current.surveyId) {
                         return message.error(`请选择问卷`);
+                      }
+                      if (!v) {
+                        return;
                       }
                       const [startDate, endDate] = v as Array<any>;
                       selectItem.current = {

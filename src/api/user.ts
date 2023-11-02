@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:55:53
- * @LastEditTime: 2023-09-21 14:47:59
+ * @LastEditTime: 2023-11-02 15:47:47
  * @Description: 用户管理
  */
 import instance from './instance';
@@ -34,5 +34,5 @@ export function createUser(role: number, data: unknown) {
  * @desc 更新用户
  */
 export function updateUser(data: unknown) {
-  return instance.put(`/api/admin/user/update`, data);
+  return instance.post(`/api/admin/user/update`, data);
 }

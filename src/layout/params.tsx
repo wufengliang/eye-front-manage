@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:44:59
- * @LastEditTime: 2023-10-20 15:32:10
+ * @LastEditTime: 2023-11-02 15:29:30
  * @Description:
  */
 import {
@@ -35,6 +35,7 @@ export const SUPER_ADMIN_MENUS: Array<Record<string, any>> = [
 //  管理员
 export const ADMIN_MENUS: Array<Record<string, any>> = [
   { key: 'user', label: '用户管理', icon: <UsergroupAddOutlined /> },
+  { key: 'project', label: '项目管理', icon: <ProjectOutlined /> },
   { key: 'testVideo', label: '测试视频', icon: <VideoCameraOutlined /> },
   { key: 'questionAnswer', label: '问卷答案', icon: <QuestionCircleOutlined /> },
   { key: 'questionDownload', label: '问卷管理', icon: <CloudServerOutlined /> }

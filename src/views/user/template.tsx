@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2023-10-18 13:47:13
+ * @LastEditTime: 2023-11-03 17:21:03
  * @Description: 创建用户、编辑用户
  */
 import { useRef, forwardRef, useImperativeHandle, Ref } from 'react';
@@ -41,7 +41,7 @@ function UserTemplate(props = {}, cref?: Ref<unknown>) {
         <Form.Item name={'role'} label='角色'>
           <Select placeholder='请选择用户角色'>
             {USER_TYPE_LIST.map(item => (
-              <Select.Option value={item.value}>{item.label}</Select.Option>
+              <Select.Option value={item.value} disabled={item.disabled}>{item.label}</Select.Option>
             ))}
           </Select>
         </Form.Item>

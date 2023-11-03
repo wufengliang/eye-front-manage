@@ -1,22 +1,28 @@
+/*
+ * @Author: wufengliang 44823912@qq.com
+ * @Date: 2023-10-17 16:37:58
+ * @LastEditTime: 2023-11-03 17:18:20
+ * @Description:
+ */
 
 import { getUserList } from '@/api/user';
 import { TNumberOrString } from '@/types/common.type';
 import { useAntdTable } from 'ahooks';
 import { ColumnsType } from 'antd/es/table';
-import { Ref, forwardRef, useState, useImperativeHandle } from 'react';
+import { Ref, forwardRef, useState, useImperativeHandle, useMemo } from 'react';
 import { Table } from 'antd';
 
-const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
-  return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
-}
-
-function UserTemplate(props = {}, ref?: Ref<unknown>) {
+function UserTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
 
   const [userList, setUserList] = useState<any[]>([]);
 
+  const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number | null }, form: Record<string, string | number> = {}): Promise<any> => {
+    return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
+  }
+
   const { tableProps } = useAntdTable(getData, {
     defaultParams: [
-      { current: 1, pageSize: 10, all: 1 },
+      props.role === 1 ? { current: 1, pageSize: 10, all: 1 } : { current: 1, pageSize: 10, },
       { search: '' }
     ],
     defaultType: 'advance',

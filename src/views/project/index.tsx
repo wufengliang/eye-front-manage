@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-11-03 16:35:46
+ * @LastEditTime: 2023-11-03 17:17:48
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -139,7 +139,7 @@ function ProjectManage() {
       case OperateType.COPY:
         return Modal.confirm({
           title: '选择收到问卷的用户',
-          content: <UserTemplate ref={userRef} />,
+          content: <UserTemplate ref={userRef} role={userInfo?.role} />,
           icon: null,
           maskClosable: false,
           closable: true,

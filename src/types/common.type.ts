@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 11:49:57
- * @LastEditTime: 2023-10-26 13:55:41
+ * @LastEditTime: 2023-11-03 17:20:44
  * @Description: 公共类型
  */
 
@@ -18,6 +18,7 @@ export type TNumberOrString = string | number;
 export interface IUserAuthType {
   value: number;
   label: string;
+  disabled?: boolean;
 }
 
 export interface IColumnType {

@@ -1,11 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-10-30 10:48:34
+ * @LastEditTime: 2023-11-03 16:35:46
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAntdTable } from 'ahooks';
 import type { ColumnsType } from 'antd/es/table';
 import { useNavigate } from 'react-router-dom';
@@ -22,26 +22,27 @@ import UserTemplate from './user';
 import BgConfigTemplate from './bg-config';
 import { to } from '@/utils/utils';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
-const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
-  return getProjectList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
+
+
+const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number }, form: Record<string, string | number> = {}): Promise<any> => {
+  return getProjectList({ page: params.current, size: params.pageSize, ...form }).then(result => result);
 }
 
 function ProjectManage() {
-  const searchRef = useRef<unknown>(null);
+  const { userInfo } = useSelector((state: Record<string, any>) => state.user);
+  const searchRef = useRef<Record<string, any>>(null);
   const userRef = useRef<unknown>(null);
   const createProjectRef = useRef(null);
   const bgConfigRef = useRef(null);
   const navigate = useNavigate();
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
+  const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
+  const [dataSource, setDataSource] = useState<Record<string, any>>({})
+  const searchParams = useRef<Record<string, any>>({ search: '' });
+  const [loading, setLoading] = useState(false);
 
-  const { tableProps, search } = useAntdTable(getData, {
-    defaultParams: [
-      { current: 1, pageSize: 10, all: 1 },
-      { search: '' },
-    ],
-    form: (searchRef.current as Record<string, any>)?.form
-  });
 
   const columns: ColumnsType<any> = [
     { title: '问卷ID', dataIndex: 'id', fixed: 'left', width: 150, },
@@ -87,6 +88,21 @@ function ProjectManage() {
       )
     }
   ];
+
+  //  获取数据
+  const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10 }) => {
+    setLoading(true);
+    const [, result] = await to(getProjectList(Object.assign({}, pageOptions, { ...(searchRef.current! as Record<string, any>)?.form?.getFieldsValue() })));
+    result && setDataSource(result);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (userInfo.role) {
+      const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+      getData(options);
+    }
+  }, [paginationConfig, userInfo.role])
 
   //  多选操作
   const rowSelection = {
@@ -172,7 +188,7 @@ function ProjectManage() {
               return Promise.reject(error);
             }
             message.success(`更新成功`);
-            search.submit();
+            getData();
           }
         })
       default:
@@ -210,7 +226,7 @@ function ProjectManage() {
 
         if (!!!error) {
           message.success(`删除成功`);
-          search.submit();
+          getData();
         }
       }
     })
@@ -275,9 +291,15 @@ function ProjectManage() {
       <div className='mb-6'>
         <CustomSearch
           ref={searchRef}
-          loading={tableProps.loading}
-          onSearch={() => search.submit()}
-          onReset={() => search.reset()}
+          loading={loading}
+          onSearch={() => {
+            searchParams.current = (searchRef.current! as Record<string, any>)?.form?.getFieldsValue();
+            getData();
+          }}
+          onReset={() => {
+            searchParams.current = { search: '' };
+            getData();
+          }}
           columns={[{ name: 'search', label: '问卷标题', type: 'Input', defaultValue: null, placeholder: '请输入...' }]}
         />
       </div>
@@ -301,7 +323,20 @@ function ProjectManage() {
     <div className='project-box'>
       {renderSearch()}
       {renderOperate()}
-      <Table columns={columns} rowSelection={rowSelection} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
+      <Table
+        columns={columns}
+        rowSelection={rowSelection}
+        scroll={{ x: scrollXCount }}
+        bordered
+        rowKey='id'
+        loading={loading}
+        dataSource={dataSource?.list}
+        pagination={dataSource}
+        onChange={(pagination) => {
+          const { pageSize, current } = pagination;
+          setPaginationConfig({ ...paginationConfig, page: current!, size: pageSize! });
+        }}
+      />
     </div>
   )
 }

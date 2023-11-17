@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:44:36
- * @LastEditTime: 2023-11-03 17:20:49
+ * @LastEditTime: 2023-11-04 15:00:52
  * @Description: 常量数据
  */
 import { IUserAuthType } from "@/types/common.type";
@@ -11,17 +11,14 @@ export const USER_TYPE_LIST: Array<IUserAuthType> = [
   {
     value: 1,
     label: "超级管理员",
-    disabled: true,
   },
   {
     value: 2,
     label: "项目管理员",
-    disabled: false,
   },
   {
     value: 3,
     label: "普通用户",
-    disabled: false,
   },
 ];
 

@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-11-03 16:48:51
+ * @LastEditTime: 2023-11-17 19:48:52
  * @Description: 用户管理
  */
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import { Table, Button, Modal, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table'
 import { useAntdTable } from 'ahooks';
@@ -22,18 +22,37 @@ import './index.scss';
 
 function UserManage() {
   const { userInfo } = useSelector((state: Record<string, any>) => state.user);
+  const [dataSource, setDataSource] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(false);
+  const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
 
-  const getData = useMemo(() => (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number | null }, form: Record<string, string | number> = {}): Promise<any> => {
-    return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
-  }, [userInfo])
 
-  const { tableProps, search } = useAntdTable(getData, {
-    defaultParams: [
-      userInfo.role === 1 ? { current: 1, pageSize: 10, all: 1 } : { current: 1, pageSize: 10, },
-      { search: '' }
-    ],
-    defaultType: 'advance',
-  });
+  //  获取数据
+  const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10, all: userInfo.role === 1 ? 1 : null }) => {
+    setLoading(true);
+    const [, result] = await to(getUserList(Object.assign({}, pageOptions)));
+    result && setDataSource(Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size }));
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (userInfo.role) {
+      const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+      getData(options);
+    }
+  }, [paginationConfig, userInfo.role])
+
+
+  // const getData = useMemo(() => (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number | null }, form: Record<string, string | number> = {}): Promise<any> => {
+  //   return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
+  // }, [userInfo])
+
+  // const { tableProps, search } = useAntdTable(getData, {
+  //   defaultParams: [
+  //     userInfo.role === 1 ? { current: 1, pageSize: 10, all: 1 } : { current: 1, pageSize: 10, },
+  //     { search: '' }
+  //   ],
+  // });
 
   const modalRef = useRef();
 
@@ -48,7 +67,7 @@ function UserManage() {
             const [error] = await to(deleteUser(data?.id!));
             if (!error) {
               message.success('删除成功');
-              search.submit();
+              getData();
             }
           }
         });
@@ -58,15 +77,21 @@ function UserManage() {
           icon: null,
           closable: true,
           width: 500,
-          content: <UserTemplate key='userTemplate' ref={modalRef} {...(data || {})} />,
+          content: <UserTemplate key='userTemplate' ref={modalRef} {...(data || {})} role={data?.role ?? userInfo.role} />,
           onOk: () => {
             const role = userInfo.role === 2 ? 1 : 0;  //  默认只有管理员、超管才可以创建用户
             const { validate } = modalRef.current!;
             if (validate && typeof validate === 'function') {
               (validate as Function)().then(async (value: Record<string, any>) => {
-                const [error] = await to(type === OperateType.EDIT ? updateUser({ ...pick(value, ['role', 'status', 'remark']), ...pick(data, ['id', 'status']) }) : createUser(role, value))
+                const params = type === OperateType.EDIT ? { ...pick(value, ['role', 'status', 'remark', 'password']), ...pick(data, ['id', 'status']) } : value;
+
+                if (type === OperateType.EDIT && params.password === '******') {
+                  delete params.password;
+                }
+
+                const [error] = await to(type === OperateType.EDIT ? updateUser(params) : createUser(role, params))
                 if (!error) {
-                  search.submit();
+                  getData();
                   message.success(`${type === OperateType.EDIT ? '编辑' : '创建'}成功`);
                 }
                 return;
@@ -107,9 +132,21 @@ function UserManage() {
   return (
     <div className='user-box'>
       <div className='flex justify-end mb-3'>
-        <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button>
+        {[1, 2].includes(userInfo.role) ? <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button> : null}
       </div>
-      <Table columns={columns} scroll={{ x: scrollXCount }} bordered rowKey='id' {...useTableProps(tableProps)} />
+      <Table
+        columns={columns}
+        scroll={{ x: scrollXCount }}
+        bordered
+        rowKey='id'
+        loading={loading}
+        dataSource={dataSource?.list}
+        pagination={dataSource}
+        onChange={(pagination) => {
+          const { pageSize, current } = pagination;
+          setPaginationConfig({ ...paginationConfig, page: current!, size: pageSize! });
+        }}
+      />
     </div>
   )
 }

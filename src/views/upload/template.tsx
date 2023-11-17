@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:49:19
- * @LastEditTime: 2023-10-26 14:41:01
+ * @LastEditTime: 2023-11-13 14:34:24
  * @Description:
  */
 
@@ -40,7 +40,7 @@ function UploadTemplate(props = {}, ref?: Ref<unknown>) {
           <Input placeholder='请输入版本号' />
         </Form.Item>
         <Form.Item label='上传文件' name='link' rules={[{ required: true, message: '请上传文件' }]}>
-          <CustomUpload urlPath='/admin/release' accept=".apk" maxCount={1} />
+          <CustomUpload urlPath='/admin/release' expireTime={1000 * 60 * 60 * 24 * 180} accept=".apk" maxCount={1} />
         </Form.Item>
       </Form>
     </>

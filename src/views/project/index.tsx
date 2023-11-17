@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-11-03 17:17:48
+ * @LastEditTime: 2023-11-04 15:28:46
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -90,11 +90,14 @@ function ProjectManage() {
   ];
 
   //  获取数据
-  const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10 }) => {
+  const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10, all: userInfo.role === 1 ? 1 : null }) => {
     setLoading(true);
     const [, result] = await to(getProjectList(Object.assign({}, pageOptions, { ...(searchRef.current! as Record<string, any>)?.form?.getFieldsValue() })));
-    result && setDataSource(result);
+    result && setDataSource(Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size }));
     setLoading(false);
+    setTimeout(() => {
+      console.log(dataSource);
+    }, 1500);
   }
 
   useEffect(() => {

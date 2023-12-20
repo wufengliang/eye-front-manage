@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-11-17 19:48:52
+ * @LastEditTime: 2023-12-20 08:58:23
  * @Description: 用户管理
  */
 import { useMemo, useRef, useEffect, useState } from 'react';
@@ -120,7 +120,7 @@ function UserManage() {
       fixed: 'right',
       render: (_, record) => (
         <>
-          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button>
+          {[1].includes(userInfo.role) ? <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button> : null}
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
         </>
       )
@@ -132,7 +132,7 @@ function UserManage() {
   return (
     <div className='user-box'>
       <div className='flex justify-end mb-3'>
-        {[1, 2].includes(userInfo.role) ? <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button> : null}
+        {[1].includes(userInfo.role) ? <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button> : null}
       </div>
       <Table
         columns={columns}

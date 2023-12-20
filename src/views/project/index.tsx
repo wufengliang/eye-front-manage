@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-11-04 15:28:46
+ * @LastEditTime: 2023-11-21 16:28:28
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -49,6 +49,7 @@ function ProjectManage() {
     { title: '问卷标题', dataIndex: 'title', width: 150, },
     { title: '问卷开始语简介', dataIndex: 'startTips', width: 150, },
     { title: '问卷结束语简介', dataIndex: 'endTips', width: 170, },
+    { title: '创建人ID', dataIndex: 'createUserId', width: 100, },
     {
       title: '投放开始时间',
       dataIndex: 'startTime',

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-10-28 18:35:48
+ * @LastEditTime: 2023-12-21 15:04:58
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -165,10 +165,15 @@ function TestVideo() {
     const receiveData = await getMovePointData(data!);
 
     if (!receiveData) {
-      return;
+      return message.error(`暂无轨迹图数据`);
     }
 
     const { indexList, rowPixel, columnPixel, statusBarHeight, questionFilePath } = receiveData;
+
+
+    if (!indexList || !Array.isArray(indexList)) {
+      return message.error(`暂无轨迹图坐标数据`);
+    }
 
     const box = document.createElement('div');
 

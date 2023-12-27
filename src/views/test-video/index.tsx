@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-12-21 15:04:58
+ * @LastEditTime: 2023-12-27 15:10:31
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -152,7 +152,7 @@ function TestVideo() {
     const array = (currentType === TTestVideoType.HOT ? value.heatmapLink : value.heatmapVideoLink).split('?');
     const ext = getExt(array.length > 1 ? array[0] : array);
     const filename = `${currentType === TTestVideoType.HOT ? '' : '动态'}热力图_(问卷ID_${surveyId})-(问题ID_${questionId})-(用户ID_${userId})-(视频ID_${id}).${ext || ('jpg')}`;
-    downloadFile(value.heatmapLink, filename).then(() => message.success('下载成功'));
+    downloadFile(currentType === TTestVideoType.HOT ? value.heatmapLink : value.heatmapVideoLink, filename).then(() => message.success('下载成功'));
   }
 
   /**

@@ -1,12 +1,12 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2023-09-20 14:10:35
+ * @LastEditTime: 2023-12-25 11:16:35
  * @Description:
  */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { to } from '@/utils/utils';
 import { getCheckImgCode, loginIn } from '@/api/login';
@@ -26,7 +26,10 @@ export default function LoginIndex() {
     if (error) {
       return getCode();
     }
-    const { authToken } = result;
+    const { authToken, userRole } = result;
+    if (userRole === 'USER') {
+      return message.error('用户权限不足以登录管理系统')
+    }
     dispatch(setCurrentUser(result));
     Storage.setItem(USER_INFO, result);
     Cookies.set(USER_TOKEN, authToken);

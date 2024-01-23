@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 15:30:18
- * @LastEditTime: 2023-10-26 11:17:48
+ * @LastEditTime: 2024-01-23 09:01:09
  * @Description: 下载界面
  */
 import { useEffect, useState } from 'react';
@@ -30,11 +30,12 @@ function Download() {
 
   //    下载apk
   const downloadApp = () => {
-    message.info(`正在下载中，请耐心等待...`);
-    downloadFile(config.link!, `${config.fileName}.apk`)
-      .then(() => {
-        message.success(`下载成功`);
-      });
+    // message.info(`正在下载中，请耐心等待...`);
+    // downloadFile(config.link!, `${config.fileName}.apk`)
+    //   .then(() => {
+    //     message.success(`下载成功`);
+    //   });
+    window.location.href = config.link!;
   };
 
   return (

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2023-12-27 15:10:31
+ * @LastEditTime: 2024-01-23 08:59:37
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -41,7 +41,7 @@ function TestVideo() {
 
   const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
-      { current: 1, pageSize: 10, all: 1 },
+      { current: 1, pageSize: 10, all: 1, order: 'DESC' },
       { search: '' }
     ],
     form: searchRef.current?.form
@@ -62,6 +62,7 @@ function TestVideo() {
 
   const columns: ColumnsType<any> = [
     { title: '视频ID', dataIndex: 'id', fixed: 'left', width: 150, },
+    { title: '问卷标题', dataIndex: 'surveyTitle', fixed: 'left', width: 150, },
     { title: '问卷ID', dataIndex: 'surveyId', width: 150, },
     { title: '问题ID', dataIndex: 'questionId', width: 150, },
     { title: '用户ID', dataIndex: 'userId', width: 150, },
@@ -325,7 +326,10 @@ function TestVideo() {
   const renderSearch = () => (
     <div className='test-video-form mb-8'>
       <CustomSearch
-        columns={[{ name: 'search', label: '测试视频', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        columns={[
+          { name: 'search', label: '测试视频', type: 'Input', defaultValue: '', placeholder: '请输入...' },
+          { name: 'surveyTitle', label: '问卷标题', type: 'Input', defaultValue: '', placeholder: '请输入...' }
+        ]}
         loading={tableProps.loading}
         onSearch={() => search.submit()}
         onReset={() => search.reset()}

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2024-01-23 08:59:37
+ * @LastEditTime: 2024-01-24 16:33:19
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row } from 'antd';
@@ -24,7 +24,7 @@ import JSZip from 'jszip';
 import fileSaver from 'file-saver';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
-  return getTestVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
+  return getTestVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form, order: 'DESC' }).then(result => result);
 }
 
 enum TTestVideoType {
@@ -41,7 +41,7 @@ function TestVideo() {
 
   const { tableProps, search } = useAntdTable(getData, {
     defaultParams: [
-      { current: 1, pageSize: 10, all: 1, order: 'DESC' },
+      { current: 1, pageSize: 10, all: 1, },
       { search: '' }
     ],
     form: searchRef.current?.form

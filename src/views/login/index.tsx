@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2023-12-25 11:16:35
+ * @LastEditTime: 2024-05-22 06:28:30
  * @Description:
  */
 import { useState, useEffect } from 'react';
@@ -90,7 +90,7 @@ export default function LoginIndex() {
     return (
       <>
         <Form
-          initialValues={{ phone: '13417103801', password: '123' }}
+          initialValues={{ phone: '', password: '' }}
           onFinish={run}
         >
           <Form.Item

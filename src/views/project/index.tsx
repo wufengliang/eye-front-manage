@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2023-11-21 16:28:28
+ * @LastEditTime: 2024-05-22 06:50:31
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -43,6 +43,17 @@ function ProjectManage() {
   const searchParams = useRef<Record<string, any>>({ search: '' });
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (userInfo.role) {
+      setPaginationConfig(v => ({ ...v, all: userInfo.role === 1 ? 1 : null }))
+    }
+  }, [userInfo.role]);
+
+  useEffect(() => {
+    if (paginationConfig.all) {
+      getData(paginationConfig);
+    }
+  }, [paginationConfig])
 
   const columns: ColumnsType<any> = [
     { title: '问卷ID', dataIndex: 'id', fixed: 'left', width: 150, },
@@ -96,17 +107,7 @@ function ProjectManage() {
     const [, result] = await to(getProjectList(Object.assign({}, pageOptions, { ...(searchRef.current! as Record<string, any>)?.form?.getFieldsValue() })));
     result && setDataSource(Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size }));
     setLoading(false);
-    setTimeout(() => {
-      console.log(dataSource);
-    }, 1500);
   }
-
-  useEffect(() => {
-    if (userInfo.role) {
-      const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
-      getData(options);
-    }
-  }, [paginationConfig, userInfo.role])
 
   //  多选操作
   const rowSelection = {
@@ -230,7 +231,7 @@ function ProjectManage() {
 
         if (!!!error) {
           message.success(`删除成功`);
-          getData();
+          getData(paginationConfig);
         }
       }
     })

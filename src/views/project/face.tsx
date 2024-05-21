@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-23 10:07:21
- * @LastEditTime: 2023-10-26 13:58:09
+ * @LastEditTime: 2024-05-22 06:29:59
  * @Description: 人脸识别示范管理
  */
 import { useEffect, useState } from 'react';
@@ -48,7 +48,6 @@ function FaceTemplate() {
           beforeUpload={() => false}
           onChange={async (event) => {
             const { name: fileName, type, status } = event.file;
-            console.log(event.file);
             if (!!!status) {
               const [, result] = await to(uploadFile({ file: event.file, contentType: type!, fileName, urlPath: '/admin/face', expireTime: 10000 }));
               result && getData();

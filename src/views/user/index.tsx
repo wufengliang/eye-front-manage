@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2023-12-20 08:58:23
+ * @LastEditTime: 2024-05-22 06:35:20
  * @Description: 用户管理
  */
 import { useMemo, useRef, useEffect, useState } from 'react';
@@ -26,6 +26,9 @@ function UserManage() {
   const [loading, setLoading] = useState(false);
   const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
 
+  useEffect(() => {
+    setPaginationConfig(v => ({ ...v, all: userInfo.role === 1 ? 1 : null }));
+  }, [userInfo.role])
 
   //  获取数据
   const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10, all: userInfo.role === 1 ? 1 : null }) => {
@@ -40,19 +43,7 @@ function UserManage() {
       const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
       getData(options);
     }
-  }, [paginationConfig, userInfo.role])
-
-
-  // const getData = useMemo(() => (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number | null }, form: Record<string, string | number> = {}): Promise<any> => {
-  //   return getUserList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
-  // }, [userInfo])
-
-  // const { tableProps, search } = useAntdTable(getData, {
-  //   defaultParams: [
-  //     userInfo.role === 1 ? { current: 1, pageSize: 10, all: 1 } : { current: 1, pageSize: 10, },
-  //     { search: '' }
-  //   ],
-  // });
+  }, [paginationConfig])
 
   const modalRef = useRef();
 
@@ -67,7 +58,7 @@ function UserManage() {
             const [error] = await to(deleteUser(data?.id!));
             if (!error) {
               message.success('删除成功');
-              getData();
+              getData(paginationConfig);
             }
           }
         });
@@ -91,7 +82,7 @@ function UserManage() {
 
                 const [error] = await to(type === OperateType.EDIT ? updateUser(params) : createUser(role, params))
                 if (!error) {
-                  getData();
+                  getData(paginationConfig);
                   message.success(`${type === OperateType.EDIT ? '编辑' : '创建'}成功`);
                 }
                 return;

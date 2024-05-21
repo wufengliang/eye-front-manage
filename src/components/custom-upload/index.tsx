@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2023-10-30 18:05:51
+ * @LastEditTime: 2024-05-22 06:27:45
  * @Description: 自定义上传文件
  */
 import { Upload, Modal, message } from 'antd';
@@ -11,6 +11,8 @@ import { to } from '@/utils/utils';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { UploadFile, UploadListType } from 'antd/es/upload/interface';
 import { getExt } from '@/utils/utils';
+
+const defaultExpireTime = 1000 * 60 * 10;
 
 interface IUploadOptions {
   dataSource?: any[];
@@ -100,7 +102,7 @@ function CustomUpload(props: IUploadOptions) {
           setLoading(true);
           const { name: fileName, status, type } = event.file;
           if (!!!status) {
-            const [, result] = await to(uploadFile({ file: event.file, contentType: type!, fileName, urlPath: props.urlPath, expireTime: props.expireTime ?? 10000 }));
+            const [, result] = await to(uploadFile({ file: event.file, contentType: type!, fileName, urlPath: props.urlPath, expireTime: props.expireTime ?? defaultExpireTime }));
             if (result) {
               const { downloadLink } = result;
               const newArray = [...array, { name: event.file.name, url: downloadLink, status: 'done' }];

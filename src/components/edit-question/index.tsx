@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2023-10-30 17:51:31
+ * @LastEditTime: 2024-05-22 07:28:01
  * @Description:
  */
 import { useState, } from 'react';
@@ -218,7 +218,7 @@ function EditQuestion(props: IQuestionItemType) {
             label='题目开始提示语'
             className='py-1'
             name={['question', 'tips']}
-            rules={[{ required: true, message: '请输入题目开始提示语' }]}
+          // rules={[{ required: true, message: '请输入题目开始提示语' }]}
           >
             <Input placeholder='请输入...' />
           </Form.Item> :

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-21 17:16:06
- * @LastEditTime: 2023-09-22 10:00:31
+ * @LastEditTime: 2024-05-22 07:20:05
  * @Description: 自定义搜索配置项
  */
 
@@ -10,7 +10,7 @@ import React from "react";
 export type ComponentType = 'Input' | 'InputNumber' | 'Select' | 'DatePicker'
 
 export interface ICustomSearchItem {
-  type: ComponentType;
+  type?: ComponentType;
   name?: string;
   label?: string;
   placeholder?: string;
@@ -21,6 +21,7 @@ export interface ICustomSearchItem {
   min?: number;
   max?: number;
   style?: Record<string, string | number>;
+  customNode?:React.ReactNode;
 }
 
 export interface ICustomSearchType {

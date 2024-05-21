@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2023-10-26 16:11:58
+ * @LastEditTime: 2024-05-22 07:26:47
  * @Description: 项目创建模板内容
  */
 import { forwardRef, useImperativeHandle, Ref, useRef } from 'react';
@@ -44,6 +44,9 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
           <DatePicker showTime placeholder='请输入投放结束时间..' locale={zhCN} style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item label='问卷口令' name='password'>
+          <Input.Password placeholder='请输入问卷口令..' />
+        </Form.Item>
+        <Form.Item label='产品选项' name='product' rules={[{ required: true, message: '请选择产品' }]}>
           <Input.Password placeholder='请输入问卷口令..' />
         </Form.Item>
         <Form.Item label='是否是眼动项目' name='isYanDong' rules={[{ required: true, message: '请选择是否是眼动项目' }]}>

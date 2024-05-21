@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-21 17:14:27
- * @LastEditTime: 2024-05-22 06:51:14
+ * @LastEditTime: 2024-05-22 07:20:44
  * @Description: 自定义搜索
  */
 import { forwardRef, Ref, useRef, useImperativeHandle } from 'react';
@@ -32,14 +32,15 @@ function CustomSearch(props: ICustomSearchType = { columns: [] }, cref?: Ref<unk
       showClear = true,
       style,
       dataSource = [],
-      renderSingle
+      renderSingle,
+      customNode,
     } = item;
 
     if (!name) {
       throw Error(`当前搜索渲染项${type}缺失${name}字段`);
     }
 
-    if (['Select'].includes(type) && !renderSingle) {
+    if (type && ['Select'].includes(type) && !renderSingle) {
       throw Error(`当前搜索渲染项${name}缺失renderSingle自定义渲染函数`);
     }
 
@@ -59,7 +60,7 @@ function CustomSearch(props: ICustomSearchType = { columns: [] }, cref?: Ref<unk
         key={name}
       >
         {
-          (!type || type === 'Input') ?
+          (type === 'Input') ?
             <Input {...commonProps} /> :
             (type === 'InputNumber' ?
               <InputNumber {...commonProps} /> :
@@ -67,7 +68,8 @@ function CustomSearch(props: ICustomSearchType = { columns: [] }, cref?: Ref<unk
                 <Select {...commonProps}>
                   {dataSource.map((item) => renderSingle!(item as unknown))}
                 </Select> :
-                <DatePicker {...commonProps} />)
+                (type === 'DatePicker') ? <DatePicker {...commonProps} /> : customNode
+              )
             )
         }
       </Form.Item>

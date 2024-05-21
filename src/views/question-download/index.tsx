@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 09:38:02
- * @LastEditTime: 2024-05-22 06:54:01
+ * @LastEditTime: 2024-05-22 07:07:09
  * @Description: 问卷下载
  */
 import { useState, useRef, useEffect, useMemo } from 'react';
@@ -64,7 +64,7 @@ function QuestionDownload() {
   const getData = async () => {
     setLoading(true);
     const [, result] = await to(getSurveyListData({ ...params.current }));
-    result && setDataSource(result.list);
+    result && setDataSource(result.list ?? []);
     setLoading(false);
   }
 

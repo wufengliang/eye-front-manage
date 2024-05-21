@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2024-01-24 16:33:19
+ * @LastEditTime: 2024-05-22 07:21:17
  * @Description: 测试视频
  */
-import { Button, Table, Modal, message, Row } from 'antd';
+import { Button, Table, Modal, message, Row, DatePicker } from 'antd';
 import { useAntdTable } from 'ahooks';
 import { useRef, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
@@ -22,6 +22,7 @@ import DownloadOptionsTemplate from './download-options';
 import TrajectoryTemplate from './trajectory';
 import JSZip from 'jszip';
 import fileSaver from 'file-saver';
+import { useSelector } from 'react-redux';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getTestVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form, order: 'DESC' }).then(result => result);
@@ -34,6 +35,7 @@ enum TTestVideoType {
 }
 
 function TestVideo() {
+  const { userInfo } = useSelector((state: Record<string, any>) => state.user);
   //  表单组件
   const searchRef = useRef<Record<string, any>>({});
   const optionsRef = useRef<Record<string, any>>({});
@@ -84,6 +86,7 @@ function TestVideo() {
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.HOT)}>下载热力图</Button>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.TRAJECTORY)}>下载轨迹图</Button>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.DOWNLOAD, record, TTestVideoType.DYNAMIC_HOT)}>下载动态热力图</Button>
+          {userInfo.role === 1 && <Button type='primary' className='margin-right-10 margin-bottom-5' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>}
         </>
       )
     }
@@ -102,10 +105,20 @@ function TestVideo() {
         title: '查看视频',
         maskClosable: false,
         closable: true,
-        icon: null,
         content: <CustomPlay {...data} />,
         footer: null,
       });
+    }
+
+    //  删除视频
+    if (type === OperateType.DELETE) {
+      return Modal.confirm({
+        title: '删除视频',
+        maskClosable: false,
+        closable: true,
+        content: `确认删除问卷标题为【${data?.surveyTitle}】的测试视频吗？`,
+        onOk: async () => { }
+      })
     }
 
     // 热力图查看详情、下载 + 下载动态热力图
@@ -327,8 +340,9 @@ function TestVideo() {
     <div className='test-video-form mb-8'>
       <CustomSearch
         columns={[
-          { name: 'search', label: '测试视频', type: 'Input', defaultValue: '', placeholder: '请输入...' },
-          { name: 'surveyTitle', label: '问卷标题', type: 'Input', defaultValue: '', placeholder: '请输入...' }
+          { name: 'search', label: '问卷或用户ID', type: 'Input', defaultValue: '', placeholder: '请输入...' },
+          { name: 'surveyTitle', label: '问卷标题', type: 'Input', defaultValue: '', placeholder: '请输入...' },
+          { name: 'date', label: '时间段', placeholder: '请输入时间段', customNode: <DatePicker.RangePicker className='margin-top-5' style={{ width: '100%' }} /> }
         ]}
         loading={tableProps.loading}
         onSearch={() => search.submit()}

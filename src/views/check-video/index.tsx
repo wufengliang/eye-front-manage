@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2023-09-22 17:24:35
+ * @LastEditTime: 2024-05-22 07:05:46
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
@@ -14,12 +14,14 @@ import { OperateType } from '@/types/operate.enum';
 import { useGetScrollCount, useTableProps } from '@/hooks';
 import dayjs from 'dayjs';
 import { CustomPlay, CustomSearch } from '@/components';
+import { useSelector } from 'react-redux';
 
 const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all: number }, form: Record<string, string | number> = {}): Promise<any> => {
   return getCheckVideoList({ page: params.current, size: params.pageSize, all: params.all, ...form }).then(result => result);
 }
 
 function CheckVideo() {
+  const { userInfo } = useSelector((state: Record<string, any>) => state.user);
   //  表单组件
   const searchRef = useRef<Record<string, any>>({});
 
@@ -47,12 +49,13 @@ function CheckVideo() {
       render: (_, record) => (
         <>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.PLAY, record)}>点击播放</Button>
+          {userInfo.role === 1 && <Button type='primary' className='margin-right-10 margin-bottom-5' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>}
         </>
       )
     }
   ];
 
-  const handleOperate = async (type: OperateType, data: unknown) => {
+  const handleOperate = async (type: OperateType, data?: Record<string, any>) => {
     if (type === OperateType.PLAY) {
       return Modal.confirm({
         title: '查看视频',
@@ -61,6 +64,17 @@ function CheckVideo() {
         closable: true,
         content: <CustomPlay {...(data || {})} />,
         footer: null,
+      })
+    }
+
+    //  删除视频
+    if (type === OperateType.DELETE) {
+      return Modal.confirm({
+        title: '删除视频',
+        maskClosable: false,
+        closable: true,
+        content: `确认删除问卷ID为【${data?.surveyId}】的校准视频吗？`,
+        onOk: async () => { }
       })
     }
   }

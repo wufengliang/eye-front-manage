@@ -1,12 +1,12 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2024-05-22 06:35:20
+ * @LastEditTime: 2024-05-31 14:07:00
  * @Description: 用户管理
  */
 import { useMemo, useRef, useEffect, useState } from 'react';
 import { Table, Button, Modal, message } from 'antd';
-import type { ColumnsType } from 'antd/es/table'
+import type { ColumnsType } from 'antd/es/table';
 import { useAntdTable } from 'ahooks';
 import { TNumberOrString } from '@/types/common.type';
 import { getUserList, deleteUser, createUser, updateUser } from '@/api/user';
@@ -15,13 +15,16 @@ import { to } from '@/utils/utils';
 import UserTemplate from './template';
 import { OperateType } from '@/types/operate.enum';
 import { useGetScrollCount, useTableProps } from '@/hooks';
-import { pick } from 'lodash-es';
+import { omit, pick } from 'lodash-es';
 import { useSelector } from 'react-redux';
+import CustomShowContainer from '@/components/custom-show-container';
 import './index.scss';
 
 
 function UserManage() {
   const { userInfo } = useSelector((state: Record<string, any>) => state.user);
+  const { roleListMap } = useSelector((state: Record<string, any>) => state.role);
+
   const [dataSource, setDataSource] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
   const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
@@ -62,13 +65,31 @@ function UserManage() {
             }
           }
         });
+      case OperateType.STATUS:
+        const { status, phoneNumber } = data || {};
+        return Modal.confirm({
+          title: '提示',
+          content: `是否${status ? '停用' : '启用'}${phoneNumber}的用户?`,
+          maskClosable: false,
+          onOk: async () => {
+            const params = {
+              ...pick(data || {}, ['id']),
+              status: status ? 0 : 1
+            }
+            const [error] = await to(updateUser(params));
+            if (!error) {
+              message.success(`账号${phoneNumber}${status ? '停用' : '启用'}成功`);
+              getData(paginationConfig);
+            }
+          }
+        })
       default:
         return Modal.confirm({
           title: `${type === OperateType.EDIT ? '编辑' : '创建'}用户`,
           icon: null,
           closable: true,
           width: 500,
-          content: <UserTemplate key='userTemplate' ref={modalRef} {...(data || {})} role={data?.role ?? userInfo.role} />,
+          content: <UserTemplate key='userTemplate' ref={modalRef} {...(data || {})} role={data?.role ?? userInfo.role} roleListMap={roleListMap} />,
           onOk: () => {
             const role = userInfo.role === 2 ? 1 : 0;  //  默认只有管理员、超管才可以创建用户
             const { validate } = modalRef.current!;
@@ -101,7 +122,7 @@ function UserManage() {
       title: '最近登录',
       dataIndex: 'lastLoginTime',
       width: 170,
-      render: (_, record) => <>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</>
+      render: (_: any, record: any) => <>{dayjs(record.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}</>
     },
     { title: '备注', dataIndex: 'remark', width: 150, },
     {
@@ -109,10 +130,15 @@ function UserManage() {
       key: 'operation',
       width: 100,
       fixed: 'right',
-      render: (_, record) => (
+      render: (_: any, record: any) => (
         <>
-          {[1].includes(userInfo.role) ? <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button> : null}
-          <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
+          <CustomShowContainer id={3}>
+            <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button>
+          </CustomShowContainer>
+          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.STATUS, record)}>{record.status ? '停用' : '启用'}</Button>
+          <CustomShowContainer id={4}>
+            <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
+          </CustomShowContainer>
         </>
       )
     }
@@ -123,7 +149,10 @@ function UserManage() {
   return (
     <div className='user-box'>
       <div className='flex justify-end mb-3'>
-        {[1].includes(userInfo.role) ? <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button> : null}
+        {/* {[1].includes(userInfo.role) ? <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button> : null} */}
+        <CustomShowContainer id={2}>
+          <Button type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加用户</Button>
+        </CustomShowContainer>
       </div>
       <Table
         columns={columns}

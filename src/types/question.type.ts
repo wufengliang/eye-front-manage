@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-24 15:31:28
- * @LastEditTime: 2023-10-28 19:32:36
+ * @LastEditTime: 2024-05-31 06:09:16
  * @Description: 问题数据
  */
 
@@ -29,6 +29,7 @@ export interface IQuestionItemType {
   onChange?: (type: OperateType, index: number, data?: Record<string, any>) => void;
   value: IQuestionDataType;
   children?: ReactNode;
+  questionGroups?:any[];
 }
 
 export interface ISingleBgChoiceType {

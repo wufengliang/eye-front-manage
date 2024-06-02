@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 16:20:10
- * @LastEditTime: 2024-05-22 06:28:30
+ * @LastEditTime: 2024-05-30 17:07:56
  * @Description:
  */
 import { useState, useEffect } from 'react';
@@ -10,7 +10,7 @@ import { Form, Input, Button, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { to } from '@/utils/utils';
 import { getCheckImgCode, loginIn } from '@/api/login';
-import { setCurrentUser } from '@/store/slices/user';
+import { setCurrentUser } from '@/store/user';
 import Cookies from 'js-cookie';
 import { USER_TOKEN, USER_INFO } from '@/utils/variable';
 import { Storage } from '@/utils/storage';

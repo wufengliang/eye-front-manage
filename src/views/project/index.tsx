@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2024-05-22 06:50:31
+ * @LastEditTime: 2024-05-31 14:20:02
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -20,7 +20,7 @@ import RecoveryTemplate from './recovery';
 import FaceTemplate from './face';
 import UserTemplate from './user';
 import BgConfigTemplate from './bg-config';
-import { to } from '@/utils/utils';
+import { checkContinuityList, to } from '@/utils/utils';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
@@ -95,6 +95,7 @@ function ProjectManage() {
           <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.BG, record)}>背景问题配置</Button>
           {record.status !== 0 ? <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>重新编辑</Button> : null}
           <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.DETAIL, record)}>查看详情</Button>
+          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.STATUS, record)}>{record.listingStatus ? '下' : '上'}架</Button>
           <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
         </>
       )
@@ -187,7 +188,7 @@ function ProjectManage() {
           onOk: async () => {
             const { getResult } = bgConfigRef.current! as Record<string, any>;
             const value = getResult?.();
-            console.log(value);
+
             const [error] = await to(Promise.all(value.map((i: unknown) => updateProfileData(i))));
             if (error) {
               return Promise.reject(error);
@@ -196,6 +197,24 @@ function ProjectManage() {
             getData();
           }
         })
+      //  上下架
+      case OperateType.STATUS:
+        const status = (data as Record<string, any>)?.listingStatus;
+        return Modal.confirm({
+          title: `确认是否要${status ? '下' : '上'}架项目吗?`,
+          maskClosable: false,
+          onOk: async () => {
+            const params = {
+              ...(data || {}),
+              listingStatus: status ? 0 : 1
+            };
+            const [error] = await to(updateProjectData(params));
+            if (!!!error) {
+              message.success(`${status ? '下' : '上'}架成功`);
+              getData(paginationConfig);
+            }
+          }
+        });
       default:
         return;
     }
@@ -271,16 +290,27 @@ function ProjectManage() {
         if (error) {
           return Promise.reject(error);
         }
+
         const params = {
           ...result,
           startTime: dayjs(result.startTime).format('YYYY-MM-DD[T]HH:mm:ss'),
-          endTime: dayjs(result.endTime).format('YYYY-MM-DD[T]HH:mm:ss')
+          endTime: dayjs(result.endTime).format('YYYY-MM-DD[T]HH:mm:ss'),
+          questionGroups: (result.questionGroups || []).map((item: Record<string, any>) => {
+            const { groupId, groupName, random = false } = item;
+            return { groupId, groupName, random }
+          })
         }
+
+        if ((Array.isArray(params.questionGroups) && params.questionGroups.length) > 3 && !checkContinuityList(params.questionGroups, 'random')) {
+          message.error('当前产品组配置不符合要求');
+          return Promise.reject();
+        }
+
         const [err, value] = await to(createProjectData(params));
         if (!err) {
           updateProjectData({ id: value.surveyId, status: 1 });
           message.success('创建成功');
-          navigate(`/projectEdit/${value.surveyId}`, { state: params });
+          navigate(`/projectEdit/${value.surveyId}`, { state: Object.assign(params, { questionGroups: value.questionGroups }) });
         }
 
       }

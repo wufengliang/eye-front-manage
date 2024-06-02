@@ -1,20 +1,18 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2023-11-17 19:55:37
+ * @LastEditTime: 2024-05-30 21:07:38
  * @Description: 创建用户、编辑用户
  */
-import { useRef, forwardRef, useImperativeHandle, Ref } from 'react';
+import { useRef, forwardRef, useImperativeHandle, Ref, useEffect } from 'react';
 import { Form, Input, Select } from 'antd';
 import { USER_TYPE_LIST } from '@/utils/const';
-import { omit } from 'lodash-es';
 
 function UserTemplate(props: Record<string, any> = {}, cref?: Ref<unknown>) {
   const layout = {
     labelCol: { span: 5 },
     wrapperCol: { span: 16 },
   };
-  // const form = useRef(null);
   const [form] = Form.useForm();
 
   const isEditMode = Object.keys(props).length > 1;
@@ -58,8 +56,8 @@ function UserTemplate(props: Record<string, any> = {}, cref?: Ref<unknown>) {
         </Form.Item>
         <Form.Item name={'role'} label='角色'>
           <Select placeholder='请选择用户角色'>
-            {(props.role === 1 ? USER_TYPE_LIST : USER_TYPE_LIST.filter(item => item.value !== 1)).map(item => (
-              <Select.Option value={item.value}>{item.label}</Select.Option>
+            {Object.values(props.roleListMap).map((i: any) => (
+              <Select.Option value={i.id}>{i.roleName}</Select.Option>
             ))}
           </Select>
         </Form.Item>

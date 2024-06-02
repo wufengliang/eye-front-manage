@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-07 19:59:36
- * @LastEditTime: 2024-05-22 06:27:45
+ * @LastEditTime: 2024-05-31 07:29:36
  * @Description: 自定义上传文件
  */
 import { Upload, Modal, message } from 'antd';
@@ -37,6 +37,7 @@ const setData = (array?: any[]): any[] => {
 }
 
 function CustomUpload(props: IUploadOptions) {
+  console.log('props.dataSource:', props.dataSource);
   const [array, setArray] = useState<any[]>(setData(props.dataSource))
 
   const [loading, setLoading] = useState<boolean>(false);

@@ -1,14 +1,14 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:04:41
- * @LastEditTime: 2024-05-22 07:21:17
+ * @LastEditTime: 2024-05-30 16:47:39
  * @Description: 测试视频
  */
 import { Button, Table, Modal, message, Row, DatePicker } from 'antd';
 import { useAntdTable } from 'ahooks';
 import { useRef, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import { getTestVideoList, getHotPicture, donwloadMoveMapData, downloadHotData } from '@/api/test-video';
+import { getTestVideoList, getHotPicture, donwloadMoveMapData, downloadHotData, deleteTestVideo } from '@/api/test-video';
 import { getScreenInfo } from '@/api/common';
 import { TNumberOrString } from '@/types/common.type';
 import dayjs from 'dayjs';
@@ -36,6 +36,7 @@ enum TTestVideoType {
 
 function TestVideo() {
   const { userInfo } = useSelector((state: Record<string, any>) => state.user);
+
   //  表单组件
   const searchRef = useRef<Record<string, any>>({});
   const optionsRef = useRef<Record<string, any>>({});
@@ -57,6 +58,14 @@ function TestVideo() {
     onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
       setSelectedArray(selectedRows);
     },
+  }
+
+  /**
+  * @desc 重置搜索
+  * @param {Boolean} bool 是否重置
+  */
+  const resetSearch = async (bool: boolean = false) => {
+
   }
 
   //  缓存热力图数据
@@ -117,7 +126,15 @@ function TestVideo() {
         maskClosable: false,
         closable: true,
         content: `确认删除问卷标题为【${data?.surveyTitle}】的测试视频吗？`,
-        onOk: async () => { }
+        onOk: async () => {
+          const params = {
+            videoIds: [data?.id]
+          }
+          const [error] = await to(deleteTestVideo(params));
+          if (!error) {
+            message.success(`删除成功`);
+          }
+        }
       })
     }
 
@@ -342,7 +359,7 @@ function TestVideo() {
         columns={[
           { name: 'search', label: '问卷或用户ID', type: 'Input', defaultValue: '', placeholder: '请输入...' },
           { name: 'surveyTitle', label: '问卷标题', type: 'Input', defaultValue: '', placeholder: '请输入...' },
-          { name: 'date', label: '时间段', placeholder: '请输入时间段', customNode: <DatePicker.RangePicker className='margin-top-5' style={{ width: '100%' }} /> }
+          { name: 'createTime', label: '时间段', placeholder: '请输入时间段', customNode: <DatePicker.RangePicker className='margin-top-5' style={{ width: '100%' }} /> }
         ]}
         loading={tableProps.loading}
         onSearch={() => search.submit()}

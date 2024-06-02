@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 17:46:04
- * @LastEditTime: 2023-10-30 17:50:59
+ * @LastEditTime: 2024-05-31 07:34:31
  * @Description: 项目编辑
  */
 import { useEffect, useState, useRef } from 'react';
@@ -27,7 +27,6 @@ function ProjectEdit() {
   const checked = useRef<boolean>(false);
   const projectRef = useRef<Record<string, any>>(null);
 
-
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,8 +36,10 @@ function ProjectEdit() {
    */
   const getData = async () => {
     const { id } = params;
-    const [, result] = await to(getSurveyData(id!));
-    result && setList((result || []).map((item: Record<string, any>) => ({ isEditMode: false, value: item })));
+    const [error, result] = await to(getSurveyData(id!));
+    if (!error) {
+      result && setList((result || []).map((item: Record<string, any>) => ({ isEditMode: false, value: item })));
+    }
   }
 
 
@@ -66,7 +67,13 @@ function ProjectEdit() {
         if (bool) {
           return message.warning(`当前正有问题编辑中，请核对后重试`)
         }
-        newList.splice(index, 1, { isEditMode: true, value: { ...data?.value, questionFiles: (data?.value?.questionFiles || []).map((item: Record<string, any>) => ({ url: item.filePath })) } });
+        newList.splice(index, 1, {
+          isEditMode: true, value: {
+            ...data?.value, questionFiles: (data?.value?.questionFiles || []).map((item: Record<string, any>) => {
+              return ({ url: item.filePath || item.url });
+            })
+          }
+        });
         return setList(newList.map(item => (
           {
             ...item,
@@ -232,14 +239,26 @@ function ProjectEdit() {
                             return item?.isEditMode
                               ? <EditQuestion
                                 onChange={(type: OperateType, index: number, currentValue?: Record<string, any>) => handleOperate(type, index, currentValue)}
+                                questionGroups={state.questionGroups}
                                 {...item}
                               />
                               : (
                                 <QuestionItem
                                   hasMask
                                   isEditMode={item.isEditMode}
+                                  questionGroups={state.questionGroups}
                                   onChange={(type: OperateType, index: number, currentValue?: Record<string, any>) => handleOperate(type, index, currentValue)}
-                                  {...Object.assign({}, item, { value: { ...item.value, choiceOptions: (item.value?.choiceOptions || []).map((v: Record<string, any>) => ({ ...v, type: v.optionImage ? 2 : 1, value: v?.optionImage || v.optionName })) } })}
+                                  {
+                                  ...Object.assign(
+                                    {},
+                                    item,
+                                    {
+                                      value: {
+                                        ...item.value, choiceOptions: (item.value?.choiceOptions || []).map((v: Record<string, any>) => ({ ...v, type: v.optionImage ? 2 : 1, value: v?.optionImage || v.optionName })
+                                        )
+                                      }
+                                    })
+                                  }
                                 />
                               )
                           }}

@@ -1,12 +1,12 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:41:01
- * @LastEditTime: 2024-05-22 07:05:46
+ * @LastEditTime: 2024-05-30 16:47:31
  * @Description: 校准视频
  */
 import { useAntdTable } from 'ahooks';
 import { useRef } from 'react';
-import { Button, Table, Modal } from 'antd';
+import { Button, Table, Modal, DatePicker } from 'antd';
 import { getCheckVideoList } from '@/api/check-video';
 import { TNumberOrString } from '@/types/common.type';
 import type { ColumnsType } from 'antd/es/table';
@@ -49,7 +49,7 @@ function CheckVideo() {
       render: (_, record) => (
         <>
           <Button type='primary' className='margin-right-10 margin-bottom-5' onClick={() => handleOperate(OperateType.PLAY, record)}>点击播放</Button>
-          {userInfo.role === 1 && <Button type='primary' className='margin-right-10 margin-bottom-5' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>}
+          {/* {userInfo.role === 1 && <Button type='primary' className='margin-right-10 margin-bottom-5' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>} */}
         </>
       )
     }
@@ -83,7 +83,10 @@ function CheckVideo() {
   const renderSearch = () => (
     <div className='test-video-form mb-8'>
       <CustomSearch
-        columns={[{ name: 'search', label: '校准视频', type: 'Input', defaultValue: '', placeholder: '请输入...' }]}
+        columns={[
+          { name: 'search', label: '校准视频', type: 'Input', defaultValue: '', placeholder: '请输入...' },
+          { name: 'createTime', label: '时间段', placeholder: '请输入时间段', customNode: <DatePicker.RangePicker className='margin-top-5' style={{ width: '100%' }} /> }
+        ]}
         loading={tableProps.loading}
         onSearch={() => search.submit()}
         onReset={() => search.reset()}

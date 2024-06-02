@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 16:14:07
- * @LastEditTime: 2023-10-26 14:56:15
+ * @LastEditTime: 2024-05-29 22:15:32
  * @Description: 测试视频
  */
 import instance from './instance';
@@ -48,4 +48,11 @@ export function donwloadMoveMapData(data: Record<string, any>) {
  */
 export function downloadHotData(data: unknown) {
   return instance.post(`/api/viewTrace/batchGetViewData`, { data });
+}
+
+/**
+ * 删除视频
+ */
+export function deleteTestVideo(data:unknown){
+  return instance.post(`/api/answer/deleteTestVideo`,data);
 }

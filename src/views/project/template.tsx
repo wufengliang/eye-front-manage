@@ -1,11 +1,11 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2024-05-22 07:26:47
+ * @LastEditTime: 2024-06-02 16:24:31
  * @Description: 项目创建模板内容
  */
 import { forwardRef, useImperativeHandle, Ref, useRef } from 'react';
-import { Form, Input, Radio, DatePicker } from 'antd';
+import { Form, Input, Radio, DatePicker, Row, Col, Checkbox, Button } from 'antd';
 import zhCN from 'antd/es/date-picker/locale/zh_CN';
 
 function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
@@ -17,6 +17,9 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
 
   const [form] = Form.useForm();
 
+  const questionGroups = Form.useWatch('questionGroups', form);
+  const isRandom = Form.useWatch('answerRandom', form)
+
   useImperativeHandle(ref, () => {
     return {
       validate() {
@@ -25,9 +28,16 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
     }
   }, []);
 
+  /**
+   * 添加产品
+   */
+  const addQuesitionGroup = () => {
+    form.setFieldValue('questionGroups', [{ groupName: `产品${questionGroups.length + 1}`, random: false }]);
+  }
+
   return (
-    <>
-      <Form form={form} {...(props?.layout || layout)} initialValues={props}>
+    <div>
+      <Form form={form} {...(props?.layout || layout)} initialValues={{ ...props, questionGroups: props.questionGroups || [] }}>
         <Form.Item label='问卷标题' name='title' rules={[{ required: true, message: '请输入问卷标题' }]}>
           <Input placeholder='请输入问卷标题...' />
         </Form.Item>
@@ -46,9 +56,6 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
         <Form.Item label='问卷口令' name='password'>
           <Input.Password placeholder='请输入问卷口令..' />
         </Form.Item>
-        <Form.Item label='产品选项' name='product' rules={[{ required: true, message: '请选择产品' }]}>
-          <Input.Password placeholder='请输入问卷口令..' />
-        </Form.Item>
         <Form.Item label='是否是眼动项目' name='isYanDong' rules={[{ required: true, message: '请选择是否是眼动项目' }]}>
           <Radio.Group >
             <Radio value={1}>是</Radio>
@@ -61,14 +68,66 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
             <Radio value={2}>否</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label='是否随机' name='answerRandom' rules={[{ required: true, message: '请选择是否是随机' }]}>
+        {/* <Form.Item label='是否随机' name='answerRandom' rules={[{ required: true, message: '请选择是否是随机' }]}>
           <Radio.Group>
             <Radio value={1}>是</Radio>
             <Radio value={0}>否</Radio>
           </Radio.Group>
-        </Form.Item>
+        </Form.Item> */}
+        {(!questionGroups || (questionGroups && questionGroups.length === 0)) ? (
+          <Button type='primary' size='small' onClick={() => addQuesitionGroup()}>添加产品</Button>
+        ) : null}
+        <Form.List name='questionGroups'>
+          {(fields, { add, remove }) => {
+            const questionGroups = form.getFieldValue('questionGroups');
+            const nodes = fields.map((field, index) => {
+              return (
+                <Row justify='center' className='mt-2' key={field.name}>
+                  <Col span={6} offset={2}>
+                    <Form.Item
+                      name={[field.name, 'groupName']}
+                      rules={[{ required: true, message: "请输入产品名" }]}
+                    >
+                      <Input placeholder='产品名' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item
+                      name={[field.name, 'random']}
+                      valuePropName='checked'
+                    >
+                      <Checkbox defaultChecked={false} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={10}>
+                    <Button size='small' className='ml-1 mb-1' type='primary' onClick={() => add({ groupName: `产品${questionGroups.length + 1}`, random: false })}>添加产品</Button>
+                    {/* {fields.length > 1 ? <Button size='small' danger className='ml-1' onClick={() => remove(index)}>移除产品</Button> : null} */}
+                    {<Button size='small' danger className='ml-1' onClick={() => remove(index)}>移除产品</Button>}
+                  </Col>
+                </Row>
+              )
+            });
+
+            const header = (
+              <Row justify='center'>
+                <Col span={6} offset={2}>产品名</Col>
+                <Col span={6}>是否随机</Col>
+                <Col span={10}>
+                  操作
+                </Col>
+              </Row>
+            )
+
+            return (
+              <>
+                {questionGroups && questionGroups?.length > 0 ? header : null}
+                {nodes}
+              </>
+            )
+          }}
+        </Form.List>
       </Form>
-    </>
+    </div>
   )
 }
 

@@ -1,13 +1,13 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2023-10-28 17:00:53
+ * @LastEditTime: 2024-05-31 11:52:21
  * @Description: 路由注册
  */
-import { useEffect } from 'react';
-import { HashRouter as Router, Route, Routes, Navigate, } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { initCurrentUser } from '@/store/slices/user';
+import { useEffect, useMemo } from 'react';
+import { HashRouter as Router, Route, Routes, Navigate, useRoutes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { initCurrentUser } from '@/store/user';
 import Login from '@/views/login';
 import LayoutBox from '@/layout';
 import Download from '@/views/download';
@@ -25,10 +25,16 @@ import AnswerUser from '@/views/answer-user';
 import ProjectEdit from '@/views/project-edit';
 import VideoStatistic from '@/views/video-statistic';
 import PreviewAnswer from '@/views/preview-answer';
+import PermissionBox from '@/views/role';
+import NotFound from '@/views/not-found';
+
+
 
 export default function App() {
-
+  const { menuList } = useSelector((state: Record<string, any>) => state.role);
   const dispatch = useDispatch();
+
+
   useEffect(() => {
     dispatch(initCurrentUser());
   }, []);
@@ -40,6 +46,7 @@ export default function App() {
           <Route index element={<Navigate to={'/user'} />} />
           <Route path='/user' element={<User />} />
           <Route path='/project' element={<Project />} />
+          <Route path='/projectEdit/:id' element={<ProjectEdit />} />
           <Route path='/projectDetail/:id' element={<ProjectDetail />} />
           <Route path='/testVideo' element={<TestVideo />} />
           <Route path='/checkVideo' element={<CheckVideo />} />
@@ -51,11 +58,13 @@ export default function App() {
           <Route path='/questionDownload' element={<QuestionDownload />} />
           <Route path='/videoStatistic' element={<VideoStatistic />} />
           <Route path='/previewAnswer' element={<PreviewAnswer />} />
+          <Route path='/role' element={<PermissionBox />} />
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />
-        <Route path='/projectEdit/:id' element={<ProjectEdit />} />
+        <Route path='/404' element={<NotFound />} />
       </Routes>
+
     </Router>
   );
 }

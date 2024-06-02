@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2024-05-22 07:28:01
+ * @LastEditTime: 2024-05-31 07:21:07
  * @Description:
  */
-import { useState, } from 'react';
+import { useEffect, useState, } from 'react';
 import { Form, Input, Radio, Button, Select, InputNumber, Space, Row, Col, message } from 'antd';
 import { TEST_FILES_TYPE_LIST, QUESTTION_TYPE_LIST, yearSeconds } from '@/utils/const';
 import { IQuestionItemType } from '@/types/question.type';
@@ -18,7 +18,7 @@ import { addQuestion, updateQuestion } from '@/api/project';
 
 function EditQuestion(props: IQuestionItemType) {
   const routerParams = useParams();
-  const { index, onChange } = props;
+  const { index, onChange, questionGroups = [] } = props;
 
   const {
     question,
@@ -33,13 +33,20 @@ function EditQuestion(props: IQuestionItemType) {
   const selectchoicePrepares = Form.useWatch('choicePrepares', form);
   const selectTitleType = Form.useWatch(['question', 'sourceType'], form);
 
+  useEffect(() => {
+    if (selectTitleType === 4) {
+      form.setFieldValue(['question', 'questionGroupId'], 0);
+      console.log('来了吗');
+    }
+  }, [selectTitleType])
+
   /**
    * @desc 保存问题 复制、编辑操作
    */
   const saveQuesition = async () => {
     const postParams: Record<string, any> = {};
     const [, result] = await to(form.validateFields());
-
+    console.log(result);
     if (result) {
       const {
         question: formQuestion,
@@ -66,10 +73,10 @@ function EditQuestion(props: IQuestionItemType) {
         const newChoicePrepares = (choicePrepares || []).map((item: Record<string, any>, i: number) => ({ prepareName: item.value, prepareOrder: i + 1, flag: questionAnswer === i }));
         Object.assign(postParams, { choicePrepares: newChoicePrepares, titlePath, audioPath });
       }
-
       const newQuestion = {
         ...question,
         ...formQuestion,
+        questionGroupId: formQuestion.sourceType === 4 ? 0 : formQuestion.questionGroupId,
         questionOrder: index + 1,
         surveyId: routerParams?.id,
       };
@@ -223,6 +230,25 @@ function EditQuestion(props: IQuestionItemType) {
             <Input placeholder='请输入...' />
           </Form.Item> :
           null}
+
+        {/* 没有测试文件类型 才算是阶段问题 问题归属产品组为0 */}
+        {selectTitleType !== 4 && questionGroups?.length > 0 ? (
+          <>
+            <Form.Item
+              label='题目归属'
+              name={['question', 'questionGroupId']}
+              rules={[{ required: true, message: '请选择题目归属' }]}
+            >
+              <Select placeholder='请选择题目归属...'>
+                {questionGroups.map(i => (
+                  <>
+                    <Select.Option value={i.groupId}>{i.groupName}</Select.Option>
+                  </>
+                ))}
+              </Select>
+            </Form.Item>
+          </>
+        ) : null}
 
         {/* 筛选题是没有测试文件类型 */}
         {

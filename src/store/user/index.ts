@@ -1,15 +1,17 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-04 14:12:40
- * @LastEditTime: 2023-09-04 15:30:44
+ * @LastEditTime: 2024-06-02 21:53:10
  * @Description:
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { Storage } from '@/utils/storage';
 import { USER_INFO } from '@/utils/variable';
+import { treeData } from '@/views/role/params';
 
 const initState = {
-  userInfo: {},
+  userInfo: {} as Record<string,any>,
+  menuList:[] as any[],
 }
 
 export const userSlice = createSlice({
@@ -18,10 +20,12 @@ export const userSlice = createSlice({
   reducers: {
     setCurrentUser: (state, action) => {
       state.userInfo = action.payload;
+      state.menuList = treeData(action.payload?.permissionList || []);
     },
     initCurrentUser: (state) => {
       const value = Storage.getItem(USER_INFO);
       state.userInfo = value || {};
+      state.menuList = treeData(value?.permissionList || []);
     }
   }
 })

@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2024-05-31 11:44:57
- * @LastEditTime: 2024-05-31 11:57:59
+ * @LastEditTime: 2024-06-02 21:53:32
  * @Description:
  */
 import { useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const NotFound = () => {
       status="warning"
       title="您没有访问权限，请联系管理员操作"
       extra={
-        <Button type="primary" key="console" onClick={() => navigate(path)}>
+        <Button type="primary" key="console" onClick={() => navigate(path, { replace: true })}>
           去首页
         </Button>
       }

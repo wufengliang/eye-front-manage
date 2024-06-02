@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-07-29 15:52:35
- * @LastEditTime: 2024-05-31 11:52:21
+ * @LastEditTime: 2024-06-02 22:23:31
  * @Description: 路由注册
  */
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HashRouter as Router, Route, Routes, Navigate, useRoutes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { initCurrentUser } from '@/store/user';
@@ -27,12 +27,17 @@ import VideoStatistic from '@/views/video-statistic';
 import PreviewAnswer from '@/views/preview-answer';
 import PermissionBox from '@/views/role';
 import NotFound from '@/views/not-found';
+import { routerMap } from './layout/params';
+import PrivateRoute from './views/PrivateRoute';
 
 
 
 export default function App() {
-  const { menuList } = useSelector((state: Record<string, any>) => state.role);
   const dispatch = useDispatch();
+
+  // const routerList = useMemo(() => {
+  //   return menuList.map((i: any) => ({ key: i.path.slice(1), label: i.title, element: routerMap[i.title]?.element, icon: i.icon }));
+  // }, [menuList])
 
 
   useEffect(() => {
@@ -44,10 +49,8 @@ export default function App() {
       <Routes>
         <Route path='/' element={<LayoutBox />}>
           <Route index element={<Navigate to={'/user'} />} />
-          <Route path='/user' element={<User />} />
+          {/* <Route path='/user' element={<User />} />
           <Route path='/project' element={<Project />} />
-          <Route path='/projectEdit/:id' element={<ProjectEdit />} />
-          <Route path='/projectDetail/:id' element={<ProjectDetail />} />
           <Route path='/testVideo' element={<TestVideo />} />
           <Route path='/checkVideo' element={<CheckVideo />} />
           <Route path='/downloadVideo' element={<DownloadVideo />} />
@@ -58,7 +61,20 @@ export default function App() {
           <Route path='/questionDownload' element={<QuestionDownload />} />
           <Route path='/videoStatistic' element={<VideoStatistic />} />
           <Route path='/previewAnswer' element={<PreviewAnswer />} />
-          <Route path='/role' element={<PermissionBox />} />
+          <Route path='/role' element={<PermissionBox />} /> */}
+
+          {
+            Object.values(routerMap).map(i => {
+              return <Route path={i.path} key={i.path} element={
+                <PrivateRoute path={i.path}>
+                  {i.element}
+                </PrivateRoute>
+              } />
+            })
+          }
+
+          <Route path='/projectEdit/:id' element={<ProjectEdit />} />
+          <Route path='/projectDetail/:id' element={<ProjectDetail />} />
         </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/download' element={<Download />} />

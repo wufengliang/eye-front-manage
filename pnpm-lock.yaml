@@ -14,6 +14,9 @@ dependencies:
   '@babel/core':
     specifier: ^7.16.0
     version: 7.24.6
+  '@babel/polyfill':
+    specifier: ^7.12.1
+    version: 7.12.1
   '@pmmmwh/react-refresh-webpack-plugin':
     specifier: ^0.5.3
     version: 0.5.13(react-refresh@0.11.0)(webpack-dev-server@4.15.2)(webpack@5.91.0)
@@ -1693,6 +1696,14 @@ packages:
       '@babel/core': 7.24.6
       '@babel/helper-create-regexp-features-plugin': 7.24.6(@babel/core@7.24.6)
       '@babel/helper-plugin-utils': 7.24.6
+    dev: false
+
+  /@babel/polyfill@7.12.1:
+    resolution: {integrity: sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g==}
+    deprecated: 🚨 This package has been deprecated in favor of separate inclusion of a polyfill and regenerator-runtime (when needed). See the @babel/polyfill docs (https://babeljs.io/docs/en/babel-polyfill) for more information.
+    dependencies:
+      core-js: 2.6.12
+      regenerator-runtime: 0.13.11
     dev: false
 
   /@babel/preset-env@7.24.6(@babel/core@7.24.6):

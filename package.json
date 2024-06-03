@@ -2,11 +2,12 @@
   "name": "eye-front-manage",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vision.idp-tech.com/",
+  "homepage": ".",
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
     "@antv/g2": "^3.5.19",
     "@babel/core": "^7.16.0",
+    "@babel/polyfill": "^7.12.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@svgr/webpack": "^5.5.0",
@@ -80,7 +81,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "cross-env CI=false node scripts/build.js",
+    "build": "cross-env CI=false cross-env PUBLIC_URL=https://vision.idp-tech.com node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
@@ -91,9 +92,9 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ],
     "development": [
       "last 1 chrome version",

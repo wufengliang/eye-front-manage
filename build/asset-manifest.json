@@ -1,20 +1,18 @@
 {
   "files": {
-    "main.css": "https://vision.idp-tech.com/static/css/main.5811252c.css",
-    "main.js": "https://vision.idp-tech.com/static/js/main.2a6e557f.js",
+    "main.css": "https://vision.idp-tech.com/static/css/main.36aa506d.css",
+    "main.js": "https://vision.idp-tech.com/static/js/main.36155179.js",
     "static/js/828.81eda28b.chunk.js": "https://vision.idp-tech.com/static/js/828.81eda28b.chunk.js",
-    "static/media/bg.png": "https://vision.idp-tech.com/static/media/bg.019c8b255a6c06353a32.png",
-    "static/media/avator.jpg": "https://vision.idp-tech.com/static/media/avator.45a1c10a3b7f30be11d0.jpg",
     "static/media/iconfont.ttf?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.aebf0a496ad950cafa2f.ttf",
     "static/media/iconfont.woff?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.51a3d963a3dfd328ea57.woff",
     "static/media/iconfont.woff2?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.c0878ba12c9937eeade7.woff2",
     "index.html": "https://vision.idp-tech.com/index.html",
-    "main.5811252c.css.map": "https://vision.idp-tech.com/static/css/main.5811252c.css.map",
-    "main.2a6e557f.js.map": "https://vision.idp-tech.com/static/js/main.2a6e557f.js.map",
+    "main.36aa506d.css.map": "https://vision.idp-tech.com/static/css/main.36aa506d.css.map",
+    "main.36155179.js.map": "https://vision.idp-tech.com/static/js/main.36155179.js.map",
     "828.81eda28b.chunk.js.map": "https://vision.idp-tech.com/static/js/828.81eda28b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5811252c.css",
-    "static/js/main.2a6e557f.js"
+    "static/css/main.36aa506d.css",
+    "static/js/main.36155179.js"
   ]
 }

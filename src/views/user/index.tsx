@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2024-06-03 15:41:08
+ * @LastEditTime: 2024-06-03 17:12:25
  * @Description: 用户管理
  */
 import { useMemo, useRef, useEffect, useState } from 'react';
@@ -29,13 +29,20 @@ function UserManage() {
   const [loading, setLoading] = useState(false);
   const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
 
+  // useEffect(() => {
+  //   if (userInfo.role) {
+  //     const v = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+  //     setPaginationConfig(v);
+  //     getData(v);
+  //   }
+  // }, [userInfo.role])
+
   useEffect(() => {
     if (userInfo.role) {
-      const v = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
-      setPaginationConfig(v);
-      getData(v);
+      const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+      getData(options);
     }
-  }, [userInfo.role])
+  }, [paginationConfig, userInfo])
 
   //  获取数据
   const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10, all: userInfo.role === 1 ? 1 : null }) => {
@@ -132,7 +139,7 @@ function UserManage() {
           <CustomShowContainer id={3}>
             <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>编辑</Button>
           </CustomShowContainer>
-          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.STATUS, record)}>{record.status ? '停用' : '启用'}</Button>
+          <Button type='primary' className='margin-bottom-10' danger={record.status} onClick={() => handleOperate(OperateType.STATUS, record)}>{record.status ? '停用' : '启用'}</Button>
           <CustomShowContainer id={4}>
             <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
           </CustomShowContainer>

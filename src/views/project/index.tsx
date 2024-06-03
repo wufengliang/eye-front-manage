@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2024-05-31 14:20:02
+ * @LastEditTime: 2024-06-03 15:39:58
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -45,15 +45,17 @@ function ProjectManage() {
 
   useEffect(() => {
     if (userInfo.role) {
-      setPaginationConfig(v => ({ ...v, all: userInfo.role === 1 ? 1 : null }))
+      const v = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+      setPaginationConfig(v);
+      getData(v);
     }
   }, [userInfo.role]);
 
-  useEffect(() => {
-    if (paginationConfig.all) {
-      getData(paginationConfig);
-    }
-  }, [paginationConfig])
+  // useEffect(() => {
+  //   if (paginationConfig.all) {
+  //     getData(paginationConfig);
+  //   }
+  // }, [paginationConfig])
 
   const columns: ColumnsType<any> = [
     { title: '问卷ID', dataIndex: 'id', fixed: 'left', width: 150, },

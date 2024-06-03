@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-05 16:50:43
- * @LastEditTime: 2024-05-31 14:07:00
+ * @LastEditTime: 2024-06-03 15:41:08
  * @Description: 用户管理
  */
 import { useMemo, useRef, useEffect, useState } from 'react';
@@ -30,7 +30,11 @@ function UserManage() {
   const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
 
   useEffect(() => {
-    setPaginationConfig(v => ({ ...v, all: userInfo.role === 1 ? 1 : null }));
+    if (userInfo.role) {
+      const v = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
+      setPaginationConfig(v);
+      getData(v);
+    }
   }, [userInfo.role])
 
   //  获取数据
@@ -40,13 +44,6 @@ function UserManage() {
     result && setDataSource(Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size }));
     setLoading(false);
   }
-
-  useEffect(() => {
-    if (userInfo.role) {
-      const options = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
-      getData(options);
-    }
-  }, [paginationConfig])
 
   const modalRef = useRef();
 

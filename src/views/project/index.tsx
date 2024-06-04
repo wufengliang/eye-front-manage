@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2024-06-03 17:08:17
+ * @LastEditTime: 2024-06-04 16:18:17
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from 'antd';
@@ -52,9 +52,7 @@ function ProjectManage() {
   // }, [userInfo.role]);
 
   useEffect(() => {
-    if (paginationConfig.all) {
-      getData(paginationConfig);
-    }
+    getData(paginationConfig);
   }, [paginationConfig, userInfo])
 
   const columns: ColumnsType<any> = [

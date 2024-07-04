@@ -1,12 +1,13 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-08 17:33:53
- * @LastEditTime: 2024-06-25 14:24:15
+ * @LastEditTime: 2024-07-04 14:47:23
  * @Description: 创建用户、编辑用户
  */
 import { useRef, forwardRef, useImperativeHandle, Ref, useEffect } from "react";
 import { Form, Input, Select } from "antd";
 import { USER_TYPE_LIST } from "@/utils/const";
+import { omit } from "lodash-es";
 
 function UserTemplate(props: Record<string, any> = {}, cref?: Ref<unknown>) {
   const layout = {
@@ -15,7 +16,7 @@ function UserTemplate(props: Record<string, any> = {}, cref?: Ref<unknown>) {
   };
   const [form] = Form.useForm();
 
-  const isEditMode = Object.keys(props).length > 1;
+  const isEditMode = Object.keys(omit(props, ["roleList"])).length > 1;
 
   useImperativeHandle(
     cref,

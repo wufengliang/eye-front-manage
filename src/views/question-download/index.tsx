@@ -1,10 +1,10 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 09:38:02
- * @LastEditTime: 2024-07-04 15:34:40
+ * @LastEditTime: 2024-07-09 17:47:57
  * @Description: 问卷下载
  */
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Form, InputNumber, DatePicker, Button, Input, Modal, Table, message } from "antd";
 import { exportSurverData, getSurveyListData } from "@/api/question-download";
 import dayjs from "dayjs";
@@ -32,7 +32,10 @@ const getData = (
     page: params.current,
     size: params.pageSize,
     ...newForm,
-  }).then((result) => result);
+  }).then((result) => {
+    console.log(result);
+    return result;
+  });
 };
 
 function QuestionDownload() {

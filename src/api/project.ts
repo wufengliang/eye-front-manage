@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-13 11:34:55
- * @LastEditTime: 2023-10-28 20:55:11
+ * @LastEditTime: 2024-07-09 17:33:27
  * @Description:
  */
 import instance from './instance';
@@ -59,8 +59,9 @@ export function getSurveyData(id: string) {
 /**
  * @desc 复制问卷
  */
-export function copySurvey(surveyId: string, userId: string) {
-  return instance.get(`/api/survey/copy?surveyId=${surveyId}&userId=${userId}`);
+export function copySurvey(surveyId: string, userId?: string) {
+  const url = userId ? `/api/survey/copy?surveyId=${surveyId}&userId=${userId}` : `/api/survey/copy?surveyId=${surveyId}`;
+  return instance.get(url);
 }
 
 /**

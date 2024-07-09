@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2024-07-09 17:09:08
+ * @LastEditTime: 2024-07-09 17:20:29
  * @Description: 项目创建模板内容
  */
 import { forwardRef, useImperativeHandle, Ref, useRef } from "react";
@@ -57,21 +57,21 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
           name="title"
           rules={[{ required: true, message: "请输入问卷标题" }]}
         >
-          <Input disabled={props.disabled} placeholder="请输入问卷标题..." />
+          <Input placeholder="请输入问卷标题..." />
         </Form.Item>
         <Form.Item
           label="问卷开始语"
           name="startTips"
           rules={[{ required: true, message: "请输入问卷开始语" }]}
         >
-          <Input disabled={props.disabled} placeholder="请输入问卷开始语..." />
+          <Input placeholder="请输入问卷开始语..." />
         </Form.Item>
         <Form.Item
           label="问卷结束语"
           name="endTips"
           rules={[{ required: true, message: "请输入问卷结束语" }]}
         >
-          <Input disabled={props.disabled} placeholder="请输入问卷结束语.." />
+          <Input placeholder="请输入问卷结束语.." />
         </Form.Item>
         <Form.Item
           label="投放开始时间"
@@ -79,7 +79,6 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
           rules={[{ required: true, message: "请选择投放开始时间" }]}
         >
           <DatePicker
-            disabled={props.disabled}
             showTime
             placeholder="请输入投放开始时间.."
             locale={zhCN}
@@ -93,21 +92,20 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
         >
           <DatePicker
             showTime
-            disabled={props.disabled}
             placeholder="请输入投放结束时间.."
             locale={zhCN}
             style={{ width: "100%" }}
           />
         </Form.Item>
         <Form.Item label="问卷口令" name="password">
-          <Input.Password disabled={props.disabled} placeholder="请输入问卷口令.." />
+          <Input.Password placeholder="请输入问卷口令.." />
         </Form.Item>
         <Form.Item
           label="是否是眼动项目"
           name="isYanDong"
           rules={[{ required: true, message: "请选择是否是眼动项目" }]}
         >
-          <Radio.Group disabled={props.disabled}>
+          <Radio.Group>
             <Radio value={1}>是</Radio>
             <Radio value={0}>否</Radio>
           </Radio.Group>
@@ -117,7 +115,7 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
           name="locationType"
           rules={[{ required: true, message: "请选择是否是横版问卷" }]}
         >
-          <Radio.Group disabled={props.disabled}>
+          <Radio.Group>
             <Radio value={1}>是</Radio>
             <Radio value={2}>否</Radio>
           </Radio.Group>
@@ -147,12 +145,12 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
                       name={[field.name, "groupName"]}
                       rules={[{ required: true, message: "请输入产品名" }]}
                     >
-                      <Input placeholder="产品名" />
+                      <Input disabled={props.disabled} placeholder="产品名" />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item name={[field.name, "random"]} valuePropName="checked">
-                      <Checkbox defaultChecked={false} />
+                      <Checkbox disabled={props.disabled} defaultChecked={false} />
                     </Form.Item>
                   </Col>
                   {props.disabled ? null : (

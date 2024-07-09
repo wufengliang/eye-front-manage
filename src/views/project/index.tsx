@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2024-07-09 10:46:30
+ * @LastEditTime: 2024-07-09 17:36:22
  * @Description: 项目管理
  */
 import { Table, Button, Tag, Row, Modal, message } from "antd";
@@ -188,34 +188,58 @@ function ProjectManage() {
         return navigate(`/projectDetail/${id}`, { state: data });
       //  复制
       case OperateType.COPY:
+        const fn = () => {
+          Modal.confirm({
+            title: "选择收到问卷的用户",
+            content: <UserTemplate ref={userRef} role={userInfo?.role} />,
+            icon: null,
+            maskClosable: false,
+            closable: true,
+            width: 650,
+            onOk: async () => {
+              const { userList } = userRef.current as Record<string, any>;
+              if (userList.length === 0) {
+                message.error(`请选择收到问卷的用户`);
+                return Promise.reject("请选择收到问卷的用户");
+              }
+              const userIds = userList.map((item: any) => item.id);
+              const projectIds = selectedArray.map((item: any) => item.id);
+              const pArray: any[] = [];
+              projectIds.forEach((id) => {
+                userIds.forEach((userId: string) => pArray.push(copySurvey(id, userId)));
+              });
+              Promise.all(pArray)
+                .then(() => {
+                  message.success(`复制成功`);
+                })
+                .catch(() => {
+                  message.error(`复制异常，请联系管理员操作`);
+                });
+            },
+          });
+        };
+
+        if (userInfo.role === 1) {
+          return fn();
+        }
         return Modal.confirm({
-          title: "选择收到问卷的用户",
-          content: <UserTemplate ref={userRef} role={userInfo?.role} />,
-          icon: null,
+          title: "提示",
+          content: "是否复制问卷到自己账户下？",
           maskClosable: false,
           closable: true,
-          width: 650,
           onOk: async () => {
-            const { userList } = userRef.current as Record<string, any>;
-            if (userList.length === 0) {
-              message.error(`请选择收到问卷的用户`);
-              return Promise.reject("请选择收到问卷的用户");
-            }
-            const userIds = userList.map((item: any) => item.id);
             const projectIds = selectedArray.map((item: any) => item.id);
-            const pArray: any[] = [];
-            projectIds.forEach((id) => {
-              userIds.forEach((userId: string) => pArray.push(copySurvey(id, userId)));
-            });
-            Promise.all(pArray)
+            Promise.all(projectIds.map((id) => copySurvey(id)))
               .then(() => {
                 message.success(`复制成功`);
+                getData();
               })
               .catch(() => {
                 message.error(`复制异常，请联系管理员操作`);
               });
           },
         });
+
       //  背景问题配置
       case OperateType.BG:
         return Modal.confirm({

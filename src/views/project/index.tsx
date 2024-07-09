@@ -1,34 +1,44 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-09 11:27:55
- * @LastEditTime: 2024-06-04 16:18:17
+ * @LastEditTime: 2024-07-09 10:46:30
  * @Description: 项目管理
  */
-import { Table, Button, Tag, Row, Modal, message } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import { useAntdTable } from 'ahooks';
-import type { ColumnsType } from 'antd/es/table';
-import { useNavigate } from 'react-router-dom';
-import { OperateType } from '@/types/operate.enum';
-import { TNumberOrString } from '@/types/common.type';
-import { useGetScrollCount, useTableProps } from '@/hooks';
-import { getProjectList, createProjectData, updateProjectData, copySurvey, getProfileData, updateProfileData } from '@/api/project';
-import { CustomSearch } from '@/components';
-import { DeleteOutlined } from '@ant-design/icons';
-import ProjectTemplate from './template';
-import RecoveryTemplate from './recovery';
-import FaceTemplate from './face';
-import UserTemplate from './user';
-import BgConfigTemplate from './bg-config';
-import { checkContinuityList, to } from '@/utils/utils';
-import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
+import { Table, Button, Tag, Row, Modal, message } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useAntdTable } from "ahooks";
+import type { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
+import { OperateType } from "@/types/operate.enum";
+import { TNumberOrString } from "@/types/common.type";
+import { useGetScrollCount, useTableProps } from "@/hooks";
+import {
+  getProjectList,
+  createProjectData,
+  updateProjectData,
+  copySurvey,
+  getProfileData,
+  updateProfileData,
+} from "@/api/project";
+import { CustomSearch } from "@/components";
+import { DeleteOutlined } from "@ant-design/icons";
+import ProjectTemplate from "./template";
+import RecoveryTemplate from "./recovery";
+import FaceTemplate from "./face";
+import UserTemplate from "./user";
+import BgConfigTemplate from "./bg-config";
+import { checkContinuityList, to } from "@/utils/utils";
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
-
-
-const getData = (params: { current: TNumberOrString, pageSize: TNumberOrString, all?: number }, form: Record<string, string | number> = {}): Promise<any> => {
-  return getProjectList({ page: params.current, size: params.pageSize, ...form }).then(result => result);
-}
+const getData = (
+  params: { current: TNumberOrString; pageSize: TNumberOrString; all?: number },
+  form: Record<string, string | number> = {}
+): Promise<any> => {
+  return getProjectList({ page: params.current, size: params.pageSize, ...form }).then(
+    (result) => result
+  );
+};
 
 function ProjectManage() {
   const { userInfo } = useSelector((state: Record<string, any>) => state.user);
@@ -38,77 +48,112 @@ function ProjectManage() {
   const bgConfigRef = useRef(null);
   const navigate = useNavigate();
   const [selectedArray, setSelectedArray] = useState<unknown[]>([]);
-  const [paginationConfig, setPaginationConfig] = useState({ page: 1, size: 10, all: userInfo.role === 1 ? 1 : null });
-  const [dataSource, setDataSource] = useState<Record<string, any>>({})
-  const searchParams = useRef<Record<string, any>>({ search: '' });
+  const [paginationConfig, setPaginationConfig] = useState({
+    page: 1,
+    size: 10,
+    all: userInfo.role === 1 ? 1 : null,
+  });
+  const [dataSource, setDataSource] = useState<Record<string, any>>({});
+  const searchParams = useRef<Record<string, any>>({ search: "" });
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   if (userInfo.role) {
-  //     const v = { ...paginationConfig, all: userInfo.role === 1 ? 1 : null }
-  //     setPaginationConfig(v);
-  //     getData(v);
-  //   }
-  // }, [userInfo.role]);
 
   useEffect(() => {
     getData(paginationConfig);
-  }, [paginationConfig, userInfo])
+  }, [paginationConfig, userInfo]);
 
   const columns: ColumnsType<any> = [
-    { title: '问卷ID', dataIndex: 'id', fixed: 'left', width: 150, },
-    { title: '问卷标题', dataIndex: 'title', width: 150, },
-    { title: '问卷开始语简介', dataIndex: 'startTips', width: 150, },
-    { title: '问卷结束语简介', dataIndex: 'endTips', width: 170, },
-    { title: '创建人ID', dataIndex: 'createUserId', width: 100, },
+    { title: "问卷ID", dataIndex: "id", fixed: "left", width: 150 },
+    { title: "问卷标题", dataIndex: "title", width: 150 },
+    { title: "问卷开始语简介", dataIndex: "startTips", width: 150 },
+    { title: "问卷结束语简介", dataIndex: "endTips", width: 170 },
+    { title: "创建人ID", dataIndex: "createUserId", width: 100 },
     {
-      title: '投放开始时间',
-      dataIndex: 'startTime',
+      title: "投放开始时间",
+      dataIndex: "startTime",
       width: 180,
-      render: (_, record) => (
-        <>{dayjs(record.startTime).format('YYYY-MM-DD HH:mm:ss')}</>
-      )
+      render: (_, record) => <>{dayjs(record.startTime).format("YYYY-MM-DD HH:mm:ss")}</>,
     },
     {
-      title: '投放结束时间',
-      dataIndex: 'endTime',
+      title: "投放结束时间",
+      dataIndex: "endTime",
       width: 180,
-      render: (_, record) => (
-        <>{dayjs(record.endTime).format('YYYY-MM-DD HH:mm:ss')}</>
-      )
+      render: (_, record) => <>{dayjs(record.endTime).format("YYYY-MM-DD HH:mm:ss")}</>,
     },
     {
-      title: '问卷状态',
-      dataIndex: 'status',
+      title: "问卷状态",
+      dataIndex: "status",
       width: 150,
       render: (_, record) => (
-        <Tag color={record.status === 0 ? 'red' : 'green'}>{record.status === 0 ? '正在回收' : '待投放'}</Tag>
-      )
+        <Tag color={record.status === 0 ? "red" : "green"}>
+          {record.status === 0 ? "正在回收" : "待投放"}
+        </Tag>
+      ),
     },
     {
-      title: '操作',
-      key: 'operation',
+      title: "操作",
+      key: "operation",
       width: 150,
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) => (
         <>
-          <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.BG, record)}>背景问题配置</Button>
-          {record.status !== 0 ? <Button className='margin-bottom-10' onClick={() => handleOperate(OperateType.EDIT, record)}>重新编辑</Button> : null}
-          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.DETAIL, record)}>查看详情</Button>
-          <Button type='primary' className='margin-bottom-10' onClick={() => handleOperate(OperateType.STATUS, record)}>{record.listingStatus ? '下' : '上'}架</Button>
-          <Button type='primary' danger onClick={() => handleOperate(OperateType.DELETE, record)}>删除</Button>
+          <Button
+            className="margin-bottom-10"
+            onClick={() => handleOperate(OperateType.BG, record)}
+          >
+            背景问题配置
+          </Button>
+          {record.status !== 0 ? (
+            <Button
+              className="margin-bottom-10"
+              onClick={() => handleOperate(OperateType.EDIT, record)}
+            >
+              重新编辑
+            </Button>
+          ) : null}
+          <Button
+            type="primary"
+            className="margin-bottom-10"
+            onClick={() => handleOperate(OperateType.DETAIL, record)}
+          >
+            查看详情
+          </Button>
+          <Button
+            type={record.listingStatus ? "default" : "primary"}
+            className="margin-bottom-10"
+            onClick={() => handleOperate(OperateType.STATUS, record)}
+          >
+            {record.listingStatus ? "下" : "上"}架
+          </Button>
+          <Button type="primary" danger onClick={() => handleOperate(OperateType.DELETE, record)}>
+            删除
+          </Button>
         </>
-      )
-    }
+      ),
+    },
   ];
 
   //  获取数据
-  const getData = async (pageOptions: { page: number, size: number, all?: any } = { page: 1, size: 10, all: userInfo.role === 1 ? 1 : null }) => {
+  const getData = async (
+    pageOptions: { page: number; size: number; all?: any } = {
+      page: 1,
+      size: 10,
+      all: userInfo.role === 1 ? 1 : null,
+    }
+  ) => {
     setLoading(true);
-    const [, result] = await to(getProjectList(Object.assign({}, pageOptions, { ...(searchRef.current! as Record<string, any>)?.form?.getFieldsValue() })));
-    result && setDataSource(Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size }));
+    const [, result] = await to(
+      getProjectList(
+        Object.assign({}, pageOptions, {
+          ...(searchRef.current! as Record<string, any>)?.form?.getFieldsValue(),
+        })
+      )
+    );
+    result &&
+      setDataSource(
+        Object.assign(result, { current: pageOptions.page, pageSize: pageOptions.size })
+      );
     setLoading(false);
-  }
+  };
 
   //  多选操作
   const rowSelection = {
@@ -118,7 +163,7 @@ function ProjectManage() {
     onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
       setSelectedArray(selectedRows);
     },
-  }
+  };
 
   const handleOperate = async (type: OperateType, data?: unknown) => {
     const { id } = (data || {}) as Record<string, any>;
@@ -128,7 +173,7 @@ function ProjectManage() {
         return createProject();
       //  编辑
       case OperateType.EDIT:
-        return navigate(`/projectEdit/${id}`, { state: data })
+        return navigate(`/projectEdit/${id}`, { state: data });
       //  回收站
       case OperateType.RECOVERY:
         return showRecovery();
@@ -144,7 +189,7 @@ function ProjectManage() {
       //  复制
       case OperateType.COPY:
         return Modal.confirm({
-          title: '选择收到问卷的用户',
+          title: "选择收到问卷的用户",
           content: <UserTemplate ref={userRef} role={userInfo?.role} />,
           icon: null,
           maskClosable: false,
@@ -154,12 +199,12 @@ function ProjectManage() {
             const { userList } = userRef.current as Record<string, any>;
             if (userList.length === 0) {
               message.error(`请选择收到问卷的用户`);
-              return Promise.reject('请选择收到问卷的用户');
+              return Promise.reject("请选择收到问卷的用户");
             }
             const userIds = userList.map((item: any) => item.id);
             const projectIds = selectedArray.map((item: any) => item.id);
             const pArray: any[] = [];
-            projectIds.forEach(id => {
+            projectIds.forEach((id) => {
               userIds.forEach((userId: string) => pArray.push(copySurvey(id, userId)));
             });
             Promise.all(pArray)
@@ -168,18 +213,15 @@ function ProjectManage() {
               })
               .catch(() => {
                 message.error(`复制异常，请联系管理员操作`);
-              })
-          }
-        })
+              });
+          },
+        });
       //  背景问题配置
       case OperateType.BG:
         return Modal.confirm({
-          title: '背景问题配置',
+          title: "背景问题配置",
           content: (
-            <BgConfigTemplate
-              surveyId={(data as Record<string, any>)?.id}
-              ref={bgConfigRef}
-            />
+            <BgConfigTemplate surveyId={(data as Record<string, any>)?.id} ref={bgConfigRef} />
           ),
           icon: null,
           maskClosable: false,
@@ -195,30 +237,30 @@ function ProjectManage() {
             }
             message.success(`更新成功`);
             getData();
-          }
-        })
+          },
+        });
       //  上下架
       case OperateType.STATUS:
         const status = (data as Record<string, any>)?.listingStatus;
         return Modal.confirm({
-          title: `确认是否要${status ? '下' : '上'}架项目吗?`,
+          title: `确认是否要${status ? "下" : "上"}架项目吗?`,
           maskClosable: false,
           onOk: async () => {
             const params = {
               ...(data || {}),
-              listingStatus: status ? 0 : 1
+              listingStatus: status ? 0 : 1,
             };
             const [error] = await to(updateProjectData(params));
             if (!!!error) {
-              message.success(`${status ? '下' : '上'}架成功`);
+              message.success(`${status ? "下" : "上"}架成功`);
               getData(paginationConfig);
             }
-          }
+          },
         });
       default:
         return;
     }
-  }
+  };
 
   /**
    * @desc 展示人脸示范管理
@@ -232,52 +274,52 @@ function ProjectManage() {
       closable: true,
       icon: null,
       footer: null,
-    })
-  }
+    });
+  };
 
   /**
    * @desc 删除项目
    */
   const deleteProject = (data: unknown) => {
     Modal.confirm({
-      title: '提示',
+      title: "提示",
       content: `确认删除该项目吗?`,
       maskClosable: false,
       closable: true,
       onOk: async () => {
-        const { id, } = data as Record<string, any>;
+        const { id } = data as Record<string, any>;
         const [error] = await to(updateProjectData({ id, status: 2 }));
 
         if (!!!error) {
           message.success(`删除成功`);
           getData(paginationConfig);
         }
-      }
-    })
-  }
+      },
+    });
+  };
 
   /**
    * @desc 回收站
    */
   const showRecovery = async () => {
     Modal.confirm({
-      title: '回收站',
+      title: "回收站",
       width: 800,
       content: <RecoveryTemplate />,
       footer: null,
       maskClosable: false,
       icon: null,
       closable: true,
-      style: { top: 5 }
-    })
-  }
+      style: { top: 5 },
+    });
+  };
 
   /**
    * @desc 创建项目
    */
   const createProject = async () => {
     Modal.confirm({
-      title: '创建项目',
+      title: "创建项目",
       icon: null,
       width: 600,
       closable: true,
@@ -293,69 +335,120 @@ function ProjectManage() {
 
         const params = {
           ...result,
-          startTime: dayjs(result.startTime).format('YYYY-MM-DD[T]HH:mm:ss'),
-          endTime: dayjs(result.endTime).format('YYYY-MM-DD[T]HH:mm:ss'),
+          startTime: dayjs(result.startTime).format("YYYY-MM-DD[T]HH:mm:ss"),
+          endTime: dayjs(result.endTime).format("YYYY-MM-DD[T]HH:mm:ss"),
           questionGroups: (result.questionGroups || []).map((item: Record<string, any>) => {
             const { groupId, groupName, random = false } = item;
-            return { groupId, groupName, random }
-          })
+            return { groupId, groupName, random };
+          }),
+        };
+
+        if (Array.isArray(params.questionGroups)) {
+          const length = params.questionGroups.length;
+          if (length === 2) {
+            const hasChoose = params.questionGroups.some((i: any) => i.random);
+            if (hasChoose) {
+              params.questionGroups = params.questionGroups.map((i: any) => ({
+                ...i,
+                random: true,
+              }));
+            }
+          }
+
+          if (length > 2 && !checkContinuityList(params.questionGroups, "random")) {
+            message.error("当前产品组配置不符合要求");
+            return Promise.reject();
+          }
         }
 
-        if ((Array.isArray(params.questionGroups) && params.questionGroups.length) > 3 && !checkContinuityList(params.questionGroups, 'random')) {
-          message.error('当前产品组配置不符合要求');
-          return Promise.reject();
-        }
+        // if (
+        //   (Array.isArray(params.questionGroups) && params.questionGroups.length) > 3 &&
+        //   !checkContinuityList(params.questionGroups, "random")
+        // ) {
+        //   message.error("当前产品组配置不符合要求");
+        //   return Promise.reject();
+        // }
 
         const [err, value] = await to(createProjectData(params));
         if (!err) {
           updateProjectData({ id: value.surveyId, status: 1 });
-          message.success('创建成功');
-          navigate(`/projectEdit/${value.surveyId}`, { state: Object.assign(params, { questionGroups: value.questionGroups }) });
+          message.success("创建成功");
+          navigate(`/projectEdit/${value.surveyId}`, {
+            state: Object.assign(params, { questionGroups: value.questionGroups }),
+          });
         }
-
-      }
-    })
-  }
+      },
+    });
+  };
 
   const scrollXCount = useGetScrollCount(columns);
-
 
   //  搜索区域
   const renderSearch = () => {
     return (
-      <div className='mb-6'>
+      <div className="mb-6">
         <CustomSearch
           ref={searchRef}
           loading={loading}
           onSearch={() => {
-            searchParams.current = (searchRef.current! as Record<string, any>)?.form?.getFieldsValue();
+            searchParams.current = (
+              searchRef.current! as Record<string, any>
+            )?.form?.getFieldsValue();
             getData();
           }}
           onReset={() => {
-            searchParams.current = { search: '' };
+            searchParams.current = { search: "" };
             getData();
           }}
-          columns={[{ name: 'search', label: '问卷标题', type: 'Input', defaultValue: null, placeholder: '请输入...' }]}
+          columns={[
+            {
+              name: "search",
+              label: "问卷标题",
+              type: "Input",
+              defaultValue: null,
+              placeholder: "请输入...",
+            },
+          ]}
         />
       </div>
-    )
-  }
+    );
+  };
 
   //  额外操作区域
   const renderOperate = () => {
     return (
-      <Row justify={'end'}>
-        <Button className='mb-3 mr-2' icon={<DeleteOutlined />} onClick={() => handleOperate(OperateType.RECOVERY)}>回收站</Button>
-        <Button className='mb-3 mr-2' type='primary' onClick={() => handleOperate(OperateType.FACESHOW)}>人脸识别示范管理</Button>
-        <Button disabled={selectedArray.length === 0} className='mb-3 mr-2' type='primary' onClick={() => handleOperate(OperateType.COPY)}>复制问卷</Button>
-        <Button className='mb-3 mr-2' type='primary' onClick={() => handleOperate(OperateType.ADD)}>添加项目</Button>
+      <Row justify={"end"}>
+        <Button
+          className="mb-3 mr-2"
+          icon={<DeleteOutlined />}
+          onClick={() => handleOperate(OperateType.RECOVERY)}
+        >
+          回收站
+        </Button>
+        <Button
+          className="mb-3 mr-2"
+          type="primary"
+          onClick={() => handleOperate(OperateType.FACESHOW)}
+        >
+          人脸识别示范管理
+        </Button>
+        <Button
+          disabled={selectedArray.length === 0}
+          className="mb-3 mr-2"
+          type="primary"
+          onClick={() => handleOperate(OperateType.COPY)}
+        >
+          复制问卷
+        </Button>
+        <Button className="mb-3 mr-2" type="primary" onClick={() => handleOperate(OperateType.ADD)}>
+          添加项目
+        </Button>
       </Row>
-    )
-  }
-
+    );
+  };
 
   return (
-    <div className='project-box'>
+    <div className="project-box">
       {renderSearch()}
       {renderOperate()}
       <Table
@@ -363,7 +456,7 @@ function ProjectManage() {
         rowSelection={rowSelection}
         scroll={{ x: scrollXCount }}
         bordered
-        rowKey='id'
+        rowKey="id"
         loading={loading}
         dataSource={dataSource?.list}
         pagination={dataSource}
@@ -373,7 +466,7 @@ function ProjectManage() {
         }}
       />
     </div>
-  )
+  );
 }
 
 export default ProjectManage;

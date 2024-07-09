@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-08-30 10:51:39
- * @LastEditTime: 2024-05-31 11:02:26
+ * @LastEditTime: 2024-07-09 10:41:44
  * @Description:
  */
 import Cookies from 'js-cookie';
@@ -122,21 +122,37 @@ export function createUUid() {
  * @desc 设置最大连贯值
  * @param {Array<any>} array
  */
-export function checkContinuityList(array:Array<any>,key?:string){
-  const newArray = array.map(i=>i[key || 'checked']);
-  let count = 0; // 记录连续的true值数量
+export function checkContinuityList(array: Array<any>, key: string = 'checked') {
+  const newArray = array.map(i => i[key]);
+  // let count = 0; // 记录连续的true值数量
+
+  // for (let i = 0; i < newArray.length; i++) {
+  //   if (newArray[i] === true) {
+  //     count++; // 如果当前元素为true，则增加计数器
+  //   } else {
+  //     count = 0; // 如果当前元素为false，则重置计数器
+  //   }
+
+  //   if (count >= 2) {
+  //     return true; // 如果连续true值数量达到2个，则返回true
+  //   }
+  // }
+
+  // return false; // 如果没有找到连续的true值，返回false
+
+  let hasFirstChecked = false, count = 0;
 
   for (let i = 0; i < newArray.length; i++) {
-    if (newArray[i] === true) {
-      count++; // 如果当前元素为true，则增加计数器
+    if (newArray[i]) {
+      hasFirstChecked = true;
+      count++;
+      continue;
     } else {
-      count = 0; // 如果当前元素为false，则重置计数器
-    }
-
-    if (count === 2) {
-      return true; // 如果连续true值数量达到2个，则返回true
+      if (hasFirstChecked) {
+        return count >= 2;
+      }
+      continue;
     }
   }
-
-  return false; // 如果没有找到连续的true值，返回false
+  return count >= 2;
 }

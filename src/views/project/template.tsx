@@ -1,15 +1,14 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-09-22 11:58:37
- * @LastEditTime: 2024-06-02 16:24:31
+ * @LastEditTime: 2024-07-09 17:09:08
  * @Description: 项目创建模板内容
  */
-import { forwardRef, useImperativeHandle, Ref, useRef } from 'react';
-import { Form, Input, Radio, DatePicker, Row, Col, Checkbox, Button } from 'antd';
-import zhCN from 'antd/es/date-picker/locale/zh_CN';
+import { forwardRef, useImperativeHandle, Ref, useRef } from "react";
+import { Form, Input, Radio, DatePicker, Row, Col, Checkbox, Button } from "antd";
+import zhCN from "antd/es/date-picker/locale/zh_CN";
 
 function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
-
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 },
@@ -17,53 +16,108 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
 
   const [form] = Form.useForm();
 
-  const questionGroups = Form.useWatch('questionGroups', form);
-  const isRandom = Form.useWatch('answerRandom', form)
+  const questionGroups = Form.useWatch("questionGroups", form);
+  const isRandom = Form.useWatch("answerRandom", form);
 
-  useImperativeHandle(ref, () => {
-    return {
-      validate() {
-        return form.validateFields();
-      }
-    }
-  }, []);
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        validate() {
+          return form.validateFields();
+        },
+      };
+    },
+    []
+  );
 
   /**
    * 添加产品
    */
   const addQuesitionGroup = () => {
-    form.setFieldValue('questionGroups', [{ groupName: `产品${questionGroups.length + 1}`, random: false }]);
-  }
+    const newQuestionGroups = [
+      ...questionGroups,
+      { groupName: `产品${questionGroups.length + 1}`, random: false },
+    ];
+    // form.setFieldValue("questionGroups", [
+    //   { groupName: `产品${questionGroups.length + 1}`, random: false },
+    // ]);
+    form.setFieldValue("questionGroups", newQuestionGroups);
+  };
 
   return (
     <div>
-      <Form form={form} {...(props?.layout || layout)} initialValues={{ ...props, questionGroups: props.questionGroups || [] }}>
-        <Form.Item label='问卷标题' name='title' rules={[{ required: true, message: '请输入问卷标题' }]}>
-          <Input placeholder='请输入问卷标题...' />
+      <Form
+        form={form}
+        {...(props?.layout || layout)}
+        initialValues={{ ...props, questionGroups: props.questionGroups || [] }}
+      >
+        <Form.Item
+          label="问卷标题"
+          name="title"
+          rules={[{ required: true, message: "请输入问卷标题" }]}
+        >
+          <Input disabled={props.disabled} placeholder="请输入问卷标题..." />
         </Form.Item>
-        <Form.Item label='问卷开始语' name='startTips' rules={[{ required: true, message: '请输入问卷开始语' }]}>
-          <Input placeholder='请输入问卷开始语...' />
+        <Form.Item
+          label="问卷开始语"
+          name="startTips"
+          rules={[{ required: true, message: "请输入问卷开始语" }]}
+        >
+          <Input disabled={props.disabled} placeholder="请输入问卷开始语..." />
         </Form.Item>
-        <Form.Item label='问卷结束语' name='endTips' rules={[{ required: true, message: '请输入问卷结束语' }]}>
-          <Input placeholder='请输入问卷结束语..' />
+        <Form.Item
+          label="问卷结束语"
+          name="endTips"
+          rules={[{ required: true, message: "请输入问卷结束语" }]}
+        >
+          <Input disabled={props.disabled} placeholder="请输入问卷结束语.." />
         </Form.Item>
-        <Form.Item label='投放开始时间' name='startTime' rules={[{ required: true, message: '请选择投放开始时间' }]}>
-          <DatePicker showTime placeholder='请输入投放开始时间..' locale={zhCN} style={{ width: '100%' }} />
+        <Form.Item
+          label="投放开始时间"
+          name="startTime"
+          rules={[{ required: true, message: "请选择投放开始时间" }]}
+        >
+          <DatePicker
+            disabled={props.disabled}
+            showTime
+            placeholder="请输入投放开始时间.."
+            locale={zhCN}
+            style={{ width: "100%" }}
+          />
         </Form.Item>
-        <Form.Item label='投放结束时间' name='endTime' rules={[{ required: true, message: '请选择投放结束时间' }]}>
-          <DatePicker showTime placeholder='请输入投放结束时间..' locale={zhCN} style={{ width: '100%' }} />
+        <Form.Item
+          label="投放结束时间"
+          name="endTime"
+          rules={[{ required: true, message: "请选择投放结束时间" }]}
+        >
+          <DatePicker
+            showTime
+            disabled={props.disabled}
+            placeholder="请输入投放结束时间.."
+            locale={zhCN}
+            style={{ width: "100%" }}
+          />
         </Form.Item>
-        <Form.Item label='问卷口令' name='password'>
-          <Input.Password placeholder='请输入问卷口令..' />
+        <Form.Item label="问卷口令" name="password">
+          <Input.Password disabled={props.disabled} placeholder="请输入问卷口令.." />
         </Form.Item>
-        <Form.Item label='是否是眼动项目' name='isYanDong' rules={[{ required: true, message: '请选择是否是眼动项目' }]}>
-          <Radio.Group >
+        <Form.Item
+          label="是否是眼动项目"
+          name="isYanDong"
+          rules={[{ required: true, message: "请选择是否是眼动项目" }]}
+        >
+          <Radio.Group disabled={props.disabled}>
             <Radio value={1}>是</Radio>
             <Radio value={0}>否</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label='是否是横版问卷' name='locationType' rules={[{ required: true, message: '请选择是否是横版问卷' }]}>
-          <Radio.Group>
+        <Form.Item
+          label="是否是横版问卷"
+          name="locationType"
+          rules={[{ required: true, message: "请选择是否是横版问卷" }]}
+        >
+          <Radio.Group disabled={props.disabled}>
             <Radio value={1}>是</Radio>
             <Radio value={2}>否</Radio>
           </Radio.Group>
@@ -74,61 +128,67 @@ function ProjectTemplate(props: Record<string, any> = {}, ref?: Ref<unknown>) {
             <Radio value={0}>否</Radio>
           </Radio.Group>
         </Form.Item> */}
-        {(!questionGroups || (questionGroups && questionGroups.length === 0)) ? (
+        {/* {(!questionGroups || (questionGroups && questionGroups.length === 0)) ? (
           <Button type='primary' size='small' onClick={() => addQuesitionGroup()}>添加产品</Button>
+        ) : null} */}
+        {!props.disabled ? (
+          <Button type="primary" size="small" onClick={() => addQuesitionGroup()}>
+            添加产品
+          </Button>
         ) : null}
-        <Form.List name='questionGroups'>
+        <Form.List name="questionGroups">
           {(fields, { add, remove }) => {
-            const questionGroups = form.getFieldValue('questionGroups');
+            const questionGroups = form.getFieldValue("questionGroups");
             const nodes = fields.map((field, index) => {
               return (
-                <Row justify='center' className='mt-2' key={field.name}>
-                  <Col span={6} offset={2}>
+                <Row justify="center" className="mt-2" key={field.name}>
+                  <Col span={8}>
                     <Form.Item
-                      name={[field.name, 'groupName']}
+                      name={[field.name, "groupName"]}
                       rules={[{ required: true, message: "请输入产品名" }]}
                     >
-                      <Input placeholder='产品名' />
+                      <Input placeholder="产品名" />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
-                    <Form.Item
-                      name={[field.name, 'random']}
-                      valuePropName='checked'
-                    >
+                  <Col span={8}>
+                    <Form.Item name={[field.name, "random"]} valuePropName="checked">
                       <Checkbox defaultChecked={false} />
                     </Form.Item>
                   </Col>
-                  <Col span={10}>
-                    <Button size='small' className='ml-1 mb-1' type='primary' onClick={() => add({ groupName: `产品${questionGroups.length + 1}`, random: false })}>添加产品</Button>
-                    {/* {fields.length > 1 ? <Button size='small' danger className='ml-1' onClick={() => remove(index)}>移除产品</Button> : null} */}
-                    {<Button size='small' danger className='ml-1' onClick={() => remove(index)}>移除产品</Button>}
-                  </Col>
+                  {props.disabled ? null : (
+                    <Col span={4}>
+                      {/* <Button size='small' className='ml-1 mb-1' type='primary' onClick={() => add({ groupName: `产品${questionGroups.length + 1}`, random: false })}>添加产品</Button> */}
+                      {/* {fields.length > 1 ? <Button size='small' danger className='ml-1' onClick={() => remove(index)}>移除产品</Button> : null} */}
+                      {
+                        <Button size="small" danger className="ml-1" onClick={() => remove(index)}>
+                          移除产品
+                        </Button>
+                      }
+                    </Col>
+                  )}
                 </Row>
-              )
+              );
             });
 
             const header = (
-              <Row justify='center'>
-                <Col span={6} offset={2}>产品名</Col>
-                <Col span={6}>是否随机</Col>
-                <Col span={10}>
-                  操作
-                </Col>
+              <Row justify="center">
+                <Col span={8}>产品名</Col>
+                <Col span={8}>是否随机</Col>
+                {props.disabled ? null : <Col span={4}>操作</Col>}
               </Row>
-            )
+            );
 
             return (
               <>
                 {questionGroups && questionGroups?.length > 0 ? header : null}
                 {nodes}
               </>
-            )
+            );
           }}
         </Form.List>
       </Form>
     </div>
-  )
+  );
 }
 
 export default forwardRef(ProjectTemplate);

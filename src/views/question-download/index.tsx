@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-17 09:38:02
- * @LastEditTime: 2024-07-09 17:47:57
+ * @LastEditTime: 2024-07-09 17:52:45
  * @Description: 问卷下载
  */
 import { useState, useRef, useEffect } from "react";
@@ -165,7 +165,8 @@ function QuestionDownload() {
         columns={columns}
         bordered
         scroll={{ x: scrollXCount }}
-        {...useTableProps(tableProps)}
+        // {...useTableProps(tableProps)}
+        {...tableProps}
         rowKey="questionID"
       ></Table>
     </>

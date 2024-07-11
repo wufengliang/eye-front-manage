@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "https://vision.idp-tech.com/static/css/main.36aa506d.css",
-    "main.js": "https://vision.idp-tech.com/static/js/main.a734df17.js",
-    "static/js/828.81eda28b.chunk.js": "https://vision.idp-tech.com/static/js/828.81eda28b.chunk.js",
-    "static/media/iconfont.ttf?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.aebf0a496ad950cafa2f.ttf",
-    "static/media/iconfont.woff?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.51a3d963a3dfd328ea57.woff",
-    "static/media/iconfont.woff2?t=1658570223155": "https://vision.idp-tech.com/static/media/iconfont.c0878ba12c9937eeade7.woff2",
-    "index.html": "https://vision.idp-tech.com/index.html",
-    "main.36aa506d.css.map": "https://vision.idp-tech.com/static/css/main.36aa506d.css.map",
-    "main.a734df17.js.map": "https://vision.idp-tech.com/static/js/main.a734df17.js.map",
-    "828.81eda28b.chunk.js.map": "https://vision.idp-tech.com/static/js/828.81eda28b.chunk.js.map"
+    "main.css": "./static/css/main.692cff40.css",
+    "main.js": "./static/js/main.75532b39.js",
+    "static/js/828.81eda28b.chunk.js": "./static/js/828.81eda28b.chunk.js",
+    "static/media/iconfont.ttf?t=1658570223155": "./static/media/iconfont.aebf0a496ad950cafa2f.ttf",
+    "static/media/iconfont.woff?t=1658570223155": "./static/media/iconfont.51a3d963a3dfd328ea57.woff",
+    "static/media/iconfont.woff2?t=1658570223155": "./static/media/iconfont.c0878ba12c9937eeade7.woff2",
+    "index.html": "./index.html",
+    "main.692cff40.css.map": "./static/css/main.692cff40.css.map",
+    "main.75532b39.js.map": "./static/js/main.75532b39.js.map",
+    "828.81eda28b.chunk.js.map": "./static/js/828.81eda28b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.36aa506d.css",
-    "static/js/main.a734df17.js"
+    "static/css/main.692cff40.css",
+    "static/js/main.75532b39.js"
   ]
 }

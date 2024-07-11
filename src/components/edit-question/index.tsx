@@ -1,7 +1,7 @@
 /*
  * @Author: wufengliang 44823912@qq.com
  * @Date: 2023-10-25 16:24:49
- * @LastEditTime: 2024-07-09 17:05:50
+ * @LastEditTime: 2024-07-11 21:00:00
  * @Description:
  */
 import { useEffect, useState } from "react";
@@ -350,9 +350,14 @@ function EditQuestion(props: IQuestionItemType) {
             label="图片注视时间"
             className="py-1"
             name={["question", "stayTime"]}
-            rules={[{ required: true, message: "请输入注视时间" }]}
+            rules={[{ required: selectTitleType !== 4, message: "请输入注视时间" }]}
           >
-            <InputNumber placeholder="请输入..." style={{ width: "100%" }} controls={false} />
+            <InputNumber
+              disabled={selectTitleType === 4}
+              placeholder="请输入..."
+              style={{ width: "100%" }}
+              controls={false}
+            />
           </Form.Item>
         ) : null}
         {/* 图片注视时间 */}

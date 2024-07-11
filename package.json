@@ -81,7 +81,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "cross-env CI=false cross-env PUBLIC_URL=https://vision.idp-tech.com node scripts/build.js",
+    "build:test": "cross-env CI=false cross-env PUBLIC_URL=https://vision.idp-tech.com node scripts/build.js",
+    "build": "cross-env CI=false  node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
